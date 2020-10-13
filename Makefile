@@ -6,7 +6,7 @@
 #    By: larosale <larosale@42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/05/04 11:31:09 by larosale          #+#    #+#              #
-#    Updated: 2020/10/13 00:59:28 by larosale         ###   ########.fr        #
+#*   Updated: 2020/10/13 12:48:04 by gejeanet         ###   ########.fr       *#
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,6 +55,7 @@ endif
 	@echo "\033[90m[\033[32mOK\033[90m]\033[34m Compiling $<\033[0m"
 
 $(LIBFT):
+	@echo "\033[90m\033[32mLET'S GO!!!\033[90m\033[0m"
 	@$(MAKE) -C $(LIBFT_FLDR)
 
 .PHONY: bonus
