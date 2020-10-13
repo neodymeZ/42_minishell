@@ -6,6 +6,7 @@ Implemented:
 2) cd, pwd, exit builtins
 3) Ctrl-C, Ctrl-D handling
 4) Prompt with current directory
+5) Error management
 
 To do:
 1) Parser
