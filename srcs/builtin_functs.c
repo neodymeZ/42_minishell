@@ -6,13 +6,11 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 20:32:03 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/14 15:33:57 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/10/14 20:59:08 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-extern	char	**g_env;
 
 /*
 ** Minishell implementation of the "cd" builtin bash function.
@@ -50,25 +48,6 @@ int		ft_pwd(void)
 		return (-1);
 	ft_putstr_fd(pwd, 1);
 	free(pwd);
-	return (0);
-}
-
-/*
-** builtin "env" implementation
-** simply prints all environment's variables
-*/
-
-int		ft_env(void)
-{
-	char	**env;
-
-	env = g_env;
-	while (*env != NULL)
-	{
-		ft_putstr_fd(*env, 1);
-		ft_putstr_fd("\n", 1);
-		env++;
-	}
 	return (0);
 }
 

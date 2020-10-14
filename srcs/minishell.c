@@ -6,13 +6,14 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 19:10:19 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/14 15:36:52 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/10/14 20:18:48 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 char	**g_env = NULL;
+char	**g_env_local = NULL;
 
 int		run_builtin(char **command, int gnl_result)
 {
@@ -115,5 +116,6 @@ int		main(int ac, char **av, char **env)
 		return (0);
 	}
 	env_free(g_env);
+	env_free(g_env_local);
 	return (0);
 }

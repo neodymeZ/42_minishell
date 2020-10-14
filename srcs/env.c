@@ -6,7 +6,7 @@
 /*   By: gejeanet <gejeanet@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 13:51:28 by gejeanet          #+#    #+#             */
-/*   Updated: 2020/10/14 15:29:19 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/10/14 20:13:47 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,10 @@ static	char	**do_copy(char **env_copy, char **env)
 	*tmp = NULL;
 	return (env_copy);
 }
+
+/*
+** free the memory of global (or local - see args) environment table
+*/
 
 void			env_free(char **env)
 {
