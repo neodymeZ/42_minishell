@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 19:07:41 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/13 01:26:03 by larosale         ###   ########.fr       */
+/*   Updated: 2020/10/14 15:34:22 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,10 @@
 ** External variables' declarations
 */
 
-extern char	**environ;
+/*
+** extern char	**environ;
+*/
 extern int	errno;
-
 
 /*
 ** Builtin functions
@@ -37,6 +38,7 @@ extern int	errno;
 int			ft_cd(char **command);
 int			ft_pwd(void);
 void		ft_exit(void);
+int			ft_env(void);
 
 /*
 ** Signal handlers
@@ -50,6 +52,13 @@ void   		signal_handler(int signo);
 
 void		print_error(int e);
 int			errman(int errnum);
+
+/*
+** Environment handling
+*/
+
+char		**env_init(char **env);
+void		env_free(char **env);
 
 /*
 ** Utils
