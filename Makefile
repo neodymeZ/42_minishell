@@ -19,8 +19,9 @@ SRCS_FLDR		= ./srcs
 HDRS_FLDR		= ./includes
 LIBFT_FLDR		= ./libft
 SRCS_LIST		= minishell.c error_handler.c builtin_functs.c \
-				minishell_utils.c signal_handlers.c
-HDRS_LIST		= minishell.h errors.h
+				minishell_utils.c signal_handlers.c lexer.c \
+				lexer_utils_input.c lexer_utils_tokens.c
+HDRS_LIST		= minishell.h errors.h lexer.h
 SRCS			= $(addprefix $(SRCS_FLDR)/,$(SRCS_LIST))
 OBJS			= $(SRCS:.c=.o)
 HDRS			= $(addprefix $(HDRS_FLDR)/,$(HDRS_LIST))
