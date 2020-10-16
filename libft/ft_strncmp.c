@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/10 20:13:40 by larosale          #+#    #+#             */
-/*   Updated: 2020/05/11 14:35:11 by larosale         ###   ########.fr       */
+/*   Updated: 2020/10/15 02:12:42 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 				*(unsigned char *)(s2 + step)));
 		}
 	}
-	if (n && (*(s1 + step) == '\0' || *(s2 + step) == '\0'))
+	if (n && n != step && (*(s1 + step) == '\0' || *(s2 + step) == '\0'))
 	{
 		return ((int)(*(unsigned char *)(s1 + step) -
 			*(unsigned char *)(s2 + step)));

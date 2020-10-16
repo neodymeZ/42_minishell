@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 00:03:42 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/13 00:07:49 by larosale         ###   ########.fr       */
+/*   Updated: 2020/10/13 23:46:50 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,5 +17,11 @@ void	print_prompt(void)
 	ft_putstr_fd("minishell: ", 1);
 	ft_pwd();
 	ft_putstr_fd(" $ ", 1);
+	return ;
+}
+
+void	print_prompt2(void)
+{
+	ft_putstr_fd("> ", 2);
 	return ;
 }
