@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 19:07:41 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/14 15:34:22 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/10/17 02:53:02 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 /*
 ** extern char	**environ;
 */
+
 extern int	errno;
 
 /*
@@ -44,7 +45,7 @@ int			ft_env(void);
 ** Signal handlers
 */
 
-void   		signal_handler(int signo);
+void		signal_handler(int signo);
 
 /*
 ** Error handling
@@ -59,6 +60,12 @@ int			errman(int errnum);
 
 char		**env_init(char **env);
 void		env_free(char **env);
+int			ft_export(char **var);
+int			ft_unset(char **var);
+int			ft_env(void);
+void		env_del_var(char *var, char **env);
+void		env_set_var(char *var, char *value, char **env);
+char		*env_get_var(char *var);
 
 /*
 ** Utils

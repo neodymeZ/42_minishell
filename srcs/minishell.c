@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 19:10:19 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/14 20:18:48 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/10/17 02:58:18 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ int		shell_loop(void)
 ** Also, we need "ac" and "av" args because shell must be able to start
 ** a script given as an argument (TODO)
 */
+
 int		main(int ac, char **av, char **env)
 {
 	// Copy env to global g_env. So, we can now add/remove/change env entries

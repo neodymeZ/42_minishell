@@ -6,7 +6,7 @@
 /*   By: gejeanet <gejeanet@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 13:51:28 by gejeanet          #+#    #+#             */
-/*   Updated: 2020/10/14 20:13:47 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/10/17 02:55:13 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void			env_free(char **env)
 
 	tmp = env;
 	if (tmp == NULL)
-		return;
+		return ;
 	while (*tmp != NULL)
 	{
 		free(*tmp);
@@ -59,6 +59,7 @@ void			env_free(char **env)
 /*
 ** make a copy of given environment and return a pointer to it
 */
+
 char			**env_init(char **env)
 {
 	char	**env_copy;
