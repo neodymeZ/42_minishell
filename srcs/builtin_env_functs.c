@@ -6,7 +6,7 @@
 /*   By: gejeanet <gejeanet@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 20:57:33 by gejeanet          #+#    #+#             */
-/*   Updated: 2020/10/17 02:59:12 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/10/18 21:39:15 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,10 @@ int				ft_export(char **var)
 
 	result = 0;
 	if (var == NULL || *var == NULL)
+	{
 		prnt_env();
+		return (result);
+	}
 	while (*var != NULL)
 	{
 		get_name_and_value(*var, &name, &value);

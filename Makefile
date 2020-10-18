@@ -6,7 +6,7 @@
 #    By: larosale <larosale@42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/05/04 11:31:09 by larosale          #+#    #+#              #
-#*   Updated: 2020/10/17 02:47:43 by gejeanet         ###   ########.fr       *#
+#*   Updated: 2020/10/18 22:56:48 by gejeanet         ###   ########.fr       *#
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,8 @@ HDRS_FLDR		= ./includes
 LIBFT_FLDR		= ./libft
 SRCS_LIST		= minishell.c error_handler.c builtin_functs.c \
 				minishell_utils.c signal_handlers.c \
-				env.c builtin_env_functs.c env_utils.c
+				env.c builtin_env_functs.c env_utils.c \
+				builtin_ft_echo.c
 HDRS_LIST		= minishell.h errors.h
 SRCS			= $(addprefix $(SRCS_FLDR)/,$(SRCS_LIST))
 OBJS			= $(SRCS:.c=.o)
