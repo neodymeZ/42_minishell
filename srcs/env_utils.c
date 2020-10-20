@@ -6,7 +6,7 @@
 /*   By: gejeanet <gejeanet@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 20:14:39 by gejeanet          #+#    #+#             */
-/*   Updated: 2020/10/17 02:56:30 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/10/20 23:47:33 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,13 @@ static	char	*find_var(char *var, char **env)
 	{
 		if (ft_strncmp(*env, var, len) == 0)
 		{
+			return (*env);
+/*
 			if (*(*env + len) == '=')
 				return (*env + len + 1);
 			if (*(*env + len) == '\0')
 				return (NULL);
+*/
 		}
 		env++;
 	}

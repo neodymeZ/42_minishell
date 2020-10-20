@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 19:10:19 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/20 16:44:29 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/10/20 23:23:34 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,8 +119,8 @@ int		main(int ac, char **av, char **env)
 		// Need implement the script execution (TODO)
 		// We execute ONLY first script! (it's name is in av[1])
 		// and pass all other args av[2], av[3] and so on (if present) to him
-		(void)av;
-		return (0);
+//		(void)av;
+		printf("%s\n", search_path(av[1]));
 	}
 	env_free(g_env);
 	env_free(g_env_local);
