@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -9,6 +10,10 @@
 /*   Updated: 2020/10/20 23:12:39 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+=======
+// ADD HEADER
+
+>>>>>>> origin/main
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -23,6 +28,8 @@
 # include <signal.h>
 # include "libft.h"
 # include "errors.h"
+# include "lexer.h"
+//# include "parser.h"
 
 /*
 ** External variables' declarations
@@ -48,17 +55,16 @@ int			ft_unset(char **var);
 int			ft_env(void);
 
 /*
+** Input handling
+*/
+
+char		**read_input(int *gnl_result);
+
+/*
 ** Signal handlers
 */
 
-void		signal_handler(int signo);
-
-/*
-** Error handling
-*/
-
-void		print_error(int e);
-int			errman(int errnum);
+void   		signal_handler(int signo);
 
 /*
 ** Environment handling
@@ -75,6 +81,10 @@ char		*env_get_var(char *var);
 */
 
 void		print_prompt(void);
+<<<<<<< HEAD
 char		*search_path(char *arg);
+=======
+void		print_prompt2(void);
+>>>>>>> origin/main
 
 #endif

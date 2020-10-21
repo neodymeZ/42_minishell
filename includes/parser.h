@@ -1,27 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_utils.c                                  :+:      :+:    :+:   */
+/*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/13 00:03:42 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/13 23:46:50 by larosale         ###   ########.fr       */
+/*   Created: 2020/10/14 23:12:19 by larosale          #+#    #+#             */
+/*   Updated: 2020/10/14 23:48:53 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#ifndef PARSER_H
+# define PARSER_H
 
-void	print_prompt(void)
-{
-	ft_putstr_fd("minishell: ", 1);
-	ft_pwd();
-	ft_putstr_fd(" $ ", 1);
-	return ;
-}
+t_node *parse_simplecom(t_token *token);
 
-void	print_prompt2(void)
-{
-	ft_putstr_fd("> ", 2);
-	return ;
-}
+
+#endif

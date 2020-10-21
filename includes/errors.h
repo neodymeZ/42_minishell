@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 19:27:02 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/12 20:11:29 by larosale         ###   ########.fr       */
+/*   Updated: 2020/10/14 01:11:05 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,8 @@ typedef enum	e_errors
 	ERR_UNKNOWN = -1,
 	ERR_SYS = -2
 }				t_errors;
+
+void			print_error(int e);
+int				errman(int errnum);
 
 #endif
