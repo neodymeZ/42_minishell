@@ -37,6 +37,12 @@ int		run_builtin(char **command, int gnl_result)
 			return (errman(ERR_SYS));
 		return (0);
 	}
+	else if (!ft_strncmp(*command, "echo", 5))
+	{
+		if (ft_echo(command))
+			return (errman(ERR_SYS));
+		return (0);
+	}
 	return (-1);
 }
 

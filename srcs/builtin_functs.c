@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 20:32:03 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/14 20:59:08 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/10/21 14:32:37 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,11 @@ int		ft_cd(char **command)
 	if (*(command + 1))
 		path = *(command + 1);
 	else
-	// Implement $HOME env var usage to cd to home directory
-		path = "/Users";
+	{
+		path = env_get_var("HOME");
+		if (path == NULL)
+			return (0);
+	}
 	return (chdir(path));
 }
 
