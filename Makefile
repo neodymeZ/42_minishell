@@ -1,19 +1,4 @@
-<<<<<<< HEAD
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: larosale <larosale@42.fr>                  +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2020/05/04 11:31:09 by larosale          #+#    #+#              #
-#*   Updated: 2020/10/20 23:11:42 by gejeanet         ###   ########.fr       *#
-#                                                                              #
-# **************************************************************************** #
-=======
 # ADD HEADER
-
->>>>>>> origin/main
 
 NAME			= minishell
 CFLAGS			= -Wall -Werror -Wextra
@@ -26,15 +11,10 @@ LIBFT_FLDR		= ./libft
 SRCS_LIST		= minishell.c error_handler.c builtin_functs.c \
 				minishell_utils.c signal_handlers.c \
 				env.c builtin_env_functs.c env_utils.c \
-<<<<<<< HEAD
-				builtin_ft_echo.c \
-				search_path_util.c
-HDRS_LIST		= minishell.h errors.h
-=======
 				builtin_ft_echo.c lexer.c \
 				lexer_utils_input.c lexer_utils_tokens.c
+				search_path_util.c
 HDRS_LIST		= minishell.h errors.h lexer.h
->>>>>>> origin/main
 SRCS			= $(addprefix $(SRCS_FLDR)/,$(SRCS_LIST))
 OBJS			= $(SRCS:.c=.o)
 HDRS			= $(addprefix $(HDRS_FLDR)/,$(HDRS_LIST))

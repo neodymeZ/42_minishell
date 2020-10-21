@@ -1,19 +1,4 @@
-<<<<<<< HEAD
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/12 19:07:41 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/20 23:12:39 by gejeanet         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-=======
 // ADD HEADER
-
->>>>>>> origin/main
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -81,10 +66,7 @@ char		*env_get_var(char *var);
 */
 
 void		print_prompt(void);
-<<<<<<< HEAD
 char		*search_path(char *arg);
-=======
 void		print_prompt2(void);
->>>>>>> origin/main
 
 #endif

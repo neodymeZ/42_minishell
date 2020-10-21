@@ -6,7 +6,7 @@
 /*   By: gejeanet <gejeanet@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 20:14:39 by gejeanet          #+#    #+#             */
-/*   Updated: 2020/10/21 10:36:47 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/10/21 14:04:00 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,6 @@
 
 extern	char	**g_env;
 extern	char	**g_env_local;
-
-static	int		ft_strncmp_gejeanet(const char *s1, const char *s2, size_t n)
-{
-	while (n != 0 && *s1 != '\0' && *s2 != '\0')
-	{
-		if (*s1 != *s2)
-			break ;
-		else
-		{
-			n--;
-			s1++;
-			s2++;
-		}
-	}
-	if (n == 0 || (*s1 == '\0' && *s2 == '\0'))
-		return (0);
-	else
-		return ((int)(unsigned char)(*s1) - (int)(unsigned char)(*s2));
-}
 
 static	char	*find_var(char *var, char **env)
 {
@@ -43,7 +24,7 @@ static	char	*find_var(char *var, char **env)
 	len = ft_strlen(var);
 	while (*env != NULL)
 	{
-		if (ft_strncmp_gejeanet(*env, var, len) == 0)
+		if (ft_strncmp(*env, var, len) == 0)
 		{
 			if ((*(*env + len)) == '=')
 				return (*env + len + 1);
