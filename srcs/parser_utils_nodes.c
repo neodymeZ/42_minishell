@@ -6,11 +6,11 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/20 01:00:36 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/21 15:48:12 by larosale         ###   ########.fr       */
+/*   Updated: 2020/10/21 16:49:02 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
+#include "minishell.h"
 
 /*
 ** Creates a new node of the tree of type "type".
@@ -21,7 +21,7 @@ t_node	*create_node(t_node_types type)
 {
 	t_node	*node;
 
-	if (!(node = ft_calloc(1, sizeof(t_node))
+	if (!(node = ft_calloc(1, sizeof(t_node))))
 		return (errman(ERR_SYS) ? NULL : NULL);
 	node->type = type;
 	return (node);
@@ -87,8 +87,8 @@ void	delete_tree(t_node *root)
 			delete_tree(child);
 			child = next_child;
 		}		
-		if (node->data)
-			free(node->data);
+		if (root->data)
+			free(root->data);
 		free(root);
 	}
 	return ;

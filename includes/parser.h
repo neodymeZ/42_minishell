@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 23:12:19 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/21 15:57:22 by larosale         ###   ########.fr       */
+/*   Updated: 2020/10/21 20:29:55 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,8 @@ int					set_node_data(t_node *node, char *data);
 
 t_node				*parse_simplecom(t_token *token);
 
+// TESTING
+
+void				test_parser(t_input *in);
 
 #endif

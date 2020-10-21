@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 01:43:42 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/21 02:20:17 by larosale         ###   ########.fr       */
+/*   Updated: 2020/10/21 20:28:17 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,22 +99,17 @@ t_token			*tokenize_input(t_input *in)
 	return (token);
 }
 
-void			test_tokenize(char *input)
+void			test_tokenize(t_input *in)
 {
 	t_token	*token;
 	t_token	*null_t;
-	t_input	in;
 
-	printf("Input is: %s\n", input);
-
+	printf("Input is: %s\n", in->buffer);
 	null_t = null_token();
-	in.buffer = input;
-	in.size = ft_strlen(input);
-	in.pos = INIT_SRC_POS;
-	token = tokenize_input(&in);
+	token = tokenize_input(in);
 	while (ft_memcmp(token, null_t, sizeof(t_token)))
 	{
 		printf("Token is: %s, its length is: %d, type is: %d, concat is: %d\n", token->text, token->len, token->type, token->concat);
-		token = tokenize_input(&in);
+		token = tokenize_input(in);
 	}
 }

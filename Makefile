@@ -13,8 +13,9 @@ SRCS_LIST		= minishell.c error_handler.c builtin_functs.c \
 				minishell_utils.c signal_handlers.c \
 				env.c builtin_env_functs.c env_utils.c \
 				builtin_ft_echo.c lexer.c lexer_utils_buffer.c \
-				lexer_utils_input.c lexer_utils_tokens.c
-HDRS_LIST		= minishell.h errors.h lexer.h
+				lexer_utils_input.c lexer_utils_tokens.c \
+				parser.c parser_utils_nodes.c executor.c
+HDRS_LIST		= minishell.h errors.h lexer.h parser.h executor.h
 SRCS			= $(addprefix $(SRCS_FLDR)/,$(SRCS_LIST))
 OBJS			= $(SRCS:.c=.o)
 HDRS			= $(addprefix $(HDRS_FLDR)/,$(HDRS_LIST))

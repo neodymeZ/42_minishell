@@ -14,16 +14,15 @@
 # include "errors.h"
 # include "lexer.h"
 # include "parser.h"
+# include "executor.h"
 
 /*
-** External variables' declarations
-*/
-
-/*
-** extern char	**environ;
+** Global variables' declarations
 */
 
 extern int	errno;
+extern char	**g_env;
+extern char	**g_env_local;
 
 /*
 ** Builtin functions
@@ -37,12 +36,6 @@ int			ft_echo(char **args);
 int			ft_export(char **var);
 int			ft_unset(char **var);
 int			ft_env(void);
-
-/*
-** Input handling
-*/
-
-char		**read_input(int *gnl_result);
 
 /*
 ** Signal handlers

@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 19:07:10 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/21 01:46:03 by larosale         ###   ########.fr       */
+/*   Updated: 2020/10/21 20:32:58 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	next_c(t_input *in)
 {
 	if (!in || !in->buffer)
 		return (ERRCHAR);
-	if (in->pos == INIT_SRC_POS)
+	if (in->pos == INIT_INPUT_POS)
 		in->pos = -1;
 	if (++in->pos >= in->size)
 	{
@@ -54,7 +54,7 @@ char	peek_c(t_input *in)
 	pos = in->pos;
 	if (!in || !in->buffer)
 		return (ERRCHAR);
-	if (pos == INIT_SRC_POS)
+	if (pos == INIT_INPUT_POS)
 		pos++;
 	pos++;
 	if (pos >= in->size)
@@ -63,17 +63,32 @@ char	peek_c(t_input *in)
 }
 
 /*
-** Skips whitespaces in the input string.
+** Creates the structure of "t_input" type and fills it with data.
+** Returns the created structure, or NULL on error.
 */
 
-void	skip_white(t_input *in)
+t_input	*create_input(char *buffer)
 {
-	char c;
+	t_input	*result;
 
-	c = 0;
-	if (!in || !in->buffer)
-		return ;
-	while (((c = peek_c(in)) != EOL) && (c == ' ' || c == '\t'))
-		next_c(in);
+	if (!(result = ft_calloc(1, sizeof(t_input))))
+		return (errman(ERR_SYS) ? NULL : NULL);
+	if (!(result->buffer = ft_strdup(buffer)))
+		return (errman(ERR_SYS) ? NULL : NULL);
+	result->size = ft_strlen(buffer);
+ 	result->gnl_res = 1;
+	result->pos = INIT_INPUT_POS;
+	return (result);
+}
+
+/*
+** Deletes the structure of "t_input" type.
+*/
+
+void	delete_input(t_input *input)
+{
+	if (input && input->buffer)
+		free(input->buffer);
+	free(input);
 	return ;
 }

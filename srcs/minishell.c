@@ -5,41 +5,6 @@
 char	**g_env = NULL;
 char	**g_env_local = NULL;
 
-int		run_builtin(char **command, int gnl_result)
-{
-	// Ctrl-D handling
-	if (!(*command) && gnl_result)
-		return (0);
-	else if ((!gnl_result && !(*command)) || !ft_strncmp(*command, "exit", 5))
-		ft_exit();
-	else if (!ft_strncmp(*command, "cd", 3))
-	{
-		if (ft_cd(command))
-			return (errman(ERR_SYS));
-		return (0);
-	}
-	// Added for testing lexer functionality
-	else if (!ft_strncmp(*command, "tok", 3))
-	{
-		test_tokenize(*command);
-		return (0);
-	}
-	else if (!ft_strncmp(*command, "pwd", 4))
-	{
-		if (ft_pwd())
-			return (errman(ERR_SYS));
-		ft_putchar_fd('\n', 1);
-		return (0);
-	}
-	else if (!ft_strncmp(*command, "env", 4))
-	{
-		if (ft_env())
-			return (errman(ERR_SYS));
-		return (0);
-	}
-	return (-1);
-}
-
 char    **lexer(char *input)
 {
 	char	**result;
@@ -47,74 +12,73 @@ char    **lexer(char *input)
 
 	temp = malloc(sizeof(char *));
 	*temp = ft_strdup(input);
-	if (!ft_strncmp(input, "tok", 3))
+	if (!ft_strncmp(input, "tok", 3) || !ft_strncmp(input, "parse", 5))
 		return (temp);
 	else
 		result = ft_split(input, ' ');
 	return (result);
 }
 
-char	**read_input(int *gnl_result)
+t_input	*read_input(void)
 {
 	char	*input;
-	char	**result;
 	char	*temp;
 	char	*temp2;
+	int		gnl_res;
+	t_input	*in;
 
-	result = NULL;
-	if ((*gnl_result = get_next_line(0, &input)) < 0)
+	if ((gnl_res = get_next_line(0, &input)) < 0)
 		return (errman(ERR_SYS) ? NULL : NULL);
 	while (input[ft_strlen(input) - 1] == '\\' || check_quotes(input))	// Handling multiline input
 	{
 		print_prompt2();
 		if (input[ft_strlen(input) - 1] == '\\')
 			input[ft_strlen(input) - 1] = '\0';
-		if ((*gnl_result = get_next_line(0, &temp)) < 0 ||
+		if ((gnl_res = get_next_line(0, &temp)) < 0 ||
 			!(temp2 = ft_strjoin(input, temp)))
 			return (errman(ERR_SYS) ? NULL : NULL);
 		free(input);
 		free(temp);
 		input = temp2;
 	}
-	if (!(result = lexer(input)))
-		return (errman(ERR_SYS) ? NULL : NULL);
+	in = create_input(input);
+	in->gnl_res = gnl_res;
 	free(input);
-	return (result);
+	return (in);
 }
 
 int		shell_loop(void)
 {
-	pid_t	child_pid;
-	int		stat_loc;
-	int		gnl_result;
-	char	**command;
+	t_input	*in;
+	t_token	*token;
+	t_token	*null_t;
+	t_node	*cmd;
 
 	while (1)
 	{
 		// Print the prompt
 		print_prompt();
-		command = read_input(&gnl_result);
-		// Skip the fork for builtin functions
-		if (!run_builtin(command, gnl_result))
+		in = read_input();
+		null_t = null_token();
+		// Added for lexer testing
+		if (!ft_strncmp(in->buffer, "lexer", 5))
+		{
+			test_tokenize(in);
 			continue ;
-		// Fork main process
-		if ((child_pid = fork()) < 0)
-			return (errman(ERR_SYS));
-		else if (child_pid == 0)
-		{
-			// Do not ignore Ctrl-C in child process
-			signal(SIGINT, SIG_DFL);
-			// Execute command in child process
-			if (execve(command[0], command, g_env) < 0)
-				return (errman(ERR_SYS));
 		}
-		else
+		// Added for parser testing
+		if (!ft_strncmp(in->buffer, "parser", 6))
 		{
-			// Wait for child process in the parent (main) process
-			if (waitpid(child_pid, &stat_loc, WUNTRACED) < 0)
-				return (errman(ERR_SYS));
+			test_parser(in);
+			continue ;
 		}
-		free(command);
+		while ((token = tokenize_input(in)) &&
+			ft_memcmp(token, null_t, sizeof(t_token)))
+		{
+			cmd = parse_simplecom(token);
+			run_simplecom(cmd, in->gnl_res);
+			delete_tree(cmd);
+		}
 	}
 	return (0);
 }
@@ -125,21 +89,21 @@ int		shell_loop(void)
 ** a script given as an argument (TODO)
 */
 
-int		main(int ac, char **av, char **env)
+int		main(int argc, char **argv, char **env)
 {
 	// Copy env to global g_env. So, we can now add/remove/change env entries
 	g_env = env_init(env);
 	// Restart shell on Ctrl-C
 	signal(SIGINT, signal_handler);
 	signal(SIGTERM, SIG_IGN);
-	if (ac == 1)
+	if (argc == 1)
 		shell_loop();
-	else if (ac >= 2)
+	else if (argc >= 2)
 	{
 		// Need implement the script execution (TODO)
 		// We execute ONLY first script! (it's name is in av[1])
 		// and pass all other args av[2], av[3] and so on (if present) to him
-		(void)av;
+		(void)argv;
 		return (0);
 	}
 	env_free(g_env);

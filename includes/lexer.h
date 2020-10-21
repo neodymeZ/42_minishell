@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 01:36:22 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/21 02:23:15 by larosale         ###   ########.fr       */
+/*   Updated: 2020/10/21 20:29:29 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # define EOL			(-1)
 # define ERRCHAR		( 0)
-# define INIT_SRC_POS	(-2)
+# define INIT_INPUT_POS	(-2)
 # define CONCAT			(1)
 # define NO_CONCAT		(0)
 
@@ -47,7 +47,8 @@ typedef enum			e_token_types
 
 /*
 ** A structure of type "t_input" contains the input buffer, together with its
-** length ("size") and the current cursor position in the buffer ("pos").
+** length ("size") and the current cursor position in the buffer ("pos"). It
+** also stores the result of get_next_line function while reading input.
 */
 
 typedef struct			s_input
@@ -55,6 +56,7 @@ typedef struct			s_input
     char				*buffer;
     int					size;
     int					pos;
+	int					gnl_res;
 }						t_input;
 
 /*
@@ -97,7 +99,8 @@ typedef struct			s_tokbuf
 char					next_c(t_input *in);
 void					unget_c(t_input *in);
 char					peek_c(t_input *in);
-void					skip_white(t_input *in);
+t_input					*create_input(char *buffer);
+void					delete_input(t_input *input);
 
 /*
 ** Functions to tokenize the input string
@@ -118,6 +121,6 @@ void					delete_buffer(t_tokbuf *buffer);
 
 // TESTING
 
-void					test_tokenize(char *input);
+void					test_tokenize(t_input *in);
 
 #endif
