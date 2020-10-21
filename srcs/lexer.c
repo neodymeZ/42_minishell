@@ -6,52 +6,69 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 01:43:42 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/16 18:58:13 by larosale         ###   ########.fr       */
+/*   Updated: 2020/10/21 02:20:17 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void		delete_buffer(t_tokbuf *buffer)
+static int		parse_char(char c, t_tokbuf *buffer, t_input *in)
 {
-	if (buffer && buffer->buffer)
-		free(buffer->buffer);
-	free(buffer);
+	char	nextc;
+
+	if ((buffer->pos > 0 && ((c == ' ' || c == '\t') && buffer->type == STR)) ||
+		(c == '"' && buffer->type == STRDQ) ||
+		(c == '\047' && buffer->type == STRSQ))
+	{	
+//		printf("End of token\n");
+		if ((c == '"' || c == '\047') && (nextc = peek_c(in)) &&
+			(nextc != ' ' && nextc != '\t' && nextc != EOL))
+		{
+//			printf("End of token with concat\n");
+			buffer->concat = CONCAT;
+		}
+		return (0);
+	}
+	else if ((c == '"' || c == '\047') && !buffer->pos &&
+		buffer->type != STRDQ && buffer->type != STRSQ)
+	{
+		buffer->type = (c == '"' ? STRDQ : STRSQ);
+//		printf("Start of quoted token\n");
+	}
+	else if ((c == '"' || c == '\047') && buffer->pos > 0 &&
+		buffer->type != STRDQ && buffer->type != STRSQ)
+	{
+		buffer->concat = CONCAT;
+		unget_c(in);
+//		printf("End of token, immediately followed by quote\n");
+		return (0);
+	}
+	else if ((c == ' ' || c == '\t') && buffer->type == STR)
+	{
+//		printf("Skipping whitespace\n");
+		;
+	}
+	else
+	{
+		add_to_buffer(c, buffer);
+//		printf("Adding to buffer\n");
+	}
+	return (1);
+}
+
+static void		parse_token(t_token *token)
+{
+	if (token->type == STR && !ft_strncmp(token->text, "|", 2))
+		token->type = PIPE;
+	else if (token->type == STR && !ft_strncmp(token->text, ">", 2))
+		token->type = REDIR_OUT;
+	else if (token->type == STR && !ft_strncmp(token->text, "<", 2))
+		token->type = REDIR_IN;
+	else if (token->type == STR && !ft_strncmp(token->text, ">>", 3))
+		token->type = REDIR_APP;
+	else if (token->type == STR && !ft_strncmp(token->text, ";", 2))
+		token->type = SEMIC;
 	return ;
-}
-
-static t_tokbuf	*create_buffer(void)
-{
-	t_tokbuf	*buffer;
-
-	if (!(buffer = ft_calloc(1, sizeof(t_tokbuf))))
-	{
-		errman(ERR_SYS);
-		return (NULL);
-	}
-	buffer->size = 1024;
-	buffer->pos = 0;
-	if (!(buffer->buffer = ft_calloc(1, buffer->size)))
-	{
-		errman(ERR_SYS);
-		return (NULL);
-	}
-	return (buffer);
-}
-
-static int		add_to_buffer(char c, t_tokbuf *buffer)
-{
-	char *tmp;
-
-	buffer->buffer[buffer->pos++] = c;
-	if (buffer->pos >= buffer->size)
-	{
-		if (!(tmp = ft_realloc(buffer->buffer, buffer->size * 2, buffer->size)))
-			return (errman(ERR_SYS));
-		buffer->buffer = tmp;
-		buffer->size *= 2;
-	}
-	return (0);
 }
 
 t_token			*tokenize_input(t_input *in)
@@ -59,6 +76,7 @@ t_token			*tokenize_input(t_input *in)
 	t_tokbuf	*buffer;
 	t_token		*token;
 	char		c;
+	int			res;
 
 	token = NULL;
 	if (!in || !in->buffer || !in->size || (c = next_c(in)) == ERRCHAR)
@@ -68,16 +86,14 @@ t_token			*tokenize_input(t_input *in)
 	buffer = create_buffer();
 	while (c != EOL)
 	{
-		if ((c == ' ' || c == '\t') && buffer->pos > 0)
+		res = parse_char(c, buffer, in);
+		if (!res)
 			break ;
-		if (c != ' ' && c != '\t')
-			add_to_buffer(c, buffer);
 		c = next_c(in);
 	}
-	if (buffer->pos == 0)
-		return (null_token());
-	if (!(token = create_token(buffer->buffer)))
+	if (!(token = create_token(buffer)))
 		return (errman(ERR_SYS) ? NULL : NULL);
+	parse_token(token);
 	token->in = in;
 	delete_buffer(buffer);
 	return (token);
@@ -98,7 +114,7 @@ void			test_tokenize(char *input)
 	token = tokenize_input(&in);
 	while (ft_memcmp(token, null_t, sizeof(t_token)))
 	{
-		printf("Token is: %s, its length is: %d\n", token->text, token->len);
+		printf("Token is: %s, its length is: %d, type is: %d, concat is: %d\n", token->text, token->len, token->type, token->concat);
 		token = tokenize_input(&in);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 01:36:22 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/15 01:24:57 by larosale         ###   ########.fr       */
+/*   Updated: 2020/10/21 02:23:15 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,34 @@
 # define EOL			(-1)
 # define ERRCHAR		( 0)
 # define INIT_SRC_POS	(-2)
+# define CONCAT			(1)
+# define NO_CONCAT		(0)
+
+/*
+** Enum of type "t_token_types" defines types of tokens filled as a result
+** of lexical analysis of the input string.
+** The types are:
+** - STR - plain string;
+** - STRDQ - string in double quotes;
+** - STRSQ - string in single quotes;
+** - PIPE - pipe;
+** - REDIR_IN - input redirection;
+** - REDIR_OUT - output redirection;
+** - REDIR_APP - output redirection (append mode);
+** - SEMIC - semicolon;
+*/
+
+typedef enum			e_token_types
+{
+	STR,
+	STRDQ,
+	STRSQ,
+	PIPE,
+	REDIR_IN,
+	REDIR_OUT,
+	REDIR_APP,
+	SEMIC
+}						t_token_types;
 
 /*
 ** A structure of type "t_input" contains the input buffer, together with its
@@ -32,7 +60,8 @@ typedef struct			s_input
 /*
 ** A structure of type "t_token" contains the token information - the input
 ** string structure of "t_input" type, together with token length ("len") and
-** its text.
+** its text. It also defines the token type, as well as the concatenate flag
+** ("concat"), used to concatenate quoted strings not separated by whitespace.
 */
 
 typedef struct			s_token
@@ -40,12 +69,15 @@ typedef struct			s_token
 	t_input				*in;
 	int					len;
 	char				*text;
+	t_token_types		type;
+	int					concat;
 }						t_token;
 
 /*
 ** A structure of type "t_tokbuf" contains information about token buffer,
 ** used while tokenizing input: the buffer, its size and current position in
-** buffer.
+** buffer. It also contains type of the token and concatenate flag (to be
+** copied to the token).
 */
 
 
@@ -54,6 +86,8 @@ typedef struct			s_tokbuf
 	char				*buffer;
 	int					size;
 	int					pos;
+	t_token_types		type;
+	int					concat;	
 }						t_tokbuf;
 
 /*
@@ -70,9 +104,17 @@ void					skip_white(t_input *in);
 */
 
 t_token					*null_token(void);
-t_token					*create_token(char *str);
+t_token					*create_token(t_tokbuf *buffer);
 void					delete_token(t_token *token);
 t_token					*tokenize_input(t_input *in);
+
+/*
+** Functions to manipulate with token buffer
+*/
+
+t_tokbuf				*create_buffer(void);
+int						add_to_buffer(char c, t_tokbuf *buffer);
+void					delete_buffer(t_tokbuf *buffer);
 
 // TESTING
 

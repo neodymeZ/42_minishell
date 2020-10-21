@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 19:07:26 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/16 18:55:06 by larosale         ###   ########.fr       */
+/*   Updated: 2020/10/20 20:19:12 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,22 +34,24 @@ t_token	*null_token(void)
 ** Returns a pointer to the created structure or NULL on error.
 */
 
-t_token	*create_token(char *str)
+t_token	*create_token(t_tokbuf *buffer)
 {
 	t_token	*token;
 
 	token = null_token();
-	if (!token || !str)
+	if (!token || !buffer)
 	{
 		errman(ERR_SYS);
 		return (NULL);
 	}
-	token->len = ft_strlen(str);
-	if (!(token->text = ft_strdup(str)))
+	token->len = ft_strlen(buffer->buffer);
+	if (!(token->text = ft_strdup(buffer->buffer)))
 	{
 		errman(ERR_SYS);
 		return (NULL);
 	}
+	token->type = buffer->type;
+	token->concat = buffer->concat;
 	return (token);
 }
 

@@ -64,10 +64,11 @@ char	**read_input(int *gnl_result)
 	result = NULL;
 	if ((*gnl_result = get_next_line(0, &input)) < 0)
 		return (errman(ERR_SYS) ? NULL : NULL);
-	while (input[ft_strlen(input) - 1] == '\\')	// Handling multiline input
+	while (input[ft_strlen(input) - 1] == '\\' || check_quotes(input))	// Handling multiline input
 	{
 		print_prompt2();
-		input[ft_strlen(input) - 1] = '\0';
+		if (input[ft_strlen(input) - 1] == '\\')
+			input[ft_strlen(input) - 1] = '\0';
 		if ((*gnl_result = get_next_line(0, &temp)) < 0 ||
 			!(temp2 = ft_strjoin(input, temp)))
 			return (errman(ERR_SYS) ? NULL : NULL);
@@ -80,6 +81,7 @@ char	**read_input(int *gnl_result)
 	free(input);
 	return (result);
 }
+
 int		shell_loop(void)
 {
 	pid_t	child_pid;

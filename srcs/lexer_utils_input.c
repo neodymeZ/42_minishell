@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 19:07:10 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/14 23:10:24 by larosale         ###   ########.fr       */
+/*   Updated: 2020/10/21 01:46:03 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 /*
 ** Moves the position pointer one symbol back in the input string.
 */
-
 
 void	unget_c(t_input *in)
 {

@@ -13,7 +13,7 @@
 # include "libft.h"
 # include "errors.h"
 # include "lexer.h"
-//# include "parser.h"
+# include "parser.h"
 
 /*
 ** External variables' declarations
@@ -66,5 +66,6 @@ char		*env_get_var(char *var);
 
 void		print_prompt(void);
 void		print_prompt2(void);
+int			check_quotes(char *input);
 
 #endif
