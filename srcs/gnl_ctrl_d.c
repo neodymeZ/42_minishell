@@ -6,7 +6,7 @@
 /*   By: gejeanet <gejeanet@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 11:38:36 by gejeanet          #+#    #+#             */
-/*   Updated: 2020/10/22 16:42:19 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/10/22 22:18:12 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,30 +36,24 @@ int		gnl_ctrl_d(int fd, char **line)
 		{
 			*line = joined;
 			free(tmp);
-				clear_ctrl_d();
 			return (res);
 		}
 		else
 		{
 			if (*tmp == '\0')
 			{
+				clear_ctrl_d();
 				if (*joined == '\0')
 				{
 					*line = joined;
 					free(tmp);
-				clear_ctrl_d();
 					return (res);
 				}
 				free(tmp);
-				clear_ctrl_d();
 				continue ;
 			}
 			else
 			{
-				joined_tmp = ft_strjoin(joined, tmp);
-				free(tmp);
-				free(joined);
-				joined = joined_tmp;
 				clear_ctrl_d();
 			}
 		}
