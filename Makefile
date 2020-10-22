@@ -13,7 +13,8 @@ SRCS_LIST		= minishell.c error_handler.c builtin_functs.c \
 				env.c builtin_env_functs.c env_utils.c \
 				builtin_ft_echo.c lexer.c \
 				lexer_utils_input.c lexer_utils_tokens.c \
-				search_path_util.c
+				search_path_util.c \
+				gnl_ctrl_d.c
 HDRS_LIST		= minishell.h errors.h lexer.h
 SRCS			= $(addprefix $(SRCS_FLDR)/,$(SRCS_LIST))
 OBJS			= $(SRCS:.c=.o)

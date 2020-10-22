@@ -68,13 +68,13 @@ char	**read_input(int *gnl_result)
 	char	*temp2;
 
 	result = NULL;
-	if ((*gnl_result = get_next_line(0, &input)) < 0)
+	if ((*gnl_result = gnl_ctrl_d(0, &input)) < 0)
 		return (errman(ERR_SYS) ? NULL : NULL);
 	while (input[ft_strlen(input) - 1] == '\\')	// Handling multiline input
 	{
 		print_prompt2();
 		input[ft_strlen(input) - 1] = '\0';
-		if ((*gnl_result = get_next_line(0, &temp)) < 0 ||
+		if ((*gnl_result = gnl_ctrl_d(0, &temp)) < 0 ||
 			!(temp2 = ft_strjoin(input, temp)))
 			return (errman(ERR_SYS) ? NULL : NULL);
 		free(input);
@@ -118,6 +118,12 @@ int		shell_loop(void)
 			signal(SIGTERM, SIG_IGN);
 			// Wait for child process in the parent (main) process
 			if (waitpid(child_pid, &stat_loc, WUNTRACED) < 0)
+				return (errman(ERR_SYS));
+			if (signal(SIGINT, signal_handler) == SIG_ERR)
+				return (errman(ERR_SYS));
+			if (signal(SIGQUIT, signal_handler) == SIG_ERR)
+				return (errman(ERR_SYS));
+			if (signal(SIGTERM, SIG_IGN) == SIG_ERR)
 				return (errman(ERR_SYS));
 		}
 		free(command);

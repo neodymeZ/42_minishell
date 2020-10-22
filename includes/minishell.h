@@ -44,6 +44,7 @@ int			ft_env(void);
 */
 
 char		**read_input(int *gnl_result);
+int			gnl_ctrl_d(int fd, char **line);
 
 /*
 ** Signal handlers
