@@ -27,14 +27,14 @@ t_input	*read_input(void)
 	int		gnl_res;
 	t_input	*in;
 
-	if ((gnl_res = get_next_line(0, &input)) < 0)
+	if ((gnl_res = gnl_ctrl_d(0, &input)) < 0)
 		return (errman(ERR_SYS) ? NULL : NULL);
 	while (input[ft_strlen(input) - 1] == '\\' || check_quotes(input))	// Handling multiline input
 	{
 		print_prompt2();
 		if (input[ft_strlen(input) - 1] == '\\')
 			input[ft_strlen(input) - 1] = '\0';
-		if ((gnl_res = get_next_line(0, &temp)) < 0 ||
+		if ((gnl_res = gnl_ctrl_d(0, &temp)) < 0 ||
 			!(temp2 = ft_strjoin(input, temp)))
 			return (errman(ERR_SYS) ? NULL : NULL);
 		free(input);
@@ -94,8 +94,12 @@ int		main(int argc, char **argv, char **env)
 	// Copy env to global g_env. So, we can now add/remove/change env entries
 	g_env = env_init(env);
 	// Restart shell on Ctrl-C
-	signal(SIGINT, signal_handler);
-	signal(SIGTERM, SIG_IGN);
+	if (signal(SIGINT, signal_handler) == SIG_ERR)
+		return (errman(ERR_SYS));
+	if (signal(SIGQUIT, signal_handler) == SIG_ERR)
+		return (errman(ERR_SYS));
+	if (signal(SIGTERM, SIG_IGN) == SIG_ERR)
+		return (errman(ERR_SYS));
 	if (argc == 1)
 		shell_loop();
 	else if (argc >= 2)
@@ -103,8 +107,7 @@ int		main(int argc, char **argv, char **env)
 		// Need implement the script execution (TODO)
 		// We execute ONLY first script! (it's name is in av[1])
 		// and pass all other args av[2], av[3] and so on (if present) to him
-		(void)argv;
-		return (0);
+		printf("%s\n", search_path(argv[1]));
 	}
 	env_free(g_env);
 	env_free(g_env_local);

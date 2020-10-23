@@ -6,7 +6,7 @@
 /*   By: gejeanet <gejeanet@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/18 20:00:34 by gejeanet          #+#    #+#             */
-/*   Updated: 2020/10/19 00:01:29 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/10/21 14:48:38 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int				ft_echo(char **args)
 	opts_end_flag = 0;
 	if (args != NULL && *args != NULL)
 	{
+		args++;
 		while (*args != NULL)
 		{
 			if ((ft_strncmp(*args, "-n", 2) != 0) || (ft_strlen(*args) != 2) \

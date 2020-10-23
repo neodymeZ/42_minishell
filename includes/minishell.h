@@ -1,6 +1,5 @@
 // ADD HEADER
 
-
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -8,6 +7,8 @@
 # include <stdlib.h>
 # include <sys/wait.h>
 # include <sys/errno.h>
+# include <sys/types.h>
+# include <sys/stat.h>
 # include <stdio.h>
 # include <signal.h>
 # include "libft.h"
@@ -38,6 +39,13 @@ int			ft_unset(char **var);
 int			ft_env(void);
 
 /*
+** Input handling
+*/
+
+t_input		*read_input(void);
+int			gnl_ctrl_d(int fd, char **line);
+
+/*
 ** Signal handlers
 */
 
@@ -58,6 +66,7 @@ char		*env_get_var(char *var);
 */
 
 void		print_prompt(void);
+char		*search_path(char *arg);
 void		print_prompt2(void);
 int			check_quotes(char *input);
 

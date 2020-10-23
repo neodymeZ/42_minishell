@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:51:09 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/21 23:42:22 by larosale         ###   ########.fr       */
+/*   Updated: 2020/10/23 10:38:24 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,12 @@ int		run_builtin(char **command, int gnl_result)
 			return (errman(ERR_SYS));
 		return (0);
 	}
+	else if (!ft_strncmp(*command, "echo", 5))
+	{
+		if (ft_echo(command))
+			return (errman(ERR_SYS));
+		return (0);
+	}
 	return (-1);
 }
 
@@ -105,15 +111,22 @@ int 	run_simplecom(t_node *node, int gnl_res)
 		return (errman(ERR_SYS));
 	else if (child_pid == 0)
 	{
-		// Do not ignore Ctrl-C in child process
-		signal(SIGINT, SIG_DFL);
 		// Execute command in child process
 		exec_cmd(argv);
 	}
 	else
 	{
+		signal(SIGINT, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
+		signal(SIGTERM, SIG_IGN);
 		// Wait for child process in the parent (main) process
 		if (waitpid(child_pid, &stat_loc, WUNTRACED) < 0)
+			return (errman(ERR_SYS));
+		if (signal(SIGINT, signal_handler) == SIG_ERR)
+			return (errman(ERR_SYS));
+		if (signal(SIGQUIT, signal_handler) == SIG_ERR)
+			return (errman(ERR_SYS));
+		if (signal(SIGTERM, SIG_IGN) == SIG_ERR)
 			return (errman(ERR_SYS));
 	}
 	free_argv(argc, argv);
