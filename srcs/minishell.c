@@ -2,22 +2,19 @@
 
 #include "minishell.h"
 
+/*
+** Global variables' definition.
+*/
+
 char	**g_env = NULL;
 char	**g_env_local = NULL;
+t_token	*g_null_token = NULL;
 
-char    **lexer(char *input)
-{
-	char	**result;
-	char	**temp;
-
-	temp = malloc(sizeof(char *));
-	*temp = ft_strdup(input);
-	if (!ft_strncmp(input, "tok", 3) || !ft_strncmp(input, "parse", 5))
-		return (temp);
-	else
-		result = ft_split(input, ' ');
-	return (result);
-}
+/*
+** Reads input string using GNL and creates the structure of type "t_input"
+** to hold the string, its length, current reading position and other params.
+** Returns the structure on success, or NULL on error.
+*/
 
 t_input	*read_input(void)
 {
@@ -47,47 +44,48 @@ t_input	*read_input(void)
 	return (in);
 }
 
+/*
+** Starts main minishell loop of reading input, parsing and executing it.
+*/
+
 int		shell_loop(void)
 {
 	t_input	*in;
 	t_token	*token;
-	t_token	*null_t;
 	t_node	*cmd;
 
 	while (1)
 	{
-		// Print the prompt
 		print_prompt();
 		in = read_input();
-		null_t = null_token();
-		// Added for lexer testing
+		g_null_token = null_token();
+		// Added for lexer testing. Remove before submitting
 		if (!ft_strncmp(in->buffer, "lexer", 5))
 		{
 			test_tokenize(in);
 			continue ;
 		}
-		// Added for parser testing
+		// Added for parser testing. Remove before submitting
 		if (!ft_strncmp(in->buffer, "parser", 6))
 		{
 			test_parser(in);
 			continue ;
 		}
+		//replace by
+//		cmd = parse_input(in);
+//		run_cmd(cmd);
+//		delete_tree(cmd);
 		while ((token = tokenize_input(in)) &&
-			ft_memcmp(token, null_t, sizeof(t_token)))
+			ft_memcmp(token, g_null_token, sizeof(t_token)))
 		{
-			cmd = parse_simplecom(token);
+			// check the parse_input function return value
+			cmd = parse_temp(token);
 			run_simplecom(cmd, in->gnl_res);
 			delete_tree(cmd);
 		}
 	}
 	return (0);
 }
-
-/*
-** changed main() args because we need an "env" arg
-** Also, we need "ac" and "av" args because shell must be able to start
-** a script given as an argument (TODO)
-*/
 
 int		main(int argc, char **argv, char **env)
 {

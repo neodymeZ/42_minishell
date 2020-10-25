@@ -1,7 +1,7 @@
 # ADD HEADER
 
 NAME			= minishell
-CFLAGS			= -Wall -Werror -Wextra
+CFLAGS			= -Wall -Werror -Wextra -g
 NODEPS			= clean fclean re
 LIBS			= -L $(LIBFT_FLDR) -lft
 INCLUDES		= -I $(LIBFT_FLDR) -I $(HDRS_FLDR)

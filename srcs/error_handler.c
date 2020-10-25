@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_errors.c                                    :+:      :+:    :+:   */
+/*   error_handler.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/26 00:41:24 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/12 20:25:25 by larosale         ###   ########.fr       */
+/*   Updated: 2020/10/25 17:22:44 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@
 
 void	print_error(int e)
 {
-	e == ERR_SYS ? ft_putstr_fd("A system call error occured\n", 2) : 0;
-	e == ERR_UNKNOWN ? ft_putstr_fd("Unknown error occurred\n", 2) : 0;
+	e == ERR_SYS ? ft_putstr_fd("a system call error occured\n", 2) : 0;
+	e == ERR_UNKNOWN ? ft_putstr_fd("unknown error occurred\n", 2) : 0;
+	e == ERR_TOKEN ? ft_putstr_fd("syntax error near unexpected token\n", 2) : 0;
 	return ;
 }
 
@@ -37,6 +38,8 @@ int		errman(int errnum)
 		print_error(errnum);
 		if (errno && (errnum == ERR_SYS || errnum == ERR_UNKNOWN))
 			perror("Additional debugging info (errno)");
+		else
+			return (errnum);
 		exit(EXIT_FAILURE);
 		return (1);
 	}
