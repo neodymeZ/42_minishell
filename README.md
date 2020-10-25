@@ -1,16 +1,19 @@
 # 42_minishell
 42 minishell project
 
-Implemented:
-1) Simple commands execution (full path only)
-2) cd, pwd, exit builtins
-3) Ctrl-C, Ctrl-D handling
-4) Prompt with current directory
-5) Error management
-
 To do:
-1) Parser
-2) Pipes
-3) Redirections
-4) Environment ($PATH, etc)
-5) Builtins
+1) Parser - token string concatenation
+2) Word expansion (env vars substitution, escape chars?)
+3) Pipes
+4) Redirections
+5) Error management - pass error description to errman function
+   for custom error messages
+6) Check memory leaks
+7) Uppercase letters in commands?
+8) Launching script as a command line argument?
+
+Additionally implemented:
+1) Multiline input (on '\' symbol or on missing quote);
+
+Will not be implemented:
+1) Multiline pipe (complex parsing of input is needed);

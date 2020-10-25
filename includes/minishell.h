@@ -20,9 +20,9 @@
 ** Global variables' declarations
 */
 
-extern int	errno;
-extern char	**g_env;
-extern char	**g_env_local;
+extern int		errno;
+extern char		**g_env;
+extern char		**g_env_local;
 
 /*
 ** Builtin functions

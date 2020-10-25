@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 23:12:19 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/21 20:29:55 by larosale         ###   ########.fr       */
+/*   Updated: 2020/10/26 00:46:39 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,9 @@
 
 typedef enum		e_node_types
 {
-	NODE_ROOT,
-    NODE_CMD,
-	NODE_PIPE,
 	NODE_SEMIC,
+	NODE_PIPE,
+    NODE_CMD,
     NODE_ARG,
 	NODE_REDIR_IN,
 	NODE_REDIR_OUT,
@@ -49,7 +48,8 @@ int					set_node_data(t_node *node, char *data);
 ** Parsing functions
 */
 
-t_node				*parse_simplecom(t_token *token);
+t_node				*parse_temp(t_token *token);
+t_node				*parse_input(t_input *in);
 
 // TESTING
 
