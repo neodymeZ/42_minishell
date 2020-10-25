@@ -16,6 +16,7 @@
 # include "lexer.h"
 # include "parser.h"
 # include "executor.h"
+# include "builtin.h"
 
 /*
 ** Global variables' declarations
@@ -26,24 +27,12 @@ extern char	**g_env;
 extern char	**g_env_local;
 
 /*
-** Builtin functions
-*/
-
-int			ft_cd(char **command);
-int			ft_pwd(void);
-void		ft_exit(void);
-int			ft_env(void);
-int			ft_echo(char **args);
-int			ft_export(char **var);
-int			ft_unset(char **var);
-int			ft_env(void);
-
-/*
 ** Input handling
 */
 
 t_input		*read_input(void);
-int			gnl_ctrl_d(int fd, char **line);
+int			gnl_wrapper(int fd, char **line);
+int			check_quotes(char *input);
 
 /*
 ** Signal handlers
@@ -66,8 +55,6 @@ char		*env_get_var(char *var);
 */
 
 void		print_prompt(void);
-char		*search_path(char *arg);
 void		print_prompt2(void);
-int			check_quotes(char *input);
 
 #endif

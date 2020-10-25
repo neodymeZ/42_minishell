@@ -8,15 +8,15 @@ INCLUDES		= -I $(LIBFT_FLDR) -I $(HDRS_FLDR)
 SRCS_FLDR		= ./srcs
 HDRS_FLDR		= ./includes
 LIBFT_FLDR		= ./libft
-SRCS_LIST		= minishell.c error_handler.c builtin_functs.c \
-				minishell_utils.c signal_handlers.c \
-				env.c builtin_env_functs.c env_utils.c \
-				builtin_ft_echo.c lexer.c lexer_utils_buffer.c \
-				lexer_utils_input.c lexer_utils_tokens.c \
-				parser.c parser_utils_nodes.c executor.c \
-				search_path_util.c \
-				gnl_ctrl_d.c
-HDRS_LIST		= minishell.h errors.h lexer.h parser.h executor.h
+SRCS_LIST		= minishell.c minishell_utils_prompt.c minishell_utils_input.c \
+				error_handler.c signal_handlers.c \
+				builtin.c builtin_env.c builtin_utils_env.c \
+				env.c env_utils.c \
+				lexer.c lexer_utils_buffer.c lexer_utils_input.c \
+				lexer_utils_tokens.c \
+				parser.c parser_utils_nodes.c \
+				executor.c executor_utils.c
+HDRS_LIST		= minishell.h errors.h lexer.h parser.h executor.h builtin.h
 SRCS			= $(addprefix $(SRCS_FLDR)/,$(SRCS_LIST))
 OBJS			= $(SRCS:.c=.o)
 HDRS			= $(addprefix $(HDRS_FLDR)/,$(HDRS_LIST))
@@ -46,7 +46,7 @@ endif
 # Dependencies for .o files are automatically merged with the dependencies from
 # .d file for each object
 
-%.o: %.c 
+%.o: %.c
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 	@echo "\033[90m[\033[32mOK\033[90m]\033[34m Compiling $<\033[0m"
 

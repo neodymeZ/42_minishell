@@ -27,14 +27,14 @@ t_input	*read_input(void)
 	int		gnl_res;
 	t_input	*in;
 
-	if ((gnl_res = gnl_ctrl_d(0, &input)) < 0)
+	if ((gnl_res = gnl_wrapper(0, &input)) < 0)
 		return (errman(ERR_SYS) ? NULL : NULL);
 	while (input[ft_strlen(input) - 1] == '\\' || check_quotes(input))	// Handling multiline input
 	{
 		print_prompt2();
 		if (input[ft_strlen(input) - 1] == '\\')
 			input[ft_strlen(input) - 1] = '\0';
-		if ((gnl_res = gnl_ctrl_d(0, &temp)) < 0 ||
+		if ((gnl_res = gnl_wrapper(0, &temp)) < 0 ||
 			!(temp2 = ft_strjoin(input, temp)))
 			return (errman(ERR_SYS) ? NULL : NULL);
 		free(input);

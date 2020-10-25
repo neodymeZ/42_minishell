@@ -1,18 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   search_path_util.c                                 :+:      :+:    :+:   */
+/*   executor_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gejeanet <gejeanet@student.21-school.ru>   +#+  +:+       +#+        */
+/*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/20 20:52:10 by gejeanet          #+#    #+#             */
-/*   Updated: 2020/10/21 11:01:33 by gejeanet         ###   ########.fr       */
+/*   Created: 2020/10/26 02:35:02 by larosale          #+#    #+#             */
+/*   Updated: 2020/10/26 02:35:03 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-extern	char	**g_env;
 
 static	void	free_splitted(char **p)
 {
@@ -45,7 +43,7 @@ char			*search_path(char *arg)
 	char			*result_tmp;
 	struct	stat	sb;
 
-	if ((p = ft_split(env_get_var("PATH"), ':')) == NULL || *p == NULL) 
+	if ((p = ft_split(env_get_var("PATH"), ':')) == NULL || *p == NULL)
 		return (NULL);
 	tmp = p;
 	while (*p != NULL)
