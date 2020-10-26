@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 02:22:12 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/26 02:39:10 by larosale         ###   ########.fr       */
+/*   Updated: 2020/10/26 13:09:32 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,27 +33,35 @@ int		gnl_wrapper(int fd, char **line)
 	char		*joined;
 	char		*joined_tmp;
 
-	joined = malloc(1);
+	joined = malloc(1);		// aggregates input while \n
 	*joined = '\0';
+	tmp = NULL;
 	while (1)
 	{
 		res = get_next_line(fd, &tmp);
-		joined_tmp = ft_strjoin(joined, tmp);
-		free(joined);
-		joined = joined_tmp;
-		if (res != 0)
+		if (res > 0)		// normal line with \n
 		{
+			joined_tmp = ft_strjoin(joined, tmp);
+			free(joined);
+			joined = joined_tmp;
 			*line = joined;
 			free(tmp);
 			return (res);
 		}
-		else
+		else if (res < 0)	// some error occurs
 		{
-			if (*tmp == '\0')
+			free(joined);
+			return (res);
+		}
+		else				// ctrl-D was pressed
+		{
+			if (*tmp == '\0')	// ONLY ctrl-D was pressed
 			{
 				clear_ctrl_d();
-				if (*joined == '\0')
+				if (*joined == '\0')	// ctrl-D was pressed on empty string, we simulate "exit" command
 				{
+					free(joined);
+					joined = ft_strdup("exit");
 					*line = joined;
 					free(tmp);
 					return (res);
@@ -61,9 +69,13 @@ int		gnl_wrapper(int fd, char **line)
 				free(tmp);
 				continue ;
 			}
-			else
+			else			// there are some symbols AND ctrl-D
 			{
 				clear_ctrl_d();
+				joined_tmp = ft_strjoin(joined, tmp);	// append theese symbols
+				free(joined);
+				joined = joined_tmp;
+				free(tmp);
 			}
 		}
 	}
