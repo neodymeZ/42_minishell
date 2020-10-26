@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/04 12:36:47 by larosale          #+#    #+#             */
-/*   Updated: 2020/08/14 15:58:41 by larosale         ###   ########.fr       */
+/*   Updated: 2020/10/26 15:34:13 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,7 +162,7 @@ t_list				*ft_lstmap(t_list *lst, void *(*f)(void *),
 ** BUFFER_SIZE determines the reading buffer size.
 */
 
-# define BUFFER_SIZE 32
+# define BUFFER_SIZE 1
 
 /*
 ** REM_LINE and REM_BUFF flags set the source of remainder to be cutted
