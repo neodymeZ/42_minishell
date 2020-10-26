@@ -6,11 +6,13 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 02:22:12 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/26 13:09:32 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/10/26 17:53:04 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static	char	*joined;
 
 /*
 ** Clears the ^D symbols from stdin
@@ -19,6 +21,52 @@
 static	void	clear_ctrl_d(void)
 {
 	ft_putstr_fd("  \b\b", 1);
+}
+
+static	void	gnl_signal_handler(int signo)
+{
+	if (signo == SIGINT)
+	{
+		if (joined == NULL || *joined == '\0')
+		{
+			signal_handler(signo);
+			return ;
+		}
+		free(joined);
+		joined = malloc(1);
+		*joined = '\0';
+		signal_handler(signo);
+	}
+	else if (signo == SIGQUIT)
+	{
+		signal_handler(signo);
+	}
+}
+
+/*
+** Set new handlers and save previous handlers
+*/
+
+static	void	set_new_signal_handlers(sig_t *sig_c, sig_t *sig_slash)
+{
+	*sig_c = signal(SIGINT, gnl_signal_handler);
+	if (*sig_c == SIG_ERR)
+		exit (-1);
+	*sig_slash = signal(SIGQUIT, gnl_signal_handler);
+	if (*sig_slash == SIG_ERR)
+		exit (-1);
+}
+
+/*
+** Restore signal handlers? saved by set_new_signal_handlers()
+*/
+
+static	void	restore_signal_handlers(sig_t sig_c, sig_t sig_slash)
+{
+		if (signal(SIGINT, sig_c) == SIG_ERR)
+			exit (-1);
+		if (signal(SIGQUIT, sig_slash) == SIG_ERR)
+			exit (-1);
 }
 
 /*
@@ -30,9 +78,12 @@ int		gnl_wrapper(int fd, char **line)
 {
 	int			res;
 	char		*tmp;
-	char		*joined;
+//	char		*joined;
 	char		*joined_tmp;
+	sig_t		sig_ctrl_c;
+	sig_t		sig_ctrl_backslash;
 
+	set_new_signal_handlers(&sig_ctrl_c, &sig_ctrl_backslash);
 	joined = malloc(1);		// aggregates input while \n
 	*joined = '\0';
 	tmp = NULL;
@@ -46,11 +97,13 @@ int		gnl_wrapper(int fd, char **line)
 			joined = joined_tmp;
 			*line = joined;
 			free(tmp);
+			restore_signal_handlers(sig_ctrl_c, sig_ctrl_backslash);
 			return (res);
 		}
 		else if (res < 0)	// some error occurs
 		{
 			free(joined);
+			restore_signal_handlers(sig_ctrl_c, sig_ctrl_backslash);
 			return (res);
 		}
 		else				// ctrl-D was pressed
@@ -64,6 +117,7 @@ int		gnl_wrapper(int fd, char **line)
 					joined = ft_strdup("exit");
 					*line = joined;
 					free(tmp);
+					restore_signal_handlers(sig_ctrl_c, sig_ctrl_backslash);
 					return (res);
 				}
 				free(tmp);
