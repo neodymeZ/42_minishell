@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 01:25:11 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/27 03:00:13 by larosale         ###   ########.fr       */
+/*   Updated: 2020/10/27 19:48:40 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@
 
 int		check_varname(char *str)
 {
-	if (ft_strlen(str) == 0)
+	if (!ft_strlen(str))
 		return (1);
-	while (*str != '\0')
+	while (*str)
 	{
 		if (!ft_isalnum(*str) && (*str != '_'))
 			return (1);
@@ -36,7 +36,7 @@ int		check_varname(char *str)
 ** Returns 0 if successfull, or 1 if no value was found.
 */
 
-int	split_value(char *var, char **value)
+int		split_value(char *var, char **value)
 {
 	char	*p;
 

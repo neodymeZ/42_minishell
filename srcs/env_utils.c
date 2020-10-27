@@ -6,7 +6,7 @@
 /*   By: gejeanet <gejeanet@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 20:14:39 by gejeanet          #+#    #+#             */
-/*   Updated: 2020/10/27 03:35:24 by larosale         ###   ########.fr       */
+/*   Updated: 2020/10/27 19:53:03 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,35 @@ char			*env_get_var(char *var)
 {
 	char	*result;
 
-	if ((result = find_var(var, g_env)) != NULL)
+	if ((result = find_var(var, g_env)))
 		return (result);
-	else if ((result = find_var(var, g_env_local)) != NULL)
+	else if ((result = find_var(var, g_env_local)))
 		return (result);
 	else
 		return (NULL);
 }
+
+/*
+** Creates environment variable "var" with given "value" (of length "len")
+** at a given pointer to the environment array.
+** Helper function for the "env_set_var" function.
+** Returns 1 on error, or 0 otherwise.
+*/
+
+static int		create_var(char *var, char *value, char **env, size_t len)
+{
+	size_t	new_len;
+
+	new_len = len + ft_strlen(value) + 1;
+	free(*env);
+	if (!(*env = ft_calloc(new_len, 1)))
+		return(errman(ERR_SYS)); 
+	ft_strlcpy(*env, var, len + 1);
+	*(*env + len) = '=';
+	ft_strlcat(*env, value, new_len + 1);
+	return (0);
+}
+
 
 /*
 ** Sets the "var" variable to the value "value" in the given environment "env".
@@ -58,7 +80,7 @@ char			*env_get_var(char *var)
 ** The function returns 1 on error, or 0 otherwise.
 */
 
-int				env_set_var(char *var, char *value, char **env)
+int				env_set_var(char *var, char *value, char ***env)
 {
 	size_t	len;
 	size_t	new_len;
@@ -68,30 +90,22 @@ int				env_set_var(char *var, char *value, char **env)
 	len = ft_strlen(var);
 	env_size = 0;
 	new_len = len + ft_strlen(value) + 1;
-	tmp = env;
-	while (*env != NULL)
+	tmp = *env;
+	while (*tmp != NULL)
 	{
-		if (!(ft_strncmp(*env, var, len)) && (*(*env + len) == '='))
+		if (!(ft_strncmp(*tmp, var, len)) && (*(*tmp + len) == '='))
 		{
-			free(*env);
-			if (!(*env = ft_calloc(new_len, 1)))
-				return(errman(ERR_SYS)); 
-			ft_strlcpy(*env, var, len + 1);
-			*(*env + len) = '=';
-			ft_strlcat(*env, value, new_len + 1);
+			create_var(var, value, tmp, len);
 			return (0);
 		}
-		env++;
+		tmp++;
 		env_size++;
 	}
-	env = tmp;
-	if (!(tmp = ft_realloc(env, sizeof(char *) * (env_size + 2), sizeof(char *) * (env_size + 1))))
+	if (!(tmp = ft_realloc(*env, sizeof(char *) * (env_size + 2), sizeof(char *) * (env_size + 1))))
 		return (errman(ERR_SYS));
-	if (!(*(env + env_size) = ft_calloc(new_len, 1)))
-		return (errman(ERR_SYS));
-	ft_strlcpy(*(env + env_size), var, len + 1);
-	*(*(env + env_size) + len) = '=';
-	ft_strlcat(*(env + env_size), value, new_len + 1);
+	create_var(var, value, tmp + env_size, len);
+	*(tmp + env_size + 1) = NULL;
+	*env = tmp;
 	return (0);
 }
 
@@ -104,6 +118,8 @@ int				env_del_var(char *var, char **env)
 {
 	size_t	len;
 
+	if (!var || !env)
+		return (1);
 	len = ft_strlen(var);
 	while (*env != NULL)
 	{

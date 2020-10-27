@@ -6,15 +6,15 @@
 /*   By: gejeanet <gejeanet@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 20:57:33 by gejeanet          #+#    #+#             */
-/*   Updated: 2020/10/27 03:34:55 by larosale         ###   ########.fr       */
+/*   Updated: 2020/10/27 19:58:25 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /*
-** builtin "env" implementation
-** simply prints all environment's variables which have a value
+** Minishell implementation of the bash builtin "env".
+** Simply prints all environment's variables which have a value.
 */
 
 int				ft_env(void)
@@ -35,9 +35,9 @@ int				ft_env(void)
 }
 
 /*
-** builtin "unset"
-** remove variables (if exists) from local AND global table
-** returns completion code
+** Minishell implementation of the bash builtin "unset".
+** Removes env variable (if it exists) from both local and global env contexts.
+** Returns 0 if successful, or 1 on error.
 */
 
 int				ft_unset(char **var)
@@ -45,7 +45,7 @@ int				ft_unset(char **var)
 	int		result;
 
 	result = 0;
-	if (var == NULL)
+	if (!var || !(*++var))
 		return (0);
 	while (*var != NULL)
 	{
@@ -68,10 +68,10 @@ int				ft_unset(char **var)
 }
 
 /*
-** builtin "export"
-** remove variables (if exists) from local env table (g_env_local)
-** and add it (or update if exists) into global env table (g_env)
-** returns completion code
+** Minishell implementation of the bash builtin "export".
+** If the argument to export does not specify value, or the var name
+** is not compliant with the var name rules, an error is returned.
+** Otherwise, the variable is added to env (or modified, if exists).
 */
 
 int				ft_export(char **var)
@@ -90,9 +90,16 @@ int				ft_export(char **var)
 	{
 		// add errman call (not a valid identifier - no value was found)
 		if (split_value(*var, &value))
-			return (1);
+		{
+			ft_putstr_fd("minishell: export: `", 2);
+			ft_putstr_fd(*var, 2);
+			ft_putstr_fd("': not a valid identifier\n", 2);
+			result = 1;
+			var++;
+			continue ;
+		}
 		if (check_varname(*var) == 0)
-			env_set_var(*var, value, g_env);
+			env_set_var(*var, value, &g_env);
 		// add errman call
 		else
 		{
@@ -100,6 +107,8 @@ int				ft_export(char **var)
 			ft_putstr_fd(*var, 2);
 			ft_putstr_fd("': not a valid identifier\n", 2);
 			result = 1;
+			var++;
+			continue ;
 		}
 		var++;
 	}
