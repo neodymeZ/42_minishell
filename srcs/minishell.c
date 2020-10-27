@@ -90,6 +90,7 @@ int		shell_loop(void)
 int		main(int argc, char **argv, char **env)
 {
 	// Copy env to global g_env. So, we can now add/remove/change env entries
+	// g_env could be NULL
 	g_env = env_init(env);
 	// Restart shell on Ctrl-C
 	if (signal(SIGINT, signal_handler) == SIG_ERR)

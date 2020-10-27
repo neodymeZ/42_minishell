@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_env_functs.c                               :+:      :+:    :+:   */
+/*   builtin_env.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gejeanet <gejeanet@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 20:57:33 by gejeanet          #+#    #+#             */
-/*   Updated: 2020/10/18 21:39:15 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/10/27 03:34:55 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ int				ft_unset(char **var)
 		}
 		else
 		{
+		// add errman call
 			ft_putstr_fd("minishell: unset: `", 2);
 			ft_putstr_fd(*var, 2);
 			ft_putstr_fd("': not a valid identifier\n", 2);
@@ -75,26 +76,24 @@ int				ft_unset(char **var)
 
 int				ft_export(char **var)
 {
-	int		result;
-	char	*name;
 	char	*value;
+	int		result;
 
+	value = NULL;
 	result = 0;
-	if (var == NULL || *var == NULL)
+	if (*++var == NULL)
 	{
 		prnt_env();
-		return (result);
+		return (0);
 	}
-	while (*var != NULL)
+	while (*var)
 	{
-		get_name_and_value(*var, &name, &value);
-		if (check_varname(name) == 0)
-		{
-			if (value == NULL)
-				value = env_get_var(name);
-			env_set_var(name, value, g_env);
-			env_del_var(name, g_env_local);
-		}
+		// add errman call (not a valid identifier - no value was found)
+		if (split_value(*var, &value))
+			return (1);
+		if (check_varname(*var) == 0)
+			env_set_var(*var, value, g_env);
+		// add errman call
 		else
 		{
 			ft_putstr_fd("minishell: export: `", 2);
@@ -102,7 +101,6 @@ int				ft_export(char **var)
 			ft_putstr_fd("': not a valid identifier\n", 2);
 			result = 1;
 		}
-		free(name);
 		var++;
 	}
 	return (result);

@@ -6,71 +6,72 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 01:25:11 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/26 01:25:13 by larosale         ###   ########.fr       */
+/*   Updated: 2020/10/27 03:00:13 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
+** Checks the environment variable name "str" for validity.
+** Returns 0 if the name is valid, or 0 otherwise.
+*/
+
 int		check_varname(char *str)
 {
-	int		result;
-
-	result = 0;
 	if (ft_strlen(str) == 0)
 		return (1);
 	while (*str != '\0')
 	{
 		if (!ft_isalnum(*str) && (*str != '_'))
-		{
-			result = 1;
-			break ;
-		}
+			return (1);
 		str++;
 	}
-	return (result);
+	return (0);
 }
 
-void	get_name_and_value(char *var, char **name, char **value)
+/*
+** Splits the full env var string "var" on the "=" char.
+** Pointer to the value is saved to *value.
+** Returns 0 if successfull, or 1 if no value was found.
+*/
+
+int	split_value(char *var, char **value)
 {
 	char	*p;
 
-	p = ft_strchr(var, '=');
-	if (p == NULL)
-	{
-		*value = NULL;
-		*name = ft_strdup(var);
-	}
-	else
-	{
-		*value = p + 1;
-		*name = malloc(p - var + 1);
-		ft_memmove(*name, var, p - var);
-		*(*name + (p - var)) = '\0';
-	}
+	if (!(p = ft_strchr(var, '=')))
+		return (1);
+	*p = '\0';
+	*value = p + 1;
+	return (0);
 }
+
+/*
+** Prints environment variables similarly to the bash export command.
+*/
 
 void	prnt_env(void)
 {
 	char	**p;
-	char	*name;
-	char	*value;
+	char	*var;
 
 	p = g_env;
 	while (*p != NULL)
 	{
-		get_name_and_value(*p, &name, &value);
 		ft_putstr_fd("declare -x ", 1);
-		ft_putstr_fd(name, 1);
-		if (value != NULL)
+		var = *p;
+		while (*var != '=')
 		{
-			ft_putstr_fd("=", 1);
-			ft_putchar_fd('"', 1);
-			ft_putstr_fd(value, 1);
-			ft_putchar_fd('"', 1);
+			ft_putchar_fd(*var, 1);
+			var++;
 		}
+		ft_putchar_fd('=', 1);
+		ft_putchar_fd('"', 1);
+		ft_putstr_fd(++var, 1);
+		ft_putchar_fd('"', 1);
 		ft_putstr_fd("\n", 1);
-		free(name);
 		p++;
 	}
+	return ;
 }

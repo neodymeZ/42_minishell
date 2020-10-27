@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:51:09 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/23 10:38:24 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/10/27 02:49:15 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,12 @@ int		run_builtin(char **command, int gnl_result)
 	else if (!ft_strncmp(*command, "echo", 5))
 	{
 		if (ft_echo(command))
+			return (errman(ERR_SYS));
+		return (0);
+	}
+	else if (!ft_strncmp(*command, "export", 7))
+	{
+		if (ft_export(command))
 			return (errman(ERR_SYS));
 		return (0);
 	}
