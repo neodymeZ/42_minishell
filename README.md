@@ -2,8 +2,9 @@
 42 minishell project
 
 To do:
-1) Parser - token string concatenation
-2) Word expansion (env vars substitution, escape chars?)
+✅ 1) Parser - token string concatenation
+✅ 2) Word expansion (env vars substitution
+3) Word expansion (escape chars?)
 3) Pipes
 4) Redirections
 5) Error management - pass error description to errman function
@@ -18,3 +19,5 @@ Additionally implemented:
 
 Will not be implemented:
 1) Multiline pipe (complex parsing of input is needed);
+2) Freeing memory on erroneous exit (OS will handle);
+3) Shell variables;

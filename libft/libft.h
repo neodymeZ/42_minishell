@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/04 12:36:47 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/26 15:34:13 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/10/29 00:06:02 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char				*ft_charstr(int number, unsigned char c);
 char				*ft_strpad(char *input, char pad, int num, int free_flag);
 char				*ft_strconv(char *str, int (*f)(int));
 char				*ft_strins(char *input, char sym, size_t position);
-
+char				*ft_strsubst(char *str, char *src, char *dst);
 /*
 **----------------------------Conversions---------------------------------------
 */

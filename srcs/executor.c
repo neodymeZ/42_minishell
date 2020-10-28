@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:51:09 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/27 19:41:55 by larosale         ###   ########.fr       */
+/*   Updated: 2020/10/27 20:10:27 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,14 @@ void	free_argv(int argc, char **argv)
 
 int		exec_cmd(char **argv)
 {
-//	char	*path;
+	char	*path;
 
-	if (1)
-//	if (ft_strchr(argv[0], '/'))
+	if (ft_strchr(argv[0], '/'))
 	{
 		if (execve(argv[0], argv, g_env) < 0)
 			return (errman(ERR_SYS));
 	}
-// Implement searching in $PATH
-/*	else
+	else
 	{
 		// Add err man (executable not found)
 		if (!(path = search_path(argv[0])))
@@ -41,7 +39,7 @@ int		exec_cmd(char **argv)
 			return (errman(ERR_SYS));
 		free(path);
 	}
-*/	return (0);
+	return (0);
 }
 
 int		run_builtin(char **command, int gnl_result)

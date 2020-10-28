@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 23:12:19 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/26 00:46:39 by larosale         ###   ########.fr       */
+/*   Updated: 2020/10/29 00:39:16 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,13 @@ int					set_node_data(t_node *node, char *data);
 
 t_node				*parse_temp(t_token *token);
 t_node				*parse_input(t_input *in);
+
+/*
+** Token transformation functions
+*/
+
+int					concat_tokens(t_token *token, t_input *in);
+int					subst_env(t_token *token);
 
 // TESTING
 
