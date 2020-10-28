@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 23:48:28 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/28 00:20:51 by larosale         ###   ########.fr       */
+/*   Updated: 2020/10/28 00:51:31 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,6 +171,7 @@ t_node	*parse_input(t_input *in)
 	while ((token = tokenize_input(in)) &&
 		ft_memcmp(token, g_null_token, sizeof(t_token)))
 	{
+		subst_env(token);
 		if (token->concat)
 		{
 			if (concat_tokens(token, in))
