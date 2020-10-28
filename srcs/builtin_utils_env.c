@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 01:25:11 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/27 19:48:40 by larosale         ###   ########.fr       */
+/*   Updated: 2020/10/28 23:24:15 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,55 @@ int		split_value(char *var, char **value)
 }
 
 /*
+** It is a helper function for sort_env() via quicksort algo.
+** There is no needs to implement a ft_strcmp() for compare any strings.
+** 1000000 is enough.
+*/
+
+int		partition_for_quicksort(char **env, int l, int h)
+{
+	char	*v;
+	char	*tmp;
+	int		i;
+	int		j;
+
+	i = l;
+	j = h;
+	v = env[(l + h) / 2];
+	while (i <= j)
+	{
+		while (ft_strncmp(env[i], v, 1000000) < 0)
+			i++;
+		while (ft_strncmp(env[j], v, 1000000) > 0)
+			j--;
+		if (i >= j)
+			break ;
+		tmp = env[i];
+		env[i] = env[j];
+		env[j] = tmp;
+		i++;
+		j--;
+	}
+	return (j);
+}
+
+/*
+** Sort (quicksort) env variables (we need this before printing the environment).
+*/
+
+void	sort_env(char **env, int low, int high)
+{
+	int		base;
+
+	if (low < high)
+	{
+		base = partition_for_quicksort(env, low, high);
+		sort_env(env, low, base);
+		sort_env(env, base + 1, high);
+	}
+}
+
+/*
 ** Prints environment variables similarly to the bash export command.
 */
 
@@ -55,7 +104,15 @@ void	prnt_env(void)
 {
 	char	**p;
 	char	*var;
+	int		i;
 
+	if (g_env == NULL || *g_env == NULL)
+		return ;
+	i = 0;
+	p = g_env;
+	while (*p++ != NULL)
+		i++;
+	sort_env(g_env, 0, i - 1);
 	p = g_env;
 	while (*p != NULL)
 	{
