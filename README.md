@@ -2,8 +2,8 @@
 42 minishell project
 
 To do:
-✅ 1) Parser - token string concatenation
-✅ 2) Word expansion (env vars substitution
+1) Parser - token string concatenation ✅ 
+2) Word expansion (env vars substitution ✅ 
 3) Word expansion (escape chars?)
 3) Pipes
 4) Redirections
@@ -12,7 +12,7 @@ To do:
 6) Check memory leaks
 7) Uppercase letters in commands?
 8) Launching script as a command line argument?
-✅ 9) Lexical order of "export" output
+9) Lexical order of "export" output ✅ 
 
 Additionally implemented:
 1) Multiline input (on '\' symbol or on missing quote);
