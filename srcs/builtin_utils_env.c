@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 01:25:11 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/28 23:24:15 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/10/30 17:31:57 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,19 +116,15 @@ void	prnt_env(void)
 	p = g_env;
 	while (*p != NULL)
 	{
-		ft_putstr_fd("declare -x ", 1);
-		var = *p;
-		while (*var != '=')
+		var = *p++;
+		if (*var != '_' || *(var + 1) != '=')
 		{
-			ft_putchar_fd(*var, 1);
-			var++;
+			ft_putstr_fd("declare -x ", 1);
+			while (*var != '=')
+				ft_putchar_fd(*var++, 1);
+			ft_putstr_fd("=\"", 1);
+			ft_putstr_fd(++var, 1);
+			ft_putstr_fd("\"\n", 1);
 		}
-		ft_putchar_fd('=', 1);
-		ft_putchar_fd('"', 1);
-		ft_putstr_fd(++var, 1);
-		ft_putchar_fd('"', 1);
-		ft_putstr_fd("\n", 1);
-		p++;
 	}
-	return ;
 }
