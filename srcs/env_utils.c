@@ -6,7 +6,7 @@
 /*   By: gejeanet <gejeanet@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 20:14:39 by gejeanet          #+#    #+#             */
-/*   Updated: 2020/10/27 19:53:03 by larosale         ###   ########.fr       */
+/*   Updated: 2020/10/31 02:51:00 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,13 @@ static	char	*find_var(char *var, char **env)
 	len = ft_strlen(var);
 	while (*env != NULL)
 	{
-		if (!ft_strncmp(*env, var, len) && *(*env + len) == '=')
-			return (*env + len + 1);
+		if (!ft_strncmp(*env, var, len))
+		{
+			if (*(*env + len) == '=')
+				return (*env + len + 1);
+			if (*(*env + len) == '\0')
+				return (*env + len);
+		}
 		env++;
 	}
 	return (NULL);
@@ -63,13 +68,19 @@ static int		create_var(char *var, char *value, char **env, size_t len)
 {
 	size_t	new_len;
 
-	new_len = len + ft_strlen(value) + 1;
-	free(*env);
+	if (value == NULL)
+		new_len = len + 1;
+	else
+		new_len = len + ft_strlen(value) + 2;
+	if (*env != NULL)
+		free(*env);
 	if (!(*env = ft_calloc(new_len, 1)))
 		return(errman(ERR_SYS)); 
 	ft_strlcpy(*env, var, len + 1);
+	if (value == NULL)
+		return (0);
 	*(*env + len) = '=';
-	ft_strlcat(*env, value, new_len + 1);
+	ft_strlcat(*env, value, new_len);
 	return (0);
 }
 
@@ -83,17 +94,16 @@ static int		create_var(char *var, char *value, char **env, size_t len)
 int				env_set_var(char *var, char *value, char ***env)
 {
 	size_t	len;
-	size_t	new_len;
 	int		env_size;
 	char	**tmp;
 
 	len = ft_strlen(var);
 	env_size = 0;
-	new_len = len + ft_strlen(value) + 1;
 	tmp = *env;
 	while (*tmp != NULL)
 	{
-		if (!(ft_strncmp(*tmp, var, len)) && (*(*tmp + len) == '='))
+		if (!(ft_strncmp(*tmp, var, len)) && ((*(*tmp + len) == '=') || \
+												(*(*tmp + len) == '\0')))
 		{
 			create_var(var, value, tmp, len);
 			return (0);
@@ -101,7 +111,8 @@ int				env_set_var(char *var, char *value, char ***env)
 		tmp++;
 		env_size++;
 	}
-	if (!(tmp = ft_realloc(*env, sizeof(char *) * (env_size + 2), sizeof(char *) * (env_size + 1))))
+	if (!(tmp = ft_realloc(*env, sizeof(char *) * (env_size + 2), \
+								sizeof(char *) * (env_size + 1))))
 		return (errman(ERR_SYS));
 	create_var(var, value, tmp + env_size, len);
 	*(tmp + env_size + 1) = NULL;
@@ -110,8 +121,8 @@ int				env_set_var(char *var, char *value, char ***env)
 }
 
 /*
-** Deletes a variable "var" from given environment "env" and returns 0.
-** Does nothing if the specified variable does not exist and returns 1.
+** Delete a variable "var" from given environment "env" and returns 0.
+** Do nothing if the specified variable does not exist and returns 1.
 */
 
 int				env_del_var(char *var, char **env)
@@ -123,7 +134,8 @@ int				env_del_var(char *var, char **env)
 	len = ft_strlen(var);
 	while (*env != NULL)
 	{
-		if (!(ft_strncmp(*env, var, len)) && ((*(*env + len) == '=')))
+		if (!(ft_strncmp(*env, var, len)) && ((*(*env + len) == '=') || \
+												(*(*env + len) == '\0')))
 		{
 			free(*env);
 			while (*env != NULL)

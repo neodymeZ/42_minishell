@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 01:25:11 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/30 17:31:57 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/10/31 03:11:47 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 ** Returns 0 if the name is valid, or 0 otherwise.
 */
 
-int		check_varname(char *str)
+int				check_varname(char *str)
 {
 	if (!ft_strlen(str))
 		return (1);
@@ -32,19 +32,21 @@ int		check_varname(char *str)
 
 /*
 ** Splits the full env var string "var" on the "=" char.
-** Pointer to the value is saved to *value.
-** Returns 0 if successfull, or 1 if no value was found.
+** Cut var (replace '=' to '\0')
+** Pointer to the value (if present) is saved to *value.
 */
 
-int		split_value(char *var, char **value)
+void			split_value(char *var, char **value)
 {
 	char	*p;
 
 	if (!(p = ft_strchr(var, '=')))
-		return (1);
+	{
+		*value = NULL;
+		return ;
+	}
 	*p = '\0';
 	*value = p + 1;
-	return (0);
 }
 
 /*
@@ -53,7 +55,7 @@ int		split_value(char *var, char **value)
 ** 1000000 is enough.
 */
 
-int		partition_for_quicksort(char **env, int l, int h)
+static	int		partition_for_quicksort(char **env, int l, int h)
 {
 	char	*v;
 	char	*tmp;
@@ -84,7 +86,7 @@ int		partition_for_quicksort(char **env, int l, int h)
 ** Sort (quicksort) env variables (we need this before printing the environment).
 */
 
-void	sort_env(char **env, int low, int high)
+void			sort_env(char **env, int low, int high)
 {
 	int		base;
 
@@ -93,38 +95,5 @@ void	sort_env(char **env, int low, int high)
 		base = partition_for_quicksort(env, low, high);
 		sort_env(env, low, base);
 		sort_env(env, base + 1, high);
-	}
-}
-
-/*
-** Prints environment variables similarly to the bash export command.
-*/
-
-void	prnt_env(void)
-{
-	char	**p;
-	char	*var;
-	int		i;
-
-	if (g_env == NULL || *g_env == NULL)
-		return ;
-	i = 0;
-	p = g_env;
-	while (*p++ != NULL)
-		i++;
-	sort_env(g_env, 0, i - 1);
-	p = g_env;
-	while (*p != NULL)
-	{
-		var = *p++;
-		if (*var != '_' || *(var + 1) != '=')
-		{
-			ft_putstr_fd("declare -x ", 1);
-			while (*var != '=')
-				ft_putchar_fd(*var++, 1);
-			ft_putstr_fd("=\"", 1);
-			ft_putstr_fd(++var, 1);
-			ft_putstr_fd("\"\n", 1);
-		}
 	}
 }
