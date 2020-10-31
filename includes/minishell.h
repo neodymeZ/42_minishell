@@ -38,7 +38,10 @@ int			check_quotes(char *input);
 ** Signal handlers
 */
 
-void   		signal_handler(int signo);
+void		signal_handler(int signo);
+void		gnl_signal_handler(int signo);
+void		set_new_signal_handlers(sig_t *sig_c, sig_t *sig_slash);
+void		restore_signal_handlers(sig_t sig_c, sig_t sig_slash);
 
 /*
 ** Environment handling
