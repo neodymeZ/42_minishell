@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 02:22:12 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/26 17:53:04 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/10/31 13:00:01 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ int		gnl_wrapper(int fd, char **line)
 {
 	int			res;
 	char		*tmp;
-//	char		*joined;
 	char		*joined_tmp;
 	sig_t		sig_ctrl_c;
 	sig_t		sig_ctrl_backslash;
@@ -87,52 +86,37 @@ int		gnl_wrapper(int fd, char **line)
 	joined = malloc(1);		// aggregates input while \n
 	*joined = '\0';
 	tmp = NULL;
-	while (1)
+	while ((res = get_next_line(fd, &tmp)) == 0)
 	{
-		res = get_next_line(fd, &tmp);
-		if (res > 0)		// normal line with \n
+		clear_ctrl_d();
+		if ((*tmp == '\0') && (*joined == '\0'))	// ONLY ctrl-D was pressed and no previous input in joined
 		{
-			joined_tmp = ft_strjoin(joined, tmp);
 			free(joined);
-			joined = joined_tmp;
+			joined = ft_strdup("exit");
 			*line = joined;
 			free(tmp);
-			restore_signal_handlers(sig_ctrl_c, sig_ctrl_backslash);
-			return (res);
+			break ;
 		}
-		else if (res < 0)	// some error occurs
+		else			// there are some symbols AND ctrl-D
 		{
+			joined_tmp = ft_strjoin(joined, tmp);	// append theese symbols
 			free(joined);
-			restore_signal_handlers(sig_ctrl_c, sig_ctrl_backslash);
-			return (res);
+			joined = joined_tmp;
 		}
-		else				// ctrl-D was pressed
-		{
-			if (*tmp == '\0')	// ONLY ctrl-D was pressed
-			{
-				clear_ctrl_d();
-				if (*joined == '\0')	// ctrl-D was pressed on empty string, we simulate "exit" command
-				{
-					free(joined);
-					joined = ft_strdup("exit");
-					*line = joined;
-					free(tmp);
-					restore_signal_handlers(sig_ctrl_c, sig_ctrl_backslash);
-					return (res);
-				}
-				free(tmp);
-				continue ;
-			}
-			else			// there are some symbols AND ctrl-D
-			{
-				clear_ctrl_d();
-				joined_tmp = ft_strjoin(joined, tmp);	// append theese symbols
-				free(joined);
-				joined = joined_tmp;
-				free(tmp);
-			}
-		}
+		free(tmp);
 	}
+	if (res > 0)		// normal line with \n
+	{
+		joined_tmp = ft_strjoin(joined, tmp);
+		free(joined);
+		joined = joined_tmp;
+		*line = joined;
+		free(tmp);
+	}
+	else if (res < 0)	// some error occurs
+		free(joined);
+	restore_signal_handlers(sig_ctrl_c, sig_ctrl_backslash);
+	return (res);
 }
 
 /*
