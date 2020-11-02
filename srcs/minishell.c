@@ -21,17 +21,17 @@ t_input	*read_input(void)
 	char	*input;
 	char	*temp;
 	char	*temp2;
-	int		gnl_res;
 	t_input	*in;
 
-	if ((gnl_res = gnl_wrapper(0, &input)) < 0)
+	if (gnl_wrapper(0, &input) < 0)
 		return (errman(ERR_SYS) ? NULL : NULL);
-	while (input[ft_strlen(input) - 1] == '\\' || check_quotes(input))	// Handling multiline input
+	while (ft_strlen(input) > 0 && (input[ft_strlen(input) - 1] == '\\' ||
+		check_quotes(input)))	// Handling multiline input
 	{
 		print_prompt2();
 		if (input[ft_strlen(input) - 1] == '\\')
 			input[ft_strlen(input) - 1] = '\0';
-		if ((gnl_res = gnl_wrapper(0, &temp)) < 0 ||
+		if (gnl_wrapper(0, &temp) < 0 ||
 			!(temp2 = ft_strjoin(input, temp)))
 			return (errman(ERR_SYS) ? NULL : NULL);
 		free(input);
@@ -39,7 +39,7 @@ t_input	*read_input(void)
 		input = temp2;
 	}
 	in = create_input(input);
-	in->gnl_res = gnl_res;
+	printf("Input is: %s\n", input);
 	free(input);
 	return (in);
 }
@@ -80,7 +80,7 @@ int		shell_loop(void)
 		{
 			// check the parse_input function return value
 			cmd = parse_temp(token);
-			run_simplecom(cmd, in->gnl_res);
+			run_simplecom(cmd);
 			delete_tree(cmd);
 		}
 	}
@@ -93,12 +93,7 @@ int		main(int argc, char **argv, char **env)
 	// g_env could be NULL
 	g_env = env_init(env);
 	// Restart shell on Ctrl-C
-	if (signal(SIGINT, signal_handler) == SIG_ERR)
-		return (errman(ERR_SYS));
-	if (signal(SIGQUIT, signal_handler) == SIG_ERR)
-		return (errman(ERR_SYS));
-	if (signal(SIGTERM, SIG_IGN) == SIG_ERR)
-		return (errman(ERR_SYS));
+	set_signals(SIGNAL_SET);
 	if (argc == 1)
 		shell_loop();
 	else if (argc >= 2)

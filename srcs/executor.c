@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:51:09 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/27 20:10:27 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/02 18:14:07 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,10 @@ int		exec_cmd(char **argv)
 	return (0);
 }
 
-int		run_builtin(char **command, int gnl_result)
+int		run_builtin(char **command)
 {
 	// Ctrl-D handling
-	if (!(*command) && gnl_result)
-		return (0);
-	else if ((!gnl_result && !(*command)) || !ft_strncmp(*command, "exit", 5))
+	if (!ft_strncmp(*command, "exit", 5))
 		ft_exit();
 	else if (!ft_strncmp(*command, "cd", 3))
 	{
@@ -87,7 +85,7 @@ int		run_builtin(char **command, int gnl_result)
 	return (-1);
 }
 
-int 	run_simplecom(t_node *node, int gnl_res)
+int 	run_simplecom(t_node *node)
 {
 	t_node	*child;
 	int		argc;
@@ -109,7 +107,7 @@ int 	run_simplecom(t_node *node, int gnl_res)
 	}
 	argv[argc] = NULL;
 	// Pass GNL result to run_builtin to handle Ctrl-D?
-	if (!run_builtin(argv, gnl_res))
+	if (!run_builtin(argv))
 	{
 		free_argv(argc, argv);
 		return (0);
@@ -120,22 +118,16 @@ int 	run_simplecom(t_node *node, int gnl_res)
 	else if (child_pid == 0)
 	{
 		// Execute command in child process
+		set_signals(SIGNAL_DFL);
 		exec_cmd(argv);
 	}
 	else
 	{
-		signal(SIGINT, SIG_IGN);
-		signal(SIGQUIT, SIG_IGN);
-		signal(SIGTERM, SIG_IGN);
+		set_signals(SIGNAL_IGN);
 		// Wait for child process in the parent (main) process
 		if (waitpid(child_pid, &stat_loc, WUNTRACED) < 0)
 			return (errman(ERR_SYS));
-		if (signal(SIGINT, signal_handler) == SIG_ERR)
-			return (errman(ERR_SYS));
-		if (signal(SIGQUIT, signal_handler) == SIG_ERR)
-			return (errman(ERR_SYS));
-		if (signal(SIGTERM, SIG_IGN) == SIG_ERR)
-			return (errman(ERR_SYS));
+		set_signals(SIGNAL_SET);
 	}
 	free_argv(argc, argv);
 	return (0);

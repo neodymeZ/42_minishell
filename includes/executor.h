@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:51:21 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/26 02:39:53 by larosale         ###   ########.fr       */
+/*   Updated: 2020/10/29 19:48:21 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # define MAX_ARGS		(255)
 
 int		exec_cmd(char **argv);
-int		run_simplecom(t_node *node, int gnl_res);
+int		run_simplecom(t_node *node);
 char	*search_path(char *arg);
 
 #endif

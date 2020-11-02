@@ -6,133 +6,63 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 02:22:12 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/26 17:53:04 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/11/02 20:06:21 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static	char	*joined;
+char     *g_gnl_str = NULL;
 
 /*
-** Clears the ^D symbols from stdin
+** Helper function for GNL wrapper.
 */
 
-static	void	clear_ctrl_d(void)
+static int	join_str(char **line, char **tmp) 
 {
-	ft_putstr_fd("  \b\b", 1);
-}
-
-static	void	gnl_signal_handler(int signo)
-{
-	if (signo == SIGINT)
-	{
-		if (joined == NULL || *joined == '\0')
-		{
-			signal_handler(signo);
-			return ;
-		}
-		free(joined);
-		joined = malloc(1);
-		*joined = '\0';
-		signal_handler(signo);
-	}
-	else if (signo == SIGQUIT)
-	{
-		signal_handler(signo);
-	}
-}
-
-/*
-** Set new handlers and save previous handlers
-*/
-
-static	void	set_new_signal_handlers(sig_t *sig_c, sig_t *sig_slash)
-{
-	*sig_c = signal(SIGINT, gnl_signal_handler);
-	if (*sig_c == SIG_ERR)
-		exit (-1);
-	*sig_slash = signal(SIGQUIT, gnl_signal_handler);
-	if (*sig_slash == SIG_ERR)
-		exit (-1);
-}
-
-/*
-** Restore signal handlers? saved by set_new_signal_handlers()
-*/
-
-static	void	restore_signal_handlers(sig_t sig_c, sig_t sig_slash)
-{
-		if (signal(SIGINT, sig_c) == SIG_ERR)
-			exit (-1);
-		if (signal(SIGQUIT, sig_slash) == SIG_ERR)
-			exit (-1);
+	if (!(*tmp = ft_strjoin(g_gnl_str, *line)))
+		return (errman(ERR_SYS));
+	free(*line);
+	free(g_gnl_str);
+	g_gnl_str = *tmp;
+	return (0);
 }
 
 /*
 ** Wrapper function for the get_next_line function to implement
 ** Ctrl-D handling similarly to bash.
+** If GNL ends with non-zero result (line was read, or error returned)
+** the wrapper does nothing.
+** If GNL returns 0 (EOF) and the line is empty, minishell exits.
+** Otherwise, the line is being read in a loop while GNL returns 0.
+** Read lines are joined until non-zero GNL return.
+** The global variable gnl_str keeps pointer to the joined string for
+** correct signal handling behavior.
+** Interface of the wrapper is similar to GNL's.
 */
 
-int		gnl_wrapper(int fd, char **line)
+int			gnl_wrapper(int fd, char **line)
 {
-	int			res;
-	char		*tmp;
-//	char		*joined;
-	char		*joined_tmp;
-	sig_t		sig_ctrl_c;
-	sig_t		sig_ctrl_backslash;
+	int		gnl_res;
+	char	*tmp;
 
-	set_new_signal_handlers(&sig_ctrl_c, &sig_ctrl_backslash);
-	joined = malloc(1);		// aggregates input while \n
-	*joined = '\0';
-	tmp = NULL;
-	while (1)
+	if ((gnl_res = get_next_line(fd, line)))
+		return (gnl_res);
+	if (**line == '\0')
+		ft_exit();
+	if (!(g_gnl_str = ft_calloc(1, 1)))
+		return (errman(ERR_SYS));
+	ft_putstr_fd("  \b\b", 1);
+	while (!gnl_res) // Loop starts only when GNL result is 0 (EOF)
 	{
-		res = get_next_line(fd, &tmp);
-		if (res > 0)		// normal line with \n
-		{
-			joined_tmp = ft_strjoin(joined, tmp);
-			free(joined);
-			joined = joined_tmp;
-			*line = joined;
-			free(tmp);
-			restore_signal_handlers(sig_ctrl_c, sig_ctrl_backslash);
-			return (res);
-		}
-		else if (res < 0)	// some error occurs
-		{
-			free(joined);
-			restore_signal_handlers(sig_ctrl_c, sig_ctrl_backslash);
-			return (res);
-		}
-		else				// ctrl-D was pressed
-		{
-			if (*tmp == '\0')	// ONLY ctrl-D was pressed
-			{
-				clear_ctrl_d();
-				if (*joined == '\0')	// ctrl-D was pressed on empty string, we simulate "exit" command
-				{
-					free(joined);
-					joined = ft_strdup("exit");
-					*line = joined;
-					free(tmp);
-					restore_signal_handlers(sig_ctrl_c, sig_ctrl_backslash);
-					return (res);
-				}
-				free(tmp);
-				continue ;
-			}
-			else			// there are some symbols AND ctrl-D
-			{
-				clear_ctrl_d();
-				joined_tmp = ft_strjoin(joined, tmp);	// append theese symbols
-				free(joined);
-				joined = joined_tmp;
-				free(tmp);
-			}
-		}
+		join_str(line, &tmp);
+		gnl_res = get_next_line(fd, line);
+		ft_putstr_fd("  \b\b", 1);
 	}
+	join_str(line, &tmp); // Append last piece with \n at the end.
+	*line = tmp;
+	g_gnl_str = NULL;
+	return (gnl_res);
 }
 
 /*
@@ -142,7 +72,7 @@ int		gnl_wrapper(int fd, char **line)
 ** and 2 if ' single quote was found. 
 */
 
-int		check_quotes(char *input)
+int			check_quotes(char *input)
 {
 	int i;
 	int len;

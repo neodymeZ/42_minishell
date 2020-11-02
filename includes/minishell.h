@@ -25,6 +25,8 @@
 extern int		errno;
 extern char		**g_env;
 extern char		**g_env_local;
+extern t_token	*g_null_token;
+extern char		*g_gnl_str;
 
 /*
 ** Input handling
@@ -38,7 +40,12 @@ int			check_quotes(char *input);
 ** Signal handlers
 */
 
+# define SIGNAL_DFL 0
+# define SIGNAL_IGN 1
+# define SIGNAL_SET 2
+
 void   		signal_handler(int signo);
+int			set_signals(int flag);
 
 /*
 ** Environment handling

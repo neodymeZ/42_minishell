@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 01:36:22 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/26 00:58:11 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/02 17:55:25 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ typedef struct			s_input
     char				*buffer;
     int					size;
     int					pos;
-	int					gnl_res;
 }						t_input;
 
 /*
@@ -91,13 +90,6 @@ typedef struct			s_tokbuf
 	t_token_types		type;
 	int					concat;	
 }						t_tokbuf;
-
-/*
-** "g_null_token" global variable is used for defining the null token,
-** used to terminate tokenization.
-*/
-
-extern t_token  *g_null_token;
 
 /*
 ** Functions to manipulate the input string
