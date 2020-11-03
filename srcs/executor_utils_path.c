@@ -6,18 +6,23 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 02:35:02 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/26 02:35:03 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/03 20:55:07 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+/*
+** Helper function for "search_path" function.
+** Frees the array of strings "p".
+*/
 
 static	void	free_splitted(char **p)
 {
 	char	**tmp;
 
 	if (p == NULL)
-		return;
+		return ;
 	tmp = p;
 	while (*p != NULL)
 		free(*p++);
@@ -25,8 +30,8 @@ static	void	free_splitted(char **p)
 }
 
 /*
-** search executable file with name equal to *arg
-** and return feeable pointer to string with path + filename
+** Search executable file with name equal to *arg
+** and return freeable pointer to string with path + filename
 ** (ready to pass to execve()).
 ** Return NULL if file does not exist.
 ** We search in $PATH first, then (if search failed),

@@ -39,7 +39,6 @@ t_input	*read_input(void)
 		input = temp2;
 	}
 	in = create_input(input);
-	printf("Input is: %s\n", input);
 	free(input);
 	return (in);
 }
@@ -51,8 +50,8 @@ t_input	*read_input(void)
 int		shell_loop(void)
 {
 	t_input	*in;
-	t_token	*token;
-	t_node	*cmd;
+//	t_token	*token;
+	t_node	*ast;
 
 	while (1)
 	{
@@ -71,18 +70,18 @@ int		shell_loop(void)
 			test_parser(in);
 			continue ;
 		}
-		//replace by
-//		cmd = parse_input(in);
-//		run_cmd(cmd);
-//		delete_tree(cmd);
-		while ((token = tokenize_input(in)) &&
+		ast = parse_input(in);
+		run_ast(ast);
+		delete_tree(ast);
+/*		while ((token = tokenize_input(in)) &&
 			ft_memcmp(token, g_null_token, sizeof(t_token)))
 		{
 			// check the parse_input function return value
-			cmd = parse_temp(token);
-			run_simplecom(cmd);
-			delete_tree(cmd);
+			ast = parse_temp(token);
+			run_simplecom(ast);
+			delete_tree(ast);
 		}
+	}*/
 	}
 	return (0);
 }

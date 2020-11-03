@@ -6,44 +6,11 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 23:48:28 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/28 00:51:31 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/04 02:22:15 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/*
-** Temporary parsing function for simple command processing
-** REMOVE
-*/
-
-t_node *parse_temp(t_token *token)
-{
-	t_node	*cmd;
-	t_node	*arg;
-	t_input	*in;
-
-	// Add errman
-	if (!token)
-		return (NULL);
-	if (!(cmd = create_node(NODE_CMD)))
-		return (errman(ERR_SYS) ? NULL : NULL);
-	in = token->in;
-	while (ft_memcmp(token, g_null_token, sizeof(t_token)) &&
-		token->type != PIPE && token->type != SEMIC)
-	{
-		if (!(arg = create_node(NODE_ARG)))
-			return (errman(ERR_SYS) ? NULL : NULL);
-		set_node_data(arg, token->text);
-        add_child_node(cmd, arg);
-		delete_token(token);
-		token = tokenize_input(in);
-	}
-	if (token->type == PIPE || token->type == SEMIC)
-		unget_c(in);
-	delete_token(token);
-	return (cmd);
-}
 
 /*
 ** Parses tokens which are part of a simple command.
