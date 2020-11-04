@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 02:35:02 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/03 20:55:07 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/04 08:59:52 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,7 @@ static	void	free_splitted(char **p)
 ** and return freeable pointer to string with path + filename
 ** (ready to pass to execve()).
 ** Return NULL if file does not exist.
-** We search in $PATH first, then (if search failed),
-** we search in current directory.
+** We search in $PATH.
 ** ATTENTION!!!  returned path MAY be relative path (or absolute)
 ** because in the PATH env variable we can store path of ANY type
 */

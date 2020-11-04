@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 02:09:26 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/27 02:33:39 by larosale         ###   ########.fr       */
+/*   Updated: 2020/10/31 02:56:01 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int			ft_env(void);
 */
 
 int			check_varname(char *str);
-int			split_value(char *var, char **value);
-void		prnt_env(void);
+void		split_value(char *var, char **value);
+void		sort_env(char **env, int low, int high);
 
 #endif

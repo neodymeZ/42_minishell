@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 02:22:12 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/02 20:06:21 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/04 09:12:04 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ static int	join_str(char **line, char **tmp)
 /*
 ** Wrapper function for the get_next_line function to implement
 ** Ctrl-D handling similarly to bash.
+<<<<<<< HEAD
 ** If GNL ends with non-zero result (line was read, or error returned)
 ** the wrapper does nothing.
 ** If GNL returns 0 (EOF) and the line is empty, minishell exits.
@@ -69,7 +70,7 @@ int			gnl_wrapper(int fd, char **line)
 ** Searches the input string for opened single and double quotes that are
 ** not closed.
 ** Returns 0 if no such quotes were found, 1 if " single quote was found,
-** and 2 if ' single quote was found. 
+** and 2 if ' single quote was found.
 */
 
 int			check_quotes(char *input)
