@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:51:09 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/04 02:38:17 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/06 00:22:03 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int		run_ast(t_node *ast)
 
 	// Add errman call
 	if (!ast || !(child = ast->first_child))
-		return (1);
+		return (0);
 	while (child)
 	{
 		if (child->type == NODE_PIPE)

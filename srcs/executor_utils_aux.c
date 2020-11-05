@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 01:31:05 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/04 02:41:04 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/05 22:32:23 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,15 @@ int		exec_cmd(char **argv)
 {
 	char	*path;
 
-	if (!ft_strchr(argv[0], '/'))
+	if (ft_strchr(argv[0], '/'))
 	{
 		if (execve(argv[0], argv, g_env) < 0)
 			return (errman(ERR_SYS));
 	}
 	else
 	{
-		// Add err man (executable not found)
 		if (!(path = search_path(argv[0])))
-			return (1);
+			return (errman(ERR_NOCMD));
 		if (execve(path, argv, g_env) < 0)
 			return (errman(ERR_SYS));
 		free(path);

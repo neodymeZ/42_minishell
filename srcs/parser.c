@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 23:48:28 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/04 02:22:15 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/05 21:58:01 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ static int	parse_pipe(t_node **simplecom, t_node **pipe)
 ** Parses SEMIC tokens.
 ** If no PIPE node is on input, appends the CMD node "simplecom" as a direct
 ** child.
-** Else if both PIPE and CMD nodes exist, appends PIPE node "pipe" as a child.
+** Else if both PIPE and CMD nodes exist, appends PIPE node "pipe" as a child,
+** if no PIPE or CMD nodes exist (empty string), returns 0.
 ** Returns 0 if no error occurred, or error code otherwise.
 */
 
@@ -79,6 +80,8 @@ static int	parse_semic(t_node **simplecom, t_node **pipe,
 		*simplecom = NULL;
 		*pipe = NULL;
 	}
+	else if (!(*simplecom) && !(*pipe))
+		return (0);
 	else
 		return (errman(ERR_TOKEN));
 	return (0);
