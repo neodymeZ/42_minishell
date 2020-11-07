@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executor_utils_aux.c                               :+:      :+:    :+:   */
+/*   executor_utils_run.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/04 01:31:05 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/05 22:32:23 by larosale         ###   ########.fr       */
+/*   Created: 2020/11/07 03:33:19 by larosale          #+#    #+#             */
+/*   Updated: 2020/11/07 16:28:22 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,12 @@ int		free_argv(int argc, char **argv)
 	return (0);
 }
 
-int		exec_cmd(char **argv)
+int		exec_cmd(char **argv, t_node *cmd)
 {
 	char	*path;
 
+	set_signals(SIGNAL_DFL);
+	configure_fds(cmd);
 	if (ft_strchr(argv[0], '/'))
 	{
 		if (execve(argv[0], argv, g_env) < 0)
@@ -32,6 +34,7 @@ int		exec_cmd(char **argv)
 	}
 	else
 	{
+		// Add err man (executable not found)
 		if (!(path = search_path(argv[0])))
 			return (errman(ERR_NOCMD));
 		if (execve(path, argv, g_env) < 0)

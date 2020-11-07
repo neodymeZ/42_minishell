@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 02:22:12 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/04 09:12:04 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/11/07 18:57:34 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int			gnl_wrapper(int fd, char **line)
 	if ((gnl_res = get_next_line(fd, line)))
 		return (gnl_res);
 	if (**line == '\0')
-		ft_exit();
+		ft_exit(NULL);
 	if (!(g_gnl_str = ft_calloc(1, 1)))
 		return (errman(ERR_SYS));
 	ft_putstr_fd("  \b\b", 1);

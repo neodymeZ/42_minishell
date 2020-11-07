@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_functs.c                                   :+:      :+:    :+:   */
+/*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 20:32:03 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/21 14:32:37 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/11/07 18:59:45 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@
 ** Returns -1 on error, or 0 otherwise.
 */
 
-int		ft_cd(char **command)
+int		ft_cd(char **args)
 {
 	char	*path;
 
-	if (*(command + 1))
-		path = *(command + 1);
+	if (*(args + 1))
+		path = *(args + 1);
 	else
 	{
 		path = env_get_var("HOME");
@@ -41,7 +41,7 @@ int		ft_cd(char **command)
 ** Returns -1 on error, or 0 otherwise.
 */
 
-int		ft_pwd(void)
+int		ft_pwd(char **args)
 {
 	char	*pwd;
 
@@ -50,6 +50,8 @@ int		ft_pwd(void)
 	if (!pwd)
 		return (-1);
 	ft_putstr_fd(pwd, 1);
+	if (args)
+		ft_putchar_fd('\n', 1);
 	free(pwd);
 	return (0);
 }
@@ -58,10 +60,13 @@ int		ft_pwd(void)
 ** Exit function - quits minishell.
 */
 
-void	ft_exit(void)
+int		ft_exit(char **args)
 {
+	if (args || !args)
+		;
 	ft_putstr_fd("exit\n", 1);
 	exit(0);
+	return (0);
 }
 
 /*
@@ -74,7 +79,7 @@ void	ft_exit(void)
 ** echo -n -n 1234567 -n -n
 */
 
-int				ft_echo(char **args)
+int		ft_echo(char **args)
 {
 	int		lf_flag;
 	int		opts_end_flag;

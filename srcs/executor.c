@@ -6,36 +6,37 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:51:09 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/06 00:22:03 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/07 20:27:15 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		run_builtin(char **command)
+int		run_builtin(char **args, t_node *cmd)
 {
 	// Is it ok not to check return values? All builtin functions should
 	// call errman if it is the case.
-	if (!ft_strncmp(*command, "exit", 5))
-		ft_exit();
-	else if (!ft_strncmp(*command, "cd", 3))
-		ft_cd(command);
-	else if (!ft_strncmp(*command, "pwd", 4))
+//	configure_fds(cmd);
+	const t_builtin	funcs[] = { {"exit", ft_exit}, {"cd", ft_cd},
+		{"pwd", ft_pwd}, {"env", ft_env}, {"echo", ft_echo},
+		{"export", ft_export}, {"unset", ft_unset} };
+	int 			i;
+
+	if (cmd)
+		;
+	i = 0;
+	while (i < 7)
 	{
-		ft_pwd();
-		ft_putchar_fd('\n', 1);
+		if (!ft_strncmp(*args, funcs[i].cmd, ft_strlen(funcs[i].cmd) + 1))
+		{
+			configure_fds(cmd);
+			funcs[i].builtin_f(args);
+//			close_fds(cmd, DUP);
+			return (0);
+		}
+		i++;
 	}
-	else if (!ft_strncmp(*command, "env", 4))
-		ft_env();
-	else if (!ft_strncmp(*command, "echo", 5))
-		ft_echo(command);
-	else if (!ft_strncmp(*command, "export", 7))
-		ft_export(command);
-	else if (!ft_strncmp(*command, "unset", 6))
-		ft_unset(command);
-	else
-		return (1);
-	return (0);
+	return (1);
 }
 
 int 	run_simplecom(t_node *cmd)
@@ -50,16 +51,16 @@ int 	run_simplecom(t_node *cmd)
 	if (!cmd || !(arg = cmd->first_child))
 		return (1);
 	get_argv(arg, &argc, argv);
-	if (!run_builtin(argv))
+	if (!run_builtin(argv, cmd))
 		return (free_argv(argc, argv));
 	if ((child_pid = fork()) < 0)
 		return (errman(ERR_SYS));
-	else if (child_pid == 0 && !set_signals(SIGNAL_DFL))
-		exec_cmd(argv);
+	else if (child_pid == 0)
+		exec_cmd(argv, cmd);
 	else
 	{
-		set_signals(SIGNAL_IGN);
-		// waitpid returns pid of child process, if it exited. If it happens, we can then work with the return code, etc.
+		close_fds(cmd, NODUP);
+		set_signals(SIGNAL_SET_WAIT);
 		if (waitpid(child_pid, &stat_loc, WUNTRACED) < 0)
 			return (errman(ERR_SYS));
 		set_signals(SIGNAL_SET);
@@ -70,18 +71,21 @@ int 	run_simplecom(t_node *cmd)
 
 int		run_pipe(t_node *pipe)
 {
-	t_node *child;
+	t_node	*child;
 
 	// Add errman call
 	if (!pipe || !(child = pipe->first_child))
 		return (1);
+	create_pipes(pipe);
 	while (child)
 	{
+//		printf("Child fd_in: %d, fd_out: %d, fd to close: %d, fd to close: %d\n", child->fd_in, child->fd_out, child->fd1_close, child->fd2_close);
 		if (child->type == NODE_CMD)
 			run_simplecom(child);
 		child = child->next_sibling;
 	}
 	return (0);
+	// close fds
 }
 
 int		run_ast(t_node *ast)

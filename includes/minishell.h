@@ -40,11 +40,13 @@ int			check_quotes(char *input);
 ** Signal handlers
 */
 
-# define SIGNAL_DFL 0
-# define SIGNAL_IGN 1
-# define SIGNAL_SET 2
+# define SIGNAL_DFL			(0)
+# define SIGNAL_IGN			(1)
+# define SIGNAL_SET 		(2)
+# define SIGNAL_SET_WAIT 	(3)
 
 void   		signal_handler(int signo);
+void		signal_handler_wait(int signo);
 int			set_signals(int flag);
 
 /*

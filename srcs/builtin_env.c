@@ -6,7 +6,7 @@
 /*   By: gejeanet <gejeanet@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 20:57:33 by gejeanet          #+#    #+#             */
-/*   Updated: 2020/10/31 03:12:37 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/11/07 19:06:28 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,12 @@
 ** Simply prints all environment's variables which have a value.
 */
 
-int				ft_env(void)
+int				ft_env(char **args)
 {
 	char	**env;
 
+	if (args)
+		;
 	env = g_env;
 	while (*env != NULL)
 	{
@@ -40,29 +42,29 @@ int				ft_env(void)
 ** Returns 0 if successful, or 1 on error.
 */
 
-int				ft_unset(char **var)
+int				ft_unset(char **args)
 {
 	int		result;
 
 	result = 0;
-	if (!var || !(*++var))
+	if (!args || !(*++args))
 		return (0);
-	while (*var != NULL)
+	while (*args != NULL)
 	{
-		if (check_varname(*var) == 0)
+		if (check_varname(*args) == 0)
 		{
-			env_del_var(*var, g_env);
-			env_del_var(*var, g_env_local);
+			env_del_var(*args, g_env);
+			env_del_var(*args, g_env_local);
 		}
 		else
 		{
 		// add errman call
 			ft_putstr_fd("minishell: unset: `", 2);
-			ft_putstr_fd(*var, 2);
+			ft_putstr_fd(*args, 2);
 			ft_putstr_fd("': not a valid identifier\n", 2);
 			result = 1;
 		}
-		var++;
+		args++;
 	}
 	return (result);
 }
@@ -119,30 +121,30 @@ static	void	prnt_env(void)
 ** Otherwise, the variable is added to env (or modified, if exists).
 */
 
-int				ft_export(char **var)
+int				ft_export(char **args)
 {
 	char	*value;
 	int		result;
 
 	result = 0;
-	if (*++var == NULL)
+	if (*++args == NULL)
 	{
 		prnt_env();
 		return (0);
 	}
-	while (*var)
+	while (*args)
 	{
-		split_value(*var, &value);
-		if (check_varname(*var) == 0)
-			env_set_var(*var, value, &g_env);
+		split_value(*args, &value);
+		if (check_varname(*args) == 0)
+			env_set_var(*args, value, &g_env);
 		else
 		{
 			ft_putstr_fd("minishell: export: `", 2);
-			ft_putstr_fd(*var, 2);
+			ft_putstr_fd(*args, 2);
 			ft_putstr_fd("': not a valid identifier\n", 2);
 			result = 1;
 		}
-		var++;
+		args++;
 	}
 	return (result);
 }
