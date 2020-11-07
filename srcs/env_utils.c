@@ -6,7 +6,7 @@
 /*   By: gejeanet <gejeanet@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 20:14:39 by gejeanet          #+#    #+#             */
-/*   Updated: 2020/10/31 02:51:00 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/11/07 14:18:30 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static int		create_var(char *var, char *value, char **env, size_t len)
 	if (*env != NULL)
 		free(*env);
 	if (!(*env = ft_calloc(new_len, 1)))
-		return(errman(ERR_SYS)); 
+		errman(ERR_SYS, NULL); 
 	ft_strlcpy(*env, var, len + 1);
 	if (value == NULL)
 		return (0);
@@ -113,7 +113,7 @@ int				env_set_var(char *var, char *value, char ***env)
 	}
 	if (!(tmp = ft_realloc(*env, sizeof(char *) * (env_size + 2), \
 								sizeof(char *) * (env_size + 1))))
-		return (errman(ERR_SYS));
+		errman(ERR_SYS, NULL);
 	create_var(var, value, tmp + env_size, len);
 	*(tmp + env_size + 1) = NULL;
 	*env = tmp;

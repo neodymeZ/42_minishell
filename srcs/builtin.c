@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 20:32:03 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/21 14:32:37 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/11/07 14:16:30 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 int		ft_cd(char **command)
 {
 	char	*path;
+	int		res;
 
 	if (*(command + 1))
 		path = *(command + 1);
@@ -30,7 +31,9 @@ int		ft_cd(char **command)
 		if (path == NULL)
 			return (0);
 	}
-	return (chdir(path));
+	if ((res = chdir(path)) != 0)
+		errman(WAR_CD, path);
+	return (res);
 }
 
 /*

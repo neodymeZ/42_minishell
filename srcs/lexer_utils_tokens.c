@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 19:07:26 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/20 20:19:12 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/07 14:41:55 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,7 @@ t_token	*null_token(void)
 	t_token	*nullt;
 
 	if (!(nullt = ft_calloc(1, sizeof(t_token))))
-	{
-		errman(ERR_SYS);
-		return (NULL);
-	}
+		errman(ERR_SYS, NULL);
 	return (nullt);
 }
 
@@ -40,16 +37,10 @@ t_token	*create_token(t_tokbuf *buffer)
 
 	token = null_token();
 	if (!token || !buffer)
-	{
-		errman(ERR_SYS);
-		return (NULL);
-	}
+		errman(ERR_SYS, NULL);
 	token->len = ft_strlen(buffer->buffer);
 	if (!(token->text = ft_strdup(buffer->buffer)))
-	{
-		errman(ERR_SYS);
-		return (NULL);
-	}
+		errman(ERR_SYS, NULL);
 	token->type = buffer->type;
 	token->concat = buffer->concat;
 	return (token);

@@ -6,7 +6,7 @@
 /*   By: gejeanet <gejeanet@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 13:51:28 by gejeanet          #+#    #+#             */
-/*   Updated: 2020/10/26 21:26:54 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/07 14:20:48 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static	char	**do_copy(char **env_copy, char **env)
 	while (*env != NULL)
 	{
 		if (!(*tmp = ft_strdup(*env)))
-			return (errman(ERR_SYS) ? NULL : NULL);
+			errman(ERR_SYS, NULL);
 		tmp++;
 		env++;
 	}
@@ -71,7 +71,7 @@ char			**env_init(char **env)
 		i++;
 	if (!(env_copy = malloc((i + 1) * sizeof(char *))))
 	{
-		errman(ERR_SYS);
+		errman(ERR_SYS, NULL);
 		return (NULL);
 	}
 	if (!do_copy(env_copy, env))

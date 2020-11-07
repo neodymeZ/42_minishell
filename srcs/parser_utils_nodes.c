@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/20 01:00:36 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/21 16:49:02 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/07 14:47:44 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_node	*create_node(t_node_types type)
 	t_node	*node;
 
 	if (!(node = ft_calloc(1, sizeof(t_node))))
-		return (errman(ERR_SYS) ? NULL : NULL);
+		errman(ERR_SYS, NULL);
 	node->type = type;
 	return (node);
 }
@@ -65,7 +65,7 @@ int		set_node_data(t_node *node, char *data)
 	if (!data)
 		node->data = NULL;
 	else if (!(node->data = ft_strdup(data)))
-		return (errman(ERR_SYS));
+		errman(ERR_SYS, NULL);
 	return (0);
 }
 

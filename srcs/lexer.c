@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 01:43:42 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/26 02:53:02 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/07 15:17:34 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,8 +114,9 @@ t_token			*tokenize_input(t_input *in)
 
 	token = NULL;
 	res = 0;
+	c = '\0';
 	if (!in || !in->buffer || (c = next_c(in)) == ERRCHAR)
-		return (errman(ERR_SYS) ? NULL : NULL);	
+		errman(ERR_SYS, NULL);
 	if (c == EOL)
 		return (null_token());
 	buffer = create_buffer();
@@ -130,7 +131,7 @@ t_token			*tokenize_input(t_input *in)
 	if (buffer->type == 0 && *(buffer->buffer) == '\0')
 		return (null_token());
 	if (!(token = create_token(buffer)))
-		return (errman(ERR_SYS) ? NULL : NULL);
+		errman(ERR_SYS, NULL);
 	token->in = in;
 	delete_buffer(buffer);
 	return (token);

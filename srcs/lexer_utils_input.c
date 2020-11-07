@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 19:07:10 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/29 19:50:45 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/07 14:39:52 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,9 @@ t_input	*create_input(char *buffer)
 	t_input	*result;
 
 	if (!(result = ft_calloc(1, sizeof(t_input))))
-		return (errman(ERR_SYS) ? NULL : NULL);
+		errman(ERR_SYS, NULL);
 	if (!(result->buffer = ft_strdup(buffer)))
-		return (errman(ERR_SYS) ? NULL : NULL);
+		errman(ERR_SYS, NULL);
 	result->size = ft_strlen(buffer);
 	result->pos = INIT_INPUT_POS;
 	return (result);

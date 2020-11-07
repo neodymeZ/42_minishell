@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 00:56:54 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/04 09:03:03 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/11/07 14:49:37 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,20 +49,20 @@ int		set_signals(int flag)
 		if (signal(SIGINT, SIG_DFL) == SIG_ERR ||
 			signal(SIGQUIT, SIG_DFL) == SIG_ERR ||
 			signal(SIGTERM, SIG_DFL) == SIG_ERR)
-			return (errman(ERR_SYS));
+			errman(ERR_SYS, NULL);
 	}
 	else if (flag == SIGNAL_IGN)
 	{
 		if (signal(SIGINT, SIG_IGN) == SIG_ERR ||
 			signal(SIGQUIT, SIG_IGN) == SIG_ERR)
-			return (errman(ERR_SYS));
+			errman(ERR_SYS, NULL);
 	}
 	else if (flag == SIGNAL_SET)
 	{
 		if (signal(SIGINT, signal_handler) == SIG_ERR ||
 			signal(SIGQUIT, signal_handler) == SIG_ERR ||
 			signal(SIGTERM, SIG_IGN) == SIG_ERR)
-			return (errman(ERR_SYS));
+			errman(ERR_SYS, NULL);
 	}
 	return (0);
 }

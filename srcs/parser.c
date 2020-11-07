@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 23:48:28 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/05 21:58:01 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/07 14:46:40 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@ static int	parse_simplecom(t_token *token, t_node **simplecom)
 	if (!(*simplecom))
 	{
 		if (!(*simplecom = create_node(NODE_CMD)))
-			return (errman(ERR_SYS));
+			errman(ERR_SYS, NULL);
 	}
 	if (!(arg = create_node(NODE_ARG)))
-		return (errman(ERR_SYS));
+		errman(ERR_SYS, NULL);
 	set_node_data(arg, token->text);
 	add_child_node(*simplecom, arg);
 	return (0);
@@ -45,11 +45,11 @@ static int	parse_simplecom(t_token *token, t_node **simplecom)
 static int	parse_pipe(t_node **simplecom, t_node **pipe)
 {
 	if (!(*simplecom))
-		return (errman(ERR_TOKEN));
+		errman(ERR_TOKEN, NULL);
 	if (!(*pipe))
 	{
 		if (!(*pipe = create_node(NODE_PIPE)))
-			return (errman(ERR_SYS));
+			errman(ERR_SYS, NULL);
 	}
 	add_child_node(*pipe, *simplecom);
 	*simplecom = NULL;
@@ -83,7 +83,7 @@ static int	parse_semic(t_node **simplecom, t_node **pipe,
 	else if (!(*simplecom) && !(*pipe))
 		return (0);
 	else
-		return (errman(ERR_TOKEN));
+		errman(ERR_TOKEN, NULL);
 	return (0);
 }
 
@@ -130,7 +130,7 @@ t_node	*parse_input(t_input *in)
 	simplecom = NULL;
 	pipe = NULL;
 	if (!(semic = create_node(NODE_SEMIC)))
-		return (errman(ERR_SYS) ? NULL : NULL);
+		errman(ERR_SYS, NULL);
 	// For parser testing. REMOVE on finalizing the project.
 	if (!ft_strncmp(in->buffer, "parser", 6))
 	{

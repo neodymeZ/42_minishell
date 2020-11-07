@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 02:22:12 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/04 09:12:04 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/11/07 14:43:54 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char     *g_gnl_str = NULL;
 static int	join_str(char **line, char **tmp) 
 {
 	if (!(*tmp = ft_strjoin(g_gnl_str, *line)))
-		return (errman(ERR_SYS));
+		errman(ERR_SYS, NULL);
 	free(*line);
 	free(g_gnl_str);
 	g_gnl_str = *tmp;
@@ -52,7 +52,7 @@ int			gnl_wrapper(int fd, char **line)
 	if (**line == '\0')
 		ft_exit();
 	if (!(g_gnl_str = ft_calloc(1, 1)))
-		return (errman(ERR_SYS));
+		errman(ERR_SYS, NULL);
 	ft_putstr_fd("  \b\b", 1);
 	while (!gnl_res) // Loop starts only when GNL result is 0 (EOF)
 	{

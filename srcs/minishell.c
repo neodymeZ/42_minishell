@@ -24,7 +24,7 @@ t_input	*read_input(void)
 	t_input	*in;
 
 	if (gnl_wrapper(0, &input) < 0)
-		return (errman(ERR_SYS) ? NULL : NULL);
+		errman(ERR_SYS, NULL);
 	while (ft_strlen(input) > 0 && (input[ft_strlen(input) - 1] == '\\' ||
 		check_quotes(input)))	// Handling multiline input
 	{
@@ -33,7 +33,7 @@ t_input	*read_input(void)
 			input[ft_strlen(input) - 1] = '\0';
 		if (gnl_wrapper(0, &temp) < 0 ||
 			!(temp2 = ft_strjoin(input, temp)))
-			return (errman(ERR_SYS) ? NULL : NULL);
+			errman(ERR_SYS, NULL);
 		free(input);
 		free(temp);
 		input = temp2;

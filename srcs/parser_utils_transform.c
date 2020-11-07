@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/27 23:38:16 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/29 00:51:46 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/07 14:48:51 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ int		concat_tokens(t_token *token, t_input *in)
 	while ((read = tokenize_input(in)) && read->concat)
 	{
 		if (!(tmp = ft_strjoin(token->text, read->text)))
-			return (errman(ERR_SYS));
+			errman(ERR_SYS, NULL);
 		free(token->text);
 		token->text = tmp;
 		delete_token(read);
 	}
 	if (!(tmp = ft_strjoin(token->text, read->text)))
-		return (errman(ERR_SYS));
+		errman(ERR_SYS, NULL);
 	free(token->text);
 	token->text = tmp;
 	delete_token(read);
@@ -53,7 +53,7 @@ int		subst_env(t_token *token)
 		if (env_name[1])
 		{
 			if (!(tmp = ft_strsubst(token->text, env_name, env_value)))
-				return (errman(ERR_SYS));
+				errman(ERR_SYS, NULL);
 			free(token->text);
 			token->text = tmp;
 		}

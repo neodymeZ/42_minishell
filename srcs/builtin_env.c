@@ -6,7 +6,7 @@
 /*   By: gejeanet <gejeanet@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 20:57:33 by gejeanet          #+#    #+#             */
-/*   Updated: 2020/10/31 03:12:37 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/11/07 13:50:57 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,7 @@ int				ft_unset(char **var)
 		}
 		else
 		{
-		// add errman call
-			ft_putstr_fd("minishell: unset: `", 2);
-			ft_putstr_fd(*var, 2);
-			ft_putstr_fd("': not a valid identifier\n", 2);
+			errman(WAR_UNSET, *var);
 			result = 1;
 		}
 		var++;
@@ -137,9 +134,7 @@ int				ft_export(char **var)
 			env_set_var(*var, value, &g_env);
 		else
 		{
-			ft_putstr_fd("minishell: export: `", 2);
-			ft_putstr_fd(*var, 2);
-			ft_putstr_fd("': not a valid identifier\n", 2);
+			errman(WAR_EXPORT, *var);
 			result = 1;
 		}
 		var++;

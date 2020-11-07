@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 01:31:05 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/05 22:32:23 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/07 15:56:42 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,14 @@ int		exec_cmd(char **argv)
 	if (ft_strchr(argv[0], '/'))
 	{
 		if (execve(argv[0], argv, g_env) < 0)
-			return (errman(ERR_SYS));
+			errman(ERR_NOFDIR, argv[0]);
 	}
 	else
 	{
 		if (!(path = search_path(argv[0])))
-			return (errman(ERR_NOCMD));
+			errman(ERR_NOCMD, argv[0]);
 		if (execve(path, argv, g_env) < 0)
-			return (errman(ERR_SYS));
+			errman(ERR_SYS, NULL);
 		free(path);
 	}
 	return (0);
@@ -50,7 +50,7 @@ int		get_argv(t_node *arg, int *argc, char **argv)
 	while (arg)
 	{
 		if (!(argv[arg_count] = ft_strdup(arg->data)))
-			return (errman(ERR_SYS));
+			errman(ERR_SYS, NULL);
 		if (++arg_count >= MAX_ARGS)
 			break ;
 		arg = arg->next_sibling;

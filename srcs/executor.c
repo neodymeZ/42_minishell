@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:51:09 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/06 00:22:03 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/07 14:22:44 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int 	run_simplecom(t_node *cmd)
 	if (!run_builtin(argv))
 		return (free_argv(argc, argv));
 	if ((child_pid = fork()) < 0)
-		return (errman(ERR_SYS));
+		errman(ERR_SYS, NULL);
 	else if (child_pid == 0 && !set_signals(SIGNAL_DFL))
 		exec_cmd(argv);
 	else
@@ -61,7 +61,7 @@ int 	run_simplecom(t_node *cmd)
 		set_signals(SIGNAL_IGN);
 		// waitpid returns pid of child process, if it exited. If it happens, we can then work with the return code, etc.
 		if (waitpid(child_pid, &stat_loc, WUNTRACED) < 0)
-			return (errman(ERR_SYS));
+			errman(ERR_SYS, NULL);
 		set_signals(SIGNAL_SET);
 	}
 	free_argv(argc, argv);

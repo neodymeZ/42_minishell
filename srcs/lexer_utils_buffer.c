@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 01:39:25 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/21 01:45:42 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/07 14:39:10 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,17 +39,11 @@ t_tokbuf	*create_buffer(void)
 	t_tokbuf	*buffer;
 
 	if (!(buffer = ft_calloc(1, sizeof(t_tokbuf))))
-	{
-		errman(ERR_SYS);
-		return (NULL);
-	}
+		errman(ERR_SYS, NULL);
 	buffer->size = 1024;
 	buffer->pos = 0;
 	if (!(buffer->buffer = ft_calloc(1, buffer->size)))
-	{
-		errman(ERR_SYS);
-		return (NULL);
-	}
+		errman(ERR_SYS, NULL);
 	buffer->type = STR;
 	buffer->concat = NO_CONCAT;
 	return (buffer);
@@ -70,7 +64,7 @@ int			add_to_buffer(char c, t_tokbuf *buffer)
 	if (buffer->pos >= buffer->size)
 	{
 		if (!(tmp = ft_realloc(buffer->buffer, buffer->size * 2, buffer->size)))
-			return (errman(ERR_SYS));
+			errman(ERR_SYS, NULL);
 		buffer->buffer = tmp;
 		buffer->size *= 2;
 	}
