@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 20:32:03 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/08 02:59:48 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/08 13:26:31 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int		ft_exit(char **args)
 {
 	if (!args || (*args && *(args + 1) == NULL))
 	{
-		ft_putstr_fd("exit\n", 1);
+		ft_putstr_fd("exit\n", 2);
 		exit(0);
 	}
 	else if (*args && *(args + 1) && *(args + 2) == NULL)
@@ -80,7 +80,7 @@ int		ft_exit(char **args)
 			ft_putstr_fd("numeric argument required\n", 2);
 			exit(255);
 		}
-		ft_putstr_fd("exit\n", 1);
+		ft_putstr_fd("exit\n", 2);
 		exit(ft_atoi(*(args + 1)));
 	}
 	else
