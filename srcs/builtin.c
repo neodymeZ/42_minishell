@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 20:32:03 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/07 18:59:45 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/08 02:59:48 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,15 +57,37 @@ int		ft_pwd(char **args)
 }
 
 /*
+** Helper function for the ft_exit function.
+** Checks, if the argument is numeric and returns 1 if yes, or 0 otherwise.
+*/
+
+/*
 ** Exit function - quits minishell.
 */
 
+// Set errman
 int		ft_exit(char **args)
 {
-	if (args || !args)
-		;
-	ft_putstr_fd("exit\n", 1);
-	exit(0);
+	if (!args || (*args && *(args + 1) == NULL))
+	{
+		ft_putstr_fd("exit\n", 1);
+		exit(0);
+	}
+	else if (*args && *(args + 1) && *(args + 2) == NULL)
+	{
+		if (!(ft_isnumeric(*(args + 1))))
+		{
+			ft_putstr_fd("numeric argument required\n", 2);
+			exit(255);
+		}
+		ft_putstr_fd("exit\n", 1);
+		exit(ft_atoi(*(args + 1)));
+	}
+	else
+	{
+		ft_putstr_fd("too many arguments\n", 2);
+		return (1);
+	}
 	return (0);
 }
 
@@ -106,5 +128,16 @@ int		ft_echo(char **args)
 	}
 	if (lf_flag == 0)
 		ft_putstr_fd("\n", 1);
+	return (0);
+}
+
+/*
+** Builtin test function - does nothing :)
+*/
+
+int		ft_test(char **args)
+{
+	if (args)
+		;
 	return (0);
 }

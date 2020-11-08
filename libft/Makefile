@@ -6,7 +6,7 @@
 #    By: larosale <larosale@42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/05/04 11:31:09 by larosale          #+#    #+#              #
-#    Updated: 2020/10/28 23:30:10 by larosale         ###   ########.fr        #
+#    Updated: 2020/11/08 02:55:53 by larosale         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ SRCS_REG	= ft_memset.c ft_bzero.c ft_memcpy.c ft_memccpy.c ft_memmove.c \
 			ft_math_ipow.c ft_math_frexp.c ft_round_double.c ft_isnan.c \
 			ft_isposinf.c ft_isneginf.c ft_strins.c ft_dtoa.c \
 			ft_signbit.c ft_stripzeros.c ft_convert_double.c ft_absd.c \
-			ft_math_arclen.c ft_strsubst.c get_next_line.c \
+			ft_math_arclen.c ft_strsubst.c get_next_line.c ft_isnumeric.c \
 			ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c \
 			ft_lstadd_back.c ft_lstdelone.c ft_lstclear.c ft_lstiter.c \
 			ft_lstmap.c
