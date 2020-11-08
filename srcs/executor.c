@@ -6,11 +6,46 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:51:09 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/08 02:25:33 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/08 18:52:55 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	capture_status(int status)
+{
+	if (WIFEXITED(status))
+		g_status = WEXITSTATUS(status);
+	return (0);
+}
+
+int	run_builtin(char **argv, int flag)
+{
+	const t_builtin	funcs_notpipe[] = { {"exit", ft_exit}, {"cd", ft_cd},
+		{"pwd", ft_pwd}, {"env", ft_env}, {"echo", ft_echo},
+		{"export", ft_export}, {"unset", ft_unset} };
+	const t_builtin	funcs_pipe[] = { {"exit", ft_test}, {"cd", ft_cd},
+		{"pwd", ft_pwd}, {"env", ft_env}, {"echo", ft_echo},
+		{"export", ft_export}, {"unset", ft_unset} };
+	t_builtin		*funcs;
+	int 			i;
+
+	i = 0;
+	if (flag)
+		funcs = (t_builtin *)funcs_pipe;
+	else
+		funcs = (t_builtin *)funcs_notpipe;
+	while (i < 7)
+	{
+		if (!ft_strncmp(*argv, funcs[i].cmd, ft_strlen(funcs[i].cmd) + 1))
+		{
+			g_status = funcs[i].builtin_f(argv);
+			return (0);
+		}
+		i++;
+	}
+	return (1);
+}
 
 static int 	run_simplecom(t_node *cmd, int flag)
 {
@@ -22,10 +57,9 @@ static int 	run_simplecom(t_node *cmd, int flag)
 	if (!cmd || !(arg = cmd->first_child))
 		return (1);
 	get_argv(arg, &argc, argv);
-	if (!flag && !ft_strncmp(arg->data, "exit", 5))
-		ft_exit(argv);
-	else
-		spawn_child(argv, cmd);
+	if (!flag && !run_builtin(argv, flag))
+		return (free_argv(argc, argv));
+	spawn_child(argv, cmd);
 	free_argv(argc, argv);
 	return (0);
 }

@@ -9,6 +9,8 @@
 char	**g_env = NULL;
 char	**g_env_local = NULL;
 t_token	*g_null_token = NULL;
+char	*g_gnl_str = NULL;
+int		g_status = 0;
 
 /*
 ** Reads input string using GNL and creates the structure of type "t_input"

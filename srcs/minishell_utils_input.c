@@ -6,13 +6,11 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 02:22:12 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/08 01:20:52 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/08 17:35:00 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char     *g_gnl_str = NULL;
 
 /*
 ** Helper function for GNL wrapper.

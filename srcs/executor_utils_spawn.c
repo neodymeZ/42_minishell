@@ -6,31 +6,11 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/08 00:45:24 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/08 13:29:00 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/08 19:59:32 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static int	exec_builtin(char **argv)
-{
-	const t_builtin	funcs[] = { {"exit", ft_test}, {"cd", ft_cd},
-		{"pwd", ft_pwd}, {"env", ft_env}, {"echo", ft_echo},
-		{"export", ft_export}, {"unset", ft_unset} };
-	int 			i;
-
-	i = 0;
-	while (i < 7)
-	{
-		if (!ft_strncmp(*argv, funcs[i].cmd, ft_strlen(funcs[i].cmd) + 1))
-		{
-			funcs[i].builtin_f(argv);
-			return (0);
-		}
-		i++;
-	}
-	return (1);
-}
 
 static int	exec_cmd(char **argv)
 {
@@ -65,9 +45,9 @@ int		spawn_child(char **argv, t_node *cmd)
 	{
 		set_signals(SIGNAL_DFL);
 		configure_fds(cmd);
-		if (exec_builtin(argv))
+		if (run_builtin(argv, IN_PIPE))
 			exec_cmd(argv);
-		exit(0);
+		exit(g_status);
 	}
 	else
  	{   
@@ -75,6 +55,7 @@ int		spawn_child(char **argv, t_node *cmd)
 		set_signals(SIGNAL_SET_WAIT);
  		if (waitpid(child_pid, &stat_loc, WUNTRACED) < 0)
 			return (errman(ERR_SYS));
+		capture_status(stat_loc);
 		set_signals(SIGNAL_SET);
  	}
 	return (stat_loc);

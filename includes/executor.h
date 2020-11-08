@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:51:21 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/08 02:19:06 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/08 18:24:26 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,13 @@
 */
 
 int		run_ast(t_node *ast);
+int		run_builtin(char **argv, int flag);
 
 /*
 ** Executor utils
 */
 
+int		capture_status(int status);
 char	*search_path(char *arg);
 int		spawn_child(char **argv, t_node *cmd);
 int		get_argv(t_node *arg, int *argc, char **argv);

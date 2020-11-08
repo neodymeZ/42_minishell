@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/27 23:38:16 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/08 16:53:16 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/08 18:55:00 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,11 @@ static int	replace_env_token(t_token *token, char *src, char *dst)
 {
 	char	*tmp;
 
+	if (!dst)
+	{
+		if (!(dst = ft_itoa(g_status)))
+			return (errman(ERR_SYS));
+	}
 	if (!(tmp = ft_strsubst(token->text, src, dst)))
 		return (errman(ERR_SYS));
 	free(token->text);
@@ -61,7 +66,7 @@ int		subst_env(t_token *token)
 	{
 		if (*(tmp + 1) == '?')
 		{
-			replace_env_token(token, "$?", "0");
+			replace_env_token(token, "$?", NULL);
 			return (subst_env(token));
 		}
 		else if (*(tmp + 1) && (ft_isalnum(*(tmp + 1)) || *(tmp + 1) == '_'))

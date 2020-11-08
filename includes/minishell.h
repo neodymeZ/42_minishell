@@ -27,6 +27,7 @@ extern char		**g_env;
 extern char		**g_env_local;
 extern t_token	*g_null_token;
 extern char		*g_gnl_str;
+extern int		g_status;
 
 /*
 ** Input handling
