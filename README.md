@@ -21,3 +21,6 @@ Will not be implemented:
 1) Multiline pipe (complex parsing of input is needed);
 2) Freeing memory on erroneous exit (OS will handle);
 3) Shell variables;
+4) Simultaneous command execution. Commands are executed sequentially,
+the parent process waits until completion before forking a new child.
+Thus, looped commands like "yes" won't work correctly in pipes (i.e. yes | head)

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_functs.c                                   :+:      :+:    :+:   */
+/*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 20:32:03 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/07 14:16:30 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/11/09 09:38:36 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@
 ** Returns -1 on error, or 0 otherwise.
 */
 
-int		ft_cd(char **command)
+int		ft_cd(char **args)
 {
 	char	*path;
 	int		res;
 
-	if (*(command + 1))
-		path = *(command + 1);
+	if (*(args + 1))
+		path = *(args + 1);
 	else
 	{
 		path = env_get_var("HOME");
@@ -44,7 +44,7 @@ int		ft_cd(char **command)
 ** Returns -1 on error, or 0 otherwise.
 */
 
-int		ft_pwd(void)
+int		ft_pwd(char **args)
 {
 	char	*pwd;
 
@@ -53,6 +53,8 @@ int		ft_pwd(void)
 	if (!pwd)
 		return (-1);
 	ft_putstr_fd(pwd, 1);
+	if (args)
+		ft_putchar_fd('\n', 1);
 	free(pwd);
 	return (0);
 }
@@ -61,10 +63,30 @@ int		ft_pwd(void)
 ** Exit function - quits minishell.
 */
 
-void	ft_exit(void)
+// Set errman
+int		ft_exit(char **args)
 {
-	ft_putstr_fd("exit\n", 1);
-	exit(0);
+	if (!args || (*args && *(args + 1) == NULL))
+	{
+		ft_putstr_fd("exit\n", 2);
+		exit(0);
+	}
+	else if (*args && *(args + 1) && *(args + 2) == NULL)
+	{
+		if (!(ft_isnumeric(*(args + 1))))
+		{
+			ft_putstr_fd("numeric argument required\n", 2);
+			exit(255);
+		}
+		ft_putstr_fd("exit\n", 2);
+		exit(ft_atoi(*(args + 1)));
+	}
+	else
+	{
+		ft_putstr_fd("too many arguments\n", 2);
+		return (1);
+	}
+	return (0);
 }
 
 /*
@@ -77,7 +99,7 @@ void	ft_exit(void)
 ** echo -n -n 1234567 -n -n
 */
 
-int				ft_echo(char **args)
+int		ft_echo(char **args)
 {
 	int		lf_flag;
 	int		opts_end_flag;
@@ -104,5 +126,16 @@ int				ft_echo(char **args)
 	}
 	if (lf_flag == 0)
 		ft_putstr_fd("\n", 1);
+	return (0);
+}
+
+/*
+** Builtin test function - does nothing :)
+*/
+
+int		ft_test(char **args)
+{
+	if (args)
+		;
 	return (0);
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executor_utils.c                                   :+:      :+:    :+:   */
+/*   executor_utils_args.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 02:35:02 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/04 08:59:52 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/11/08 00:53:23 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,41 @@ char			*search_path(char *arg)
 	}
 	free_splitted(tmp);
 	return (result);
+}
+
+/*
+** Frees the "argv" array after its use.
+*/
+
+int		free_argv(int argc, char **argv)
+{
+	if (!argc)
+		return (0);
+	while (argc--)
+		free(argv[argc]);
+	return (0);
+}
+
+/*
+** Scans arg nodes of a given command and fills the "argv" array of strings
+** with arguments.
+** Returns 0 if successful, or error number on error.
+*/
+
+int		get_argv(t_node *arg, int *argc, char **argv)
+{
+	int	arg_count;
+
+	*argc = 0;
+	arg_count = *argc;
+	while (arg)
+	{
+		if (!(argv[arg_count] = ft_strdup(arg->data)))
+			return (errman(ERR_SYS));
+		if (++arg_count >= MAX_ARGS)
+			break ;
+		arg = arg->next_sibling;
+	}
+	argv[arg_count] = NULL;
+	return (0);
 }

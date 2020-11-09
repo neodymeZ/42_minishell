@@ -1,27 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_utils_prompt.c                           :+:      :+:    :+:   */
+/*   ft_isnumeric.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/13 00:03:42 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/07 18:56:44 by larosale         ###   ########.fr       */
+/*   Created: 2020/11/08 02:51:48 by larosale          #+#    #+#             */
+/*   Updated: 2020/11/08 03:01:32 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-void	print_prompt(void)
-{
-	ft_putstr_fd("minishell: ", 1);
-	ft_pwd(NULL);
-	ft_putstr_fd(" $ ", 1);
-	return ;
-}
+/*
+** Checks, whether the input string is numeric, i.e. starts with a sign symbol
+** and then consists only of digits.
+** Returns 1 if the string is numeric and 0 otherwise.
+*/
 
-void	print_prompt2(void)
+int	ft_isnumeric(char *str)
 {
-	ft_putstr_fd("> ", 2);
-	return ;
+	if (*str == '+' || *str == '-')
+		str++;
+	while (*str && ft_isdigit(*str))
+		str++;
+	if (*str)
+		return (0);
+	return (1);
 }

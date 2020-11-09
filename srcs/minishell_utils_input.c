@@ -6,13 +6,11 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 02:22:12 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/07 14:43:54 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/11/09 09:22:06 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char     *g_gnl_str = NULL;
 
 /*
 ** Helper function for GNL wrapper.
@@ -31,7 +29,6 @@ static int	join_str(char **line, char **tmp)
 /*
 ** Wrapper function for the get_next_line function to implement
 ** Ctrl-D handling similarly to bash.
-<<<<<<< HEAD
 ** If GNL ends with non-zero result (line was read, or error returned)
 ** the wrapper does nothing.
 ** If GNL returns 0 (EOF) and the line is empty, minishell exits.
@@ -50,7 +47,7 @@ int			gnl_wrapper(int fd, char **line)
 	if ((gnl_res = get_next_line(fd, line)))
 		return (gnl_res);
 	if (**line == '\0')
-		ft_exit();
+		ft_exit(NULL);
 	if (!(g_gnl_str = ft_calloc(1, 1)))
 		errman(ERR_SYS, NULL);
 	ft_putstr_fd("  \b\b", 1);

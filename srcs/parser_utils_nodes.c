@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/20 01:00:36 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/07 14:47:44 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/11/09 09:12:09 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ t_node	*create_node(t_node_types type)
 	if (!(node = ft_calloc(1, sizeof(t_node))))
 		errman(ERR_SYS, NULL);
 	node->type = type;
+	node->fd_out = 1;
 	return (node);
 }
 

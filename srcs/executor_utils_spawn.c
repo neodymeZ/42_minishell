@@ -1,27 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executor_utils_aux.c                               :+:      :+:    :+:   */
+/*   executor_utils_spawn.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/04 01:31:05 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/07 15:56:42 by gejeanet         ###   ########.fr       */
+/*   Created: 2020/11/08 00:45:24 by larosale          #+#    #+#             */
+/*   Updated: 2020/11/09 09:26:52 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		free_argv(int argc, char **argv)
-{
-	if (!argc)
-		return (0);
-	while (argc--)
-		free(argv[argc]);
-	return (0);
-}
-
-int		exec_cmd(char **argv)
+static int	exec_cmd(char **argv)
 {
 	char	*path;
 
@@ -41,20 +32,30 @@ int		exec_cmd(char **argv)
 	return (0);
 }
 
-int		get_argv(t_node *arg, int *argc, char **argv)
+int		spawn_child(char **argv, t_node *cmd)
 {
-	int	arg_count;
+	int     stat_loc;
+	pid_t	child_pid;
 
-	*argc = 0;
-	arg_count = *argc;
-	while (arg)
+	stat_loc = 0;
+	if ((child_pid = fork()) < 0)
+		return (errman(ERR_SYS, NULL));
+	else if (child_pid == 0)
 	{
-		if (!(argv[arg_count] = ft_strdup(arg->data)))
-			errman(ERR_SYS, NULL);
-		if (++arg_count >= MAX_ARGS)
-			break ;
-		arg = arg->next_sibling;
+		set_signals(SIGNAL_DFL);
+		configure_fds(cmd);
+		if (run_builtin(argv, IN_PIPE))
+			exec_cmd(argv);
+		exit(g_status);
 	}
-	argv[arg_count] = NULL;
-	return (0);
+	else
+ 	{   
+ 		close_fds(cmd);
+		set_signals(SIGNAL_SET_WAIT);
+ 		if (waitpid(child_pid, &stat_loc, WUNTRACED) < 0)
+			return (errman(ERR_SYS, NULL));
+		capture_status(stat_loc);
+		set_signals(SIGNAL_SET);
+ 	}
+	return (stat_loc);
 }

@@ -9,6 +9,8 @@
 char	**g_env = NULL;
 char	**g_env_local = NULL;
 t_token	*g_null_token = NULL;
+char	*g_gnl_str = NULL;
+int		g_status = 0;
 
 /*
 ** Reads input string using GNL and creates the structure of type "t_input"
@@ -73,15 +75,6 @@ int		shell_loop(void)
 		ast = parse_input(in);
 		run_ast(ast);
 		delete_tree(ast);
-/*		while ((token = tokenize_input(in)) &&
-			ft_memcmp(token, g_null_token, sizeof(t_token)))
-		{
-			// check the parse_input function return value
-			ast = parse_temp(token);
-			run_simplecom(ast);
-			delete_tree(ast);
-		}
-	}*/
 	}
 	return (0);
 }
