@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 02:35:02 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/09 09:48:39 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/11/09 10:58:33 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char			*search_path(char *arg)
 	char			**tmp;
 	char			*result;
 	char			*result_tmp;
-	struct	stat	sb;
+	struct stat		sb;
 
 	if ((p = ft_split(env_get_var("PATH"), ':')) == NULL || *p == NULL)
 		return (NULL);
@@ -72,7 +72,7 @@ char			*search_path(char *arg)
 ** Frees the "argv" array after its use.
 */
 
-int		free_argv(int argc, char **argv)
+int				free_argv(int argc, char **argv)
 {
 	if (!argc)
 		return (0);
@@ -87,7 +87,7 @@ int		free_argv(int argc, char **argv)
 ** Returns 0 if successful, or error number on error.
 */
 
-int		get_argv(t_node *arg, int *argc, char **argv)
+int				get_argv(t_node *arg, int *argc, char **argv)
 {
 	int	arg_count;
 

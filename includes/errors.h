@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 19:27:02 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/07 15:37:11 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/11/09 12:59:53 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 
 typedef enum	e_errors
 {
+	WAR_NUM_ARG = 5,
+	WAR_MANY_ARGS = 4,
 	WAR_CD = 3,
 	WAR_EXPORT = 2,
 	WAR_UNSET = 1,

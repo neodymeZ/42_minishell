@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/26 00:41:24 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/09 09:55:44 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/11/09 12:59:04 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,12 @@ void	print_error(int e, char *var)
 	e == ERR_SYS ? ft_putstr_fd("a system call error occured\n", 2) : 0;
 	e == ERR_UNKNOWN ? ft_putstr_fd("unknown error occurred\n", 2) : 0;
 	e == ERR_TOKEN ? ft_putstr_fd("syntax error near unexpected token\n", 2) : 0;
+	e == ERR_NOFDIR ? perror(var) : 0;
 	if (e == ERR_NOCMD)
 	{
 		ft_putstr_fd(var, 2);
 		ft_putstr_fd(": command not found\n", 2);
 	}
-	e == ERR_NOFDIR ? perror(var) : 0;
 }
 
 /*
@@ -51,6 +51,17 @@ void	print_warning(int e, char *var)
 	{
 		ft_putstr_fd("cd: ", 2);
 		perror(var);
+	}
+	else if ( e == WAR_NUM_ARG)
+	{
+		ft_putstr_fd("exit: ", 2);
+		ft_putstr_fd(var, 2);
+		ft_putstr_fd(": numeric argument required\n", 2);
+	}
+	else if (e == WAR_MANY_ARGS)
+	{
+		ft_putstr_fd("exit: ", 2);
+		ft_putstr_fd("too many arguments\n", 2);
 	}
 }
 

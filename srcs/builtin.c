@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 20:32:03 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/09 10:09:59 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/11/09 12:56:27 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ int		ft_pwd(char **args)
 ** Exit function - quits minishell.
 */
 
-// Set errman
 int		ft_exit(char **args)
 {
 	if (!args || (*args && *(args + 1) == NULL))
@@ -74,20 +73,22 @@ int		ft_exit(char **args)
 		ft_putstr_fd("exit\n", 2);
 		exit(0);
 	}
-	else if (*args && *(args + 1) && *(args + 2) == NULL)
+	else if ((ft_isnumeric(*(args + 1))))
 	{
-		if (!(ft_isnumeric(*(args + 1))))
+		if (*args && *(args + 1) && (*(args + 2) != NULL))
 		{
-			ft_putstr_fd("numeric argument required\n", 2);
-			exit(255);
+			ft_putstr_fd("exit\n", 2);
+			errman(WAR_MANY_ARGS, NULL);
+			return (1);
 		}
 		ft_putstr_fd("exit\n", 2);
 		exit(ft_atoi(*(args + 1)));
 	}
 	else
 	{
-		ft_putstr_fd("too many arguments\n", 2);
-		return (1);
+		ft_putstr_fd("exit\n", 2);
+		errman(WAR_NUM_ARG, *(args + 1));
+		exit(255);
 	}
 	return (0);
 }
@@ -119,8 +120,7 @@ int		ft_echo(char **args)
 			{
 				opts_end_flag = 1;
 				ft_putstr_fd(*args++, 1);
-				if (*args != NULL)
-					ft_putstr_fd(" ", 1);
+				(*args != NULL) ? ft_putstr_fd(" ", 1) : 0;
 				continue ;
 			}
 			lf_flag = 1;
