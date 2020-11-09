@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 02:35:02 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/08 00:53:23 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/09 09:48:39 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int		get_argv(t_node *arg, int *argc, char **argv)
 	while (arg)
 	{
 		if (!(argv[arg_count] = ft_strdup(arg->data)))
-			return (errman(ERR_SYS));
+			return (errman(ERR_SYS, NULL));
 		if (++arg_count >= MAX_ARGS)
 			break ;
 		arg = arg->next_sibling;

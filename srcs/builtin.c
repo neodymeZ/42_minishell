@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 20:32:03 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/09 09:38:36 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/11/09 10:09:59 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,10 @@ int		ft_cd(char **args)
 			return (0);
 	}
 	if ((res = chdir(path)) != 0)
+	{
 		errman(WAR_CD, path);
+		return (1);
+	}
 	return (res);
 }
 

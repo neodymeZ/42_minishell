@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/07 03:34:21 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/08 01:07:12 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/09 09:51:14 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int		create_pipes(t_node *pipe_node)
 		if (child->next_sibling)
 		{
 			if (pipe(pipe_fd))
-				return (errman(ERR_SYS));
+				return (errman(ERR_SYS, NULL));
 			child->fd_out = pipe_fd[1];
 			child->next_sibling->fd_in = pipe_fd[0];
 			child->fd1_close = pipe_fd[0];
@@ -41,9 +41,9 @@ int		configure_fds(t_node *cmd)
 	if (cmd->fd2_close)
 		close(cmd->fd2_close);
 	if (dup2(cmd->fd_in, STDIN_FILENO) == -1)
-		return (errman(ERR_SYS));
+		return (errman(ERR_SYS, NULL));
 	if (dup2(cmd->fd_out, STDOUT_FILENO) == -1)
-		return (errman(ERR_SYS));
+		return (errman(ERR_SYS, NULL));
 	return (0);
 }
 

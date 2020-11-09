@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/26 00:41:24 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/07 16:03:04 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/11/09 09:55:44 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int		errman(int errnum, char *var)
 		exit(EXIT_SUCCESS);
 	else
 	{
-		ft_putstr_fd("-minishell: ", 2);
+		ft_putstr_fd("minishell: ", 2);
 		if (errnum < 0)
 		{
 			print_error(errnum, var);
