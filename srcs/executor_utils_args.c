@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 02:35:02 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/09 10:58:33 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/11/12 01:04:38 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ int				free_argv(int argc, char **argv)
 /*
 ** Scans arg nodes of a given command and fills the "argv" array of strings
 ** with arguments.
+** Skips REDIR nodes.
 ** Returns 0 if successful, or error number on error.
 */
 
@@ -95,6 +96,14 @@ int				get_argv(t_node *arg, int *argc, char **argv)
 	arg_count = *argc;
 	while (arg)
 	{
+		if (arg->type == NODE_REDIR_IN || arg->type == NODE_REDIR_OUT ||
+			arg->type == NODE_REDIR_APP)
+		{
+			arg = arg->next_sibling->next_sibling;
+			if (!arg)
+				break ;
+			continue ;
+		}
 		if (!(argv[arg_count] = ft_strdup(arg->data)))
 			return (errman(ERR_SYS, NULL));
 		if (++arg_count >= MAX_ARGS)
@@ -102,5 +111,38 @@ int				get_argv(t_node *arg, int *argc, char **argv)
 		arg = arg->next_sibling;
 	}
 	argv[arg_count] = NULL;
+	return (0);
+}
+
+/*
+** Helper function which returns a pointer to the builtin function.
+** It uses two different arrays of structures with pointers to the builtin
+** functions, one for executing in the child process (in pipe), second for
+** executing in parent process (not in pipe).
+*/
+
+int		is_builtin(char **argv, int flag, t_builtin_f *f)
+{
+	const t_builtin	funcs_notpipe[] = { {"exit", ft_exit}, {"cd", ft_cd},
+		{"pwd", ft_pwd}, {"env", ft_env}, {"echo", ft_echo},
+		{"export", ft_export}, {"unset", ft_unset} };
+	const t_builtin	funcs_pipe[] = { {"exit", ft_test}, {"cd", ft_cd},
+		{"pwd", ft_pwd}, {"env", ft_env}, {"echo", ft_echo},
+		{"export", ft_export}, {"unset", ft_unset} };
+	t_builtin		*funcs;
+	int 			i;
+
+	i = 0;
+	*f = NULL;
+	funcs = (flag ? (t_builtin *)funcs_pipe : (t_builtin *)funcs_notpipe);
+	while (i < 7)
+	{
+		if (!ft_strncmp(*argv, funcs[i].cmd, ft_strlen(funcs[i].cmd) + 1))
+		{
+			*f = funcs[i].f;
+			return (1);
+		}
+		i++;
+	}
 	return (0);
 }

@@ -14,9 +14,9 @@ SRCS_LIST		= minishell.c minishell_utils_prompt.c minishell_utils_input.c \
 				env.c env_utils.c \
 				lexer.c lexer_utils_buffer.c lexer_utils_input.c \
 				lexer_utils_tokens.c \
-				parser.c parser_utils_nodes.c parser_utils_transform.c \
+				parser.c parser_utils_nodes.c parser_utils_expand.c \
 				executor.c executor_utils_args.c executor_utils_spawn.c \
-				executor_utils_io.c
+				executor_utils_open.c executor_utils_fildes.c
 HDRS_LIST		= minishell.h errors.h lexer.h parser.h executor.h builtin.h
 SRCS			= $(addprefix $(SRCS_FLDR)/,$(SRCS_LIST))
 OBJS			= $(SRCS:.c=.o)

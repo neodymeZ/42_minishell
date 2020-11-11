@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 23:48:28 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/09 09:18:28 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/11/11 01:01:48 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,9 @@ static int	parse_simplecom(t_token *token, t_node **simplecom)
 	if (!(arg = create_node(NODE_ARG)))
 		errman(ERR_SYS, NULL);
 	set_node_data(arg, token->text);
+	if (token->type == REDIR_IN || token->type == REDIR_OUT ||
+		token->type == REDIR_APP)
+		arg->type = (int)token->type;
 	add_child_node(*simplecom, arg);
 	return (0);
 }
@@ -215,7 +218,9 @@ void	test_parser(t_input *in)
 		{
 			if (node3->type == NODE_ARG)
 				printf("%s   ", node3->data);
-			else
+			else if (node3->type == NODE_REDIR_IN || node3->type == NODE_REDIR_OUT || node3->type == NODE_REDIR_APP)
+				printf("redir: %d ", node3->type);
+		else
 			{
 				str = node_types(node3->type);
 				printf("%s(%d)   ", str, node3->children);
@@ -237,6 +242,8 @@ void	test_parser(t_input *in)
 			{
 				if (node4->type == NODE_ARG)
 					printf("%s   ", node4->data);
+				else if (node4->type == NODE_REDIR_IN || node4->type == NODE_REDIR_OUT || node4->type == NODE_REDIR_APP)
+					printf("redir: %d ", node4->type);
 				node4 = node4->next_sibling;
 			}
 			node3 = node3->next_sibling;

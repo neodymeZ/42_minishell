@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:51:21 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/08 18:24:26 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/11 23:52:11 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,19 +27,26 @@
 */
 
 int		run_ast(t_node *ast);
-int		run_builtin(char **argv, int flag);
+int		spawn_child(char **argv, t_node *cmd);
 
 /*
-** Executor utils
+** Executor utils - handling the arguments
 */
 
-int		capture_status(int status);
 char	*search_path(char *arg);
-int		spawn_child(char **argv, t_node *cmd);
 int		get_argv(t_node *arg, int *argc, char **argv);
 int		free_argv(int argc, char **argv);
+int		is_builtin(char **argv, int flag, t_builtin_f *f);
+
+/*
+** Executor utils - handling the I/O
+*/
+
 int		create_pipes(t_node *pipe_node);
+int		create_files(t_node *cmd);
 int		configure_fds(t_node *cmd);
+int		close_fds(t_node *cmd);
+int		restore_fds(t_node *cmd, int *saved_fds);
 int		close_fds(t_node *cmd);
 
 #endif

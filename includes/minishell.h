@@ -5,6 +5,7 @@
 
 # include <unistd.h>
 # include <stdlib.h>
+# include <fcntl.h>
 # include <sys/wait.h>
 # include <sys/errno.h>
 # include <sys/types.h>
@@ -15,8 +16,8 @@
 # include "errors.h"
 # include "lexer.h"
 # include "parser.h"
-# include "executor.h"
 # include "builtin.h"
+# include "executor.h"
 
 /*
 ** Global variables' declarations

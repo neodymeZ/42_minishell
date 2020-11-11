@@ -1,16 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_utils_transform.c                           :+:      :+:    :+:   */
+/*   parser_utils_expand.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/27 23:38:16 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/09 09:09:36 by gejeanet         ###   ########.fr       */
+/*   Created: 2020/11/10 23:55:44 by larosale          #+#    #+#             */
+/*   Updated: 2020/11/11 00:01:13 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+/*
+** Concatenates tokens (quoted strings, not separated by whitespace).
+** Returns 0 on success, or calls errman on error.
+*/
 
 int		concat_tokens(t_token *token, t_input *in)
 {
@@ -36,6 +41,12 @@ int		concat_tokens(t_token *token, t_input *in)
 	return (0);
 }
 
+/*
+** Helper function for "subst_env" function.
+** Replaces text string "src" to "dst" in a given token.
+** Returns 0 on success, or calls errman on error.
+*/
+
 static int	replace_env_token(t_token *token, char *src, char *dst)
 {
 	char	*tmp;
@@ -43,14 +54,22 @@ static int	replace_env_token(t_token *token, char *src, char *dst)
 	if (!dst)
 	{
 		if (!(dst = ft_itoa(g_status)))
-			return (errman(ERR_SYS, NULL));
+			errman(ERR_SYS, NULL);
 	}
 	if (!(tmp = ft_strsubst(token->text, src, dst)))
-		return (errman(ERR_SYS, NULL));
+		errman(ERR_SYS, NULL);
 	free(token->text);
 	token->text = tmp;
 	return (0);
 }
+
+/*
+** Substitutes environment variable reference (starting with $) to the env
+** variable value.
+** If a substitution was made, the function recursively calls itself for
+** further token processing.
+** Returns 0 on success.
+*/
 
 int		subst_env(t_token *token)
 {
