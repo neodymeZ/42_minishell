@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 01:36:22 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/02 17:55:25 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/14 02:31:47 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define LEXER_H
 
 # define EOL			(-1)
+# define NO_EOL			(0)
 # define ERRCHAR		( 0)
 # define INIT_INPUT_POS	(-2)
 # define CONCAT			(1)
@@ -106,7 +107,7 @@ void					delete_input(t_input *input);
 */
 
 t_token					*null_token(void);
-t_token					*create_token(t_tokbuf *buffer);
+t_token					*create_token(t_tokbuf *buffer, t_input *in);
 void					delete_token(t_token *token);
 t_token					*tokenize_input(t_input *in);
 

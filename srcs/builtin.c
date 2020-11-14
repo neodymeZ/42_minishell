@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 20:32:03 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/09 12:56:27 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/11/14 03:01:33 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,33 +64,39 @@ int		ft_pwd(char **args)
 
 /*
 ** Exit function - quits minishell.
+** While in pipe, exit does not print "exit" to stderr.
 */
 
-int		ft_exit(char **args)
+int		ft_exit_pipe(char **args)
 {
 	if (!args || (*args && *(args + 1) == NULL))
-	{
-		ft_putstr_fd("exit\n", 2);
 		exit(0);
-	}
 	else if ((ft_isnumeric(*(args + 1))))
 	{
 		if (*args && *(args + 1) && (*(args + 2) != NULL))
 		{
-			ft_putstr_fd("exit\n", 2);
 			errman(WAR_MANY_ARGS, NULL);
 			return (1);
 		}
-		ft_putstr_fd("exit\n", 2);
 		exit(ft_atoi(*(args + 1)));
 	}
 	else
 	{
-		ft_putstr_fd("exit\n", 2);
 		errman(WAR_NUM_ARG, *(args + 1));
 		exit(255);
 	}
 	return (0);
+}
+
+/*
+** Wrapper function to "ft_exit_pipe" - prints "exit" to stderr,
+** if not in pipe.
+*/
+
+int		ft_exit(char **args)
+{
+	ft_putstr_fd("exit\n", 2);
+	return (ft_exit_pipe(args));
 }
 
 /*
@@ -129,16 +135,5 @@ int		ft_echo(char **args)
 	}
 	if (lf_flag == 0)
 		ft_putstr_fd("\n", 1);
-	return (0);
-}
-
-/*
-** Builtin test function - does nothing :)
-*/
-
-int		ft_test(char **args)
-{
-	if (args)
-		;
 	return (0);
 }

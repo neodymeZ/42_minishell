@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 01:43:42 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/07 15:17:34 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/11/14 02:36:18 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,9 +130,8 @@ t_token			*tokenize_input(t_input *in)
 	}
 	if (buffer->type == 0 && *(buffer->buffer) == '\0')
 		return (null_token());
-	if (!(token = create_token(buffer)))
+	if (!(token = create_token(buffer, in)))
 		errman(ERR_SYS, NULL);
-	token->in = in;
 	delete_buffer(buffer);
 	return (token);
 }

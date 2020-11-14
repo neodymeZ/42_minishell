@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 23:48:28 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/11 01:01:48 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/14 02:11:22 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,14 @@ static int	parse_simplecom(t_token *token, t_node **simplecom)
 	set_node_data(arg, token->text);
 	if (token->type == REDIR_IN || token->type == REDIR_OUT ||
 		token->type == REDIR_APP)
+	{
+		if ((*simplecom)->last_redir)
+			errman(ERR_TOKEN, NULL);
+		(*simplecom)->last_redir = 1;
 		arg->type = (int)token->type;
+	}
+	else
+		(*simplecom)->last_redir = 0;
 	add_child_node(*simplecom, arg);
 	return (0);
 }
@@ -54,6 +61,8 @@ static int	parse_pipe(t_node **simplecom, t_node **pipe)
 		if (!(*pipe = create_node(NODE_PIPE)))
 			errman(ERR_SYS, NULL);
 	}
+	if ((*simplecom)->last_redir)
+		errman(ERR_TOKEN, NULL);
 	add_child_node(*pipe, *simplecom);
 	*simplecom = NULL;
 	return (0);
@@ -69,8 +78,10 @@ static int	parse_pipe(t_node **simplecom, t_node **pipe)
 */
 
 static int	parse_semic(t_node **simplecom, t_node **pipe,
-	t_node **semic)
+	t_node **semic, int eol_flag)
 {
+	if (*simplecom && (*simplecom)->last_redir)
+		eol_flag ? errman(ERR_TOKEN, NULL) : errman(ERR_TOKEN, NULL);
 	if (*simplecom && !(*pipe))
 	{
 		add_child_node(*semic, *simplecom);
@@ -101,7 +112,7 @@ static int	parse_token(t_token *token, t_node **simplecom, t_node **pipe,
 	if (token->type == PIPE)
 		return (parse_pipe(simplecom, pipe));
 	else if (token->type == SEMIC)
-		return (parse_semic(simplecom, pipe, semic));
+		return (parse_semic(simplecom, pipe, semic, NO_EOL));
 	else
 		return (parse_simplecom(token, simplecom));
 	return (0);
@@ -154,7 +165,7 @@ t_node	*parse_input(t_input *in)
 			return (NULL);
 		delete_token(token);
 	}
-	parse_semic(&simplecom, &pipe, &semic);
+	parse_semic(&simplecom, &pipe, &semic, EOL);
 	delete_token(token);
 	delete_input(in);
 	return (semic);

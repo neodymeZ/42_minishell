@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 23:12:19 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/07 03:14:31 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/14 01:45:20 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ typedef struct		s_node
 	int				fd_out;
 	int				fd1_close;
 	int				fd2_close;
+	int				last_redir;
 	struct s_node	*first_child;
 	struct s_node	*prev_sibling;
 	struct s_node	*next_sibling;

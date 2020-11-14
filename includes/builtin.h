@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 02:09:26 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/11 13:09:49 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/14 03:00:57 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 int				ft_cd(char **args);
 int				ft_pwd(char **args);
 int				ft_exit(char **args);
+int				ft_exit_pipe(char **args);
 int				ft_env(char **args);
 int				ft_echo(char **args);
 int				ft_export(char **args);

@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 02:35:02 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/12 01:04:38 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/14 03:01:11 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ int		is_builtin(char **argv, int flag, t_builtin_f *f)
 	const t_builtin	funcs_notpipe[] = { {"exit", ft_exit}, {"cd", ft_cd},
 		{"pwd", ft_pwd}, {"env", ft_env}, {"echo", ft_echo},
 		{"export", ft_export}, {"unset", ft_unset} };
-	const t_builtin	funcs_pipe[] = { {"exit", ft_test}, {"cd", ft_cd},
+	const t_builtin	funcs_pipe[] = { {"exit", ft_exit_pipe}, {"cd", ft_cd},
 		{"pwd", ft_pwd}, {"env", ft_env}, {"echo", ft_echo},
 		{"export", ft_export}, {"unset", ft_unset} };
 	t_builtin		*funcs;
