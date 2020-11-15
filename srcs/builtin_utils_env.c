@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 01:25:11 by larosale          #+#    #+#             */
-/*   Updated: 2020/10/31 03:11:47 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/11/15 22:46:16 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 int				check_varname(char *str)
 {
 	if (!ft_strlen(str))
+		return (1);
+	if (!ft_isalpha(*str))
 		return (1);
 	while (*str)
 	{
