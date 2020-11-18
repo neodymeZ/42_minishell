@@ -27,7 +27,7 @@ LIBFT			= $(LIBFT_FLDR)/libft.a
 all: $(NAME)
 
 $(NAME): $(LIBFT) $(OBJS)
-	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIBS)
+	@$(CC) $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME)
 	@echo "\033[90m[\033[32mSuccess\033[90m]\033[32m Successfully \
 	compiled minishell\033[0m"
 

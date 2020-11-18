@@ -6,7 +6,7 @@
 /*   By: gejeanet <gejeanet@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 20:57:33 by gejeanet          #+#    #+#             */
-/*   Updated: 2020/11/17 01:41:22 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/18 22:52:27 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@ int				ft_env(char **args)
 {
 	char	**env;
 
-	if (args)
-		;
+	(void)args;
 	env = g_env;
 	while (*env != NULL)
 	{
