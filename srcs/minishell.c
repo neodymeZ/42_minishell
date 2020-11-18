@@ -1,4 +1,14 @@
-// ADD HEADER
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/11/17 01:44:32 by larosale          #+#    #+#             */
+/*   Updated: 2020/11/18 19:36:23 by larosale         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -25,22 +35,22 @@ t_input	*read_input(void)
 	char	*temp2;
 	t_input	*in;
 
-	if (gnl_wrapper(0, &input) < 0)
-		errman(ERR_SYS, NULL);
+	if (gnl_wrapper(0, &input) < 0 && errman(ERR_SYSCMD, NULL, NULL))
+		return (NULL);
 	while (ft_strlen(input) > 0 && (input[ft_strlen(input) - 1] == '\\' ||
-		check_quotes(input)))	// Handling multiline input
+		check_quotes(input)))
 	{
 		print_prompt2();
 		if (input[ft_strlen(input) - 1] == '\\')
 			input[ft_strlen(input) - 1] = '\0';
-		if (gnl_wrapper(0, &temp) < 0 ||
-			!(temp2 = ft_strjoin(input, temp)))
-			errman(ERR_SYS, NULL);
-		free(input);
-		free(temp);
+		if ((gnl_wrapper(0, &temp) < 0 || !(temp2 = ft_strjoin(input, temp))) &&
+			errman(ERR_SYSCMD, NULL, NULL))
+			return (free_read_input(&input, &temp));
+		free_read_input(&input, &temp);
 		input = temp2;
 	}
-	in = create_input(input);
+	if (!(in = create_input(input)))
+		return (free_read_input(&input, &temp));
 	free(input);
 	return (in);
 }
@@ -52,14 +62,13 @@ t_input	*read_input(void)
 int		shell_loop(void)
 {
 	t_input	*in;
-//	t_token	*token;
 	t_node	*ast;
 
 	while (1)
 	{
 		print_prompt();
-		in = read_input();
-		g_null_token = null_token();
+		if (!(in = read_input()))
+			continue ;
 		// Added for lexer testing. Remove before submitting
 		if (!ft_strncmp(in->buffer, "lexer", 5))
 		{
@@ -72,30 +81,32 @@ int		shell_loop(void)
 			test_parser(in);
 			continue ;
 		}
-		ast = parse_input(in);
+		if (!(ast = parse_input(in)))
+		{
+			delete_input(in);
+			continue ;
+		}
 		run_ast(ast);
 		delete_tree(ast);
 	}
 	return (0);
 }
 
+/*
+** Main minishell function.
+*/
+
 int		main(int argc, char **argv, char **env)
 {
-	// Copy env to global g_env. So, we can now add/remove/change env entries
-	// g_env could be NULL
 	g_env = env_init(env);
-	// Restart shell on Ctrl-C
+	g_status = 0;
+	if (!(g_null_token = null_token()))
+		errman(ERR_SYS, NULL, NULL);
 	set_signals(SIGNAL_SET);
-	if (argc == 1)
+	if (argc == 1 && *argv)
 		shell_loop();
-	else if (argc >= 2)
-	{
-		// Need implement the script execution (TODO)
-		// We execute ONLY first script! (it's name is in av[1])
-		// and pass all other args av[2], av[3] and so on (if present) to him
-		printf("%s\n", search_path(argv[1]));
-	}
 	env_free(g_env);
 	env_free(g_env_local);
+	free(g_null_token);
 	return (0);
 }

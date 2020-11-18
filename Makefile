@@ -9,7 +9,7 @@ SRCS_FLDR		= ./srcs
 HDRS_FLDR		= ./includes
 LIBFT_FLDR		= ./libft
 SRCS_LIST		= minishell.c minishell_utils_prompt.c minishell_utils_input.c \
-				error_handler.c signal_handlers.c \
+				minishell_utils_free.c error_handler.c signal_handlers.c \
 				builtin.c builtin_env.c builtin_utils_env.c \
 				env.c env_utils.c \
 				lexer.c lexer_utils_buffer.c lexer_utils_input.c \

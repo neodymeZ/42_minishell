@@ -6,7 +6,7 @@
 /*   By: gejeanet <gejeanet@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 20:57:33 by gejeanet          #+#    #+#             */
-/*   Updated: 2020/11/09 09:46:55 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/11/17 01:41:22 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int				ft_unset(char **args)
 		}
 		else
 		{
-			errman(WAR_UNSET, *args);
+			errman(ERR_INVLID, "unset", args);
 			result = 1;
 		}
 		args++;
@@ -67,7 +67,8 @@ int				ft_unset(char **args)
 }
 
 /*
-**
+** Helper function for "ft_export" function.
+** Prints a single entry in env vars array.
 */
 
 static	void	prnt_var(char *var)
@@ -86,6 +87,7 @@ static	void	prnt_var(char *var)
 }
 
 /*
+** Helper function for "ft_export" function.
 ** Prints environment variables similarly to the bash export command.
 */
 
@@ -136,7 +138,7 @@ int				ft_export(char **args)
 			env_set_var(*args, value, &g_env);
 		else
 		{
-			errman(WAR_EXPORT, *args);
+			errman(ERR_INVLID, "export", args);
 			result = 1;
 		}
 		args++;

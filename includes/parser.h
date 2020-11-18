@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 23:12:19 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/14 01:45:20 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/18 19:39:51 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ typedef enum		e_node_types
 {
 	NODE_SEMIC,
 	NODE_PIPE,
-    NODE_CMD,
-    NODE_ARG,
+	NODE_CMD,
+	NODE_ARG,
 	NODE_REDIR_IN,
 	NODE_REDIR_OUT,
 	NODE_REDIR_APP
@@ -48,6 +48,7 @@ t_node				*create_node(t_node_types type);
 int					add_child_node(t_node *parent, t_node *child);
 void				delete_tree(t_node *root);
 int					set_node_data(t_node *node, char *data);
+void				*free_parse_input(t_token *token, t_node *tree);
 
 /*
 ** Parsing functions

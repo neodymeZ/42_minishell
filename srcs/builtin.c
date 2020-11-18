@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 20:32:03 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/14 03:01:33 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/18 19:28:25 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*
 ** Minishell implementation of the "cd" builtin bash function.
 ** Calls "chdir" function to the specified path ("path").
-** Returns -1 on error, or 0 otherwise.
+** Returns 1 on error, or 0 otherwise.
 */
 
 int		ft_cd(char **args)
@@ -29,14 +29,17 @@ int		ft_cd(char **args)
 	{
 		path = env_get_var("HOME");
 		if (path == NULL)
-			return (0);
+		{
+			errman(ERR_NOHOME, NULL, args);
+			return (1);
+		}
 	}
 	if ((res = chdir(path)) != 0)
 	{
-		errman(WAR_CD, path);
+		errman(ERR_SYSCMD, path, args);
 		return (1);
 	}
-	return (res);
+	return (0);
 }
 
 /*
@@ -44,7 +47,7 @@ int		ft_cd(char **args)
 ** Calls "getcwd" function with zero arguments (if no buffer is specified,
 ** getcwd allocates memory for the output with malloc).
 ** The path is printed and the string "pwd" is freed.
-** Returns -1 on error, or 0 otherwise.
+** Returns 1 on error, or 0 otherwise.
 */
 
 int		ft_pwd(char **args)
@@ -54,7 +57,10 @@ int		ft_pwd(char **args)
 	pwd = NULL;
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
-		return (-1);
+	{
+		errman(ERR_SYSCMD, NULL, args);
+		return (1);
+	}
 	ft_putstr_fd(pwd, 1);
 	if (args)
 		ft_putchar_fd('\n', 1);
@@ -70,20 +76,20 @@ int		ft_pwd(char **args)
 int		ft_exit_pipe(char **args)
 {
 	if (!args || (*args && *(args + 1) == NULL))
-		exit(0);
+		exit(g_status);
 	else if ((ft_isnumeric(*(args + 1))))
 	{
-		if (*args && *(args + 1) && (*(args + 2) != NULL))
+		if (*args && *(args + 1) && *(args + 2))
 		{
-			errman(WAR_MANY_ARGS, NULL);
+			errman(ERR_MNARGS, NULL, args);
 			return (1);
 		}
 		exit(ft_atoi(*(args + 1)));
 	}
 	else
 	{
-		errman(WAR_NUM_ARG, *(args + 1));
-		exit(255);
+		errman(ERR_NUMARG, NULL, args);
+		exit(g_status);
 	}
 	return (0);
 }

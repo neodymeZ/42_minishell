@@ -6,86 +6,103 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/26 00:41:24 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/09 12:59:04 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/11/18 18:22:45 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /*
-** Prints error code based on error number "e" (see also errors.h).
+** Helper function to set the "g_status" global variable value to the exit
+** status, based on the error code.
 */
 
-void	print_error(int e, char *var)
+static void	set_status(int e)
 {
-	e == ERR_SYS ? ft_putstr_fd("a system call error occured\n", 2) : 0;
-	e == ERR_UNKNOWN ? ft_putstr_fd("unknown error occurred\n", 2) : 0;
-	e == ERR_TOKEN ? ft_putstr_fd("syntax error near unexpected token\n", 2) : 0;
-	e == ERR_NOFDIR ? perror(var) : 0;
-	if (e == ERR_NOCMD)
-	{
-		ft_putstr_fd(var, 2);
-		ft_putstr_fd(": command not found\n", 2);
-	}
+	if (e == ERR_NUMARG)
+		g_status = 255;
+	else if (e == ERR_SYSCMD)
+		g_status = 127;
+	else if (e == ERR_TOKEN)
+		g_status = 258;
+	else
+		g_status = 1;
+	return ;
+}
+
+/*
+** Helper function to write error message composed of three strings.
+*/
+
+static void	wr_msg(char *str1, char *str2, char *str3, char *str4)
+{
+	if (str1)
+		ft_putstr_fd(str1, 2);
+	if (str2)
+		ft_putstr_fd(str2, 2);
+	if (str3)
+		ft_putstr_fd(str3, 2);
+	if (str4)
+		ft_putstr_fd(str4, 2);
+	ft_putchar_fd('\n', 2);
+	return ;
 }
 
 /*
 ** Prints error code based on error number "e" (see also errors.h).
-** There ara no difference from print_error(). Simply for passing the norme.
 */
-void	print_warning(int e, char *var)
+
+void		print_error(int e, char *var, char **args)
 {
-	if (e == WAR_UNSET)
+	if (e == ERR_TOKEN)
+		wr_msg("syntax error near unexpected token `", var, "'", 0);
+	else if (e == ERR_NOCMD && args)
+		wr_msg(*args, ": command not found", 0, 0);
+	else if (e == ERR_NOHOME && args)
+		wr_msg(*args, ": HOME not set", 0, 0);
+	else if (e == ERR_MNARGS && args)
+		wr_msg(*args, ": too many arguments", 0, 0);
+	else if (e == ERR_NUMARG && args)
+		wr_msg(*args, ": ", *(args + 1), ": numeric argument required");
+	else if (e == ERR_INVLID && args)
+		wr_msg(var, ": `", *args, "': not a valid identifier");
+	if (e == ERR_SYSCMD)
 	{
-		ft_putstr_fd("unset: `", 2);
-		ft_putstr_fd(var, 2);
-		ft_putstr_fd("': not a valid identifier\n", 2);
+		*args ? ft_putstr_fd(*args, 2) : 0;
+		*args ? ft_putstr_fd(": ", 2) : 0;
+		if (errno)
+			perror(var);
+		else
+			ft_putstr_fd("unknown error occurred\n", 2);
 	}
-	else if (e == WAR_EXPORT)
-	{
-		ft_putstr_fd("export: `", 2);
-		ft_putstr_fd(var, 2);
-		ft_putstr_fd("': not a valid identifier\n", 2);
-	}
-	else if (e == WAR_CD)
-	{
-		ft_putstr_fd("cd: ", 2);
-		perror(var);
-	}
-	else if ( e == WAR_NUM_ARG)
-	{
-		ft_putstr_fd("exit: ", 2);
-		ft_putstr_fd(var, 2);
-		ft_putstr_fd(": numeric argument required\n", 2);
-	}
-	else if (e == WAR_MANY_ARGS)
-	{
-		ft_putstr_fd("exit: ", 2);
-		ft_putstr_fd("too many arguments\n", 2);
-	}
+	return ;
 }
 
 /*
-** Prints error message related to the error code "errnum".
-** If "errno" was set by failed system calls or mlx, prints errno debug info.
-** In case of successful exit, nothing is printed.
+** Error handler function.
+** If the error happened in a system call, or is unknown and not recoverable,
+** the process exits (ERR_SYS and ERR_UNKNOWN codes).
+** Otherwise, the respective error message is printed.
 */
 
-int		errman(int errnum, char *var)
+int			errman(int errnum, char *var, char **args)
 {
 	if (!errnum)
-		exit(EXIT_SUCCESS);
+		return (0);
 	else
 	{
 		ft_putstr_fd("minishell: ", 2);
-		if (errnum < 0)
+		if (errnum == ERR_SYS)
 		{
-			print_error(errnum, var);
-			if (errno && (errnum == ERR_SYS || errnum == ERR_UNKNOWN))
-				perror("Additional debugging info (errno)");
-			exit(errnum);
+			if (errno)
+				perror("");
+			else
+				ft_putstr_fd("unknown error occurred\n", 2);
+			g_status = 1;
+			exit(g_status);
 		}
-		print_warning(errnum, var);
+		print_error(errnum, var, args);
+		set_status(errnum);
 	}
-	return (errnum);
+	return (1);
 }

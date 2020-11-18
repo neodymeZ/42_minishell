@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/08 00:45:24 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/12 01:05:31 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/18 20:31:58 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,36 @@ static int	exec_cmd(char **argv)
 
 	if (ft_strchr(argv[0], '/'))
 	{
-		if (execve(argv[0], argv, g_env) < 0)
-			errman(ERR_NOFDIR, argv[0]);
+		if (execve(argv[0], argv, g_env) < 0 &&
+			errman(ERR_SYSCMD, NULL, argv))
+			return (127);
 	}
 	else
 	{
-		if (!(path = search_path(argv[0])))
-			errman(ERR_NOCMD, argv[0]);
-		if (execve(path, argv, g_env) < 0)
-			errman(ERR_SYS, NULL);
+		if (!(path = search_path(argv[0])) &&
+			errman(ERR_NOCMD, NULL, argv))
+			return (127);
+		if (execve(path, argv, g_env) < 0 &&
+			errman(ERR_SYSCMD, NULL, argv))
+			return (127);
 		free(path);
 	}
+	return (0);
+}
+
+static int	run_in_child(char **argv, t_node *cmd)
+{
+	t_builtin_f	f;
+
+	if(ft_strncmp(*argv, "./minishell", 11))
+		set_signals(SIGNAL_DFL);
+	if (configure_fds(cmd))
+		exit(1);
+	if (is_builtin(argv, IN_PIPE, &f))
+		g_status = f(argv);
+	else
+		g_status = exec_cmd(argv);
+	exit(g_status);
 	return (0);
 }
 
@@ -60,33 +79,28 @@ static int	exec_cmd(char **argv)
 ** to "g_status" global variable and sets default signal configuration.
 */
 
-int		spawn_child(char **argv, t_node *cmd)
+int			spawn_child(char **argv, t_node *cmd)
 {
-	int     stat_loc;
+	int		stat_loc;
 	pid_t	child_pid;
-	t_builtin_f	f;
 
 	stat_loc = 0;
-	if ((child_pid = fork()) < 0)
-		return (errman(ERR_SYS, NULL));
+	if ((child_pid = fork()) < 0 && (errman(ERR_SYSCMD, NULL, NULL)))
+		return (1);
 	else if (child_pid == 0)
-	{
-		set_signals(SIGNAL_DFL);
-		configure_fds(cmd);
-		if (is_builtin(argv, IN_PIPE, &f))
-			g_status = f(argv);
-		else
-			exec_cmd(argv);
-		exit(g_status);
-	}
+		run_in_child(argv, cmd);
 	else
- 	{   
- 		close_fds(cmd);
-		set_signals(SIGNAL_SET_WAIT);
- 		if (waitpid(child_pid, &stat_loc, WUNTRACED) < 0)
-			return (errman(ERR_SYS, NULL));
+	{
+		close_fds(cmd);
+		if (ft_strncmp(*argv, "./minishell", 11))
+			set_signals(SIGNAL_SET_WAIT);
+		else
+			set_signals(SIGNAL_IGN);
+		if (waitpid(child_pid, &stat_loc, WUNTRACED) < 0 &&
+			errman(ERR_SYSCMD, NULL, NULL))
+			return (1);
 		capture_status(stat_loc);
 		set_signals(SIGNAL_SET);
- 	}
-	return (stat_loc);
+	}
+	return (0);
 }

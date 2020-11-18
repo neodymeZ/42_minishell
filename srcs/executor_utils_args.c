@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 02:35:02 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/14 03:01:11 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/18 16:47:43 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,18 +74,18 @@ char			*search_path(char *arg)
 
 int				free_argv(int argc, char **argv)
 {
-	if (!argc)
-		return (0);
-	while (argc--)
+	if (!argc || !argv)
+		return (1);
+	while (argv[argc] && argc--)
 		free(argv[argc]);
-	return (0);
+	return (1);
 }
 
 /*
 ** Scans arg nodes of a given command and fills the "argv" array of strings
 ** with arguments.
 ** Skips REDIR nodes.
-** Returns 0 if successful, or error number on error.
+** Returns 0 if successful, or 1 on error.
 */
 
 int				get_argv(t_node *arg, int *argc, char **argv)
@@ -104,8 +104,9 @@ int				get_argv(t_node *arg, int *argc, char **argv)
 				break ;
 			continue ;
 		}
-		if (!(argv[arg_count] = ft_strdup(arg->data)))
-			return (errman(ERR_SYS, NULL));
+		if (!(argv[arg_count] = ft_strdup(arg->data)) &&
+			errman(ERR_SYSCMD, NULL, NULL))
+			return (1);
 		if (++arg_count >= MAX_ARGS)
 			break ;
 		arg = arg->next_sibling;
@@ -119,9 +120,10 @@ int				get_argv(t_node *arg, int *argc, char **argv)
 ** It uses two different arrays of structures with pointers to the builtin
 ** functions, one for executing in the child process (in pipe), second for
 ** executing in parent process (not in pipe).
+** Returns 1 if function pointer was found, or 0 otherwise.
 */
 
-int		is_builtin(char **argv, int flag, t_builtin_f *f)
+int				is_builtin(char **argv, int flag, t_builtin_f *f)
 {
 	const t_builtin	funcs_notpipe[] = { {"exit", ft_exit}, {"cd", ft_cd},
 		{"pwd", ft_pwd}, {"env", ft_env}, {"echo", ft_echo},
@@ -130,7 +132,7 @@ int		is_builtin(char **argv, int flag, t_builtin_f *f)
 		{"pwd", ft_pwd}, {"env", ft_env}, {"echo", ft_echo},
 		{"export", ft_export}, {"unset", ft_unset} };
 	t_builtin		*funcs;
-	int 			i;
+	int				i;
 
 	i = 0;
 	*f = NULL;

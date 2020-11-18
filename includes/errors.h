@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/25 19:27:02 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/09 12:59:53 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/11/18 03:56:30 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,20 +25,18 @@
 
 typedef enum	e_errors
 {
-	WAR_NUM_ARG = 5,
-	WAR_MANY_ARGS = 4,
-	WAR_CD = 3,
-	WAR_EXPORT = 2,
-	WAR_UNSET = 1,
 	ERR_OK = 0,
-	ERR_UNKNOWN = -1,
-	ERR_SYS = -2,
-	ERR_TOKEN = -3,
-	ERR_NOCMD = -4,
-	ERR_NOFDIR = -5
+	ERR_SYS = -1,
+	ERR_SYSCMD = -2,
+	ERR_TOKEN = -11,
+	ERR_NOCMD = -12,
+	ERR_NOHOME = -13,
+	ERR_MNARGS = -14,
+	ERR_NUMARG = -15,
+	ERR_INVLID = -16
 }				t_errors;
 
-void			print_error(int e, char *var);
-int				errman(int errnum, char *var);
+void			print_error(int e, char *var, char **args);
+int				errman(int errnum, char *var, char **args);
 
 #endif

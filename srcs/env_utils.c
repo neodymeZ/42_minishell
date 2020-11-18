@@ -6,7 +6,7 @@
 /*   By: gejeanet <gejeanet@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 20:14:39 by gejeanet          #+#    #+#             */
-/*   Updated: 2020/11/07 14:18:30 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/11/17 02:36:38 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,10 @@ static int		create_var(char *var, char *value, char **env, size_t len)
 	if (*env != NULL)
 		free(*env);
 	if (!(*env = ft_calloc(new_len, 1)))
-		errman(ERR_SYS, NULL); 
+	{
+		errman(ERR_SYSCMD, NULL, NULL);
+		return (1);
+	}
 	ft_strlcpy(*env, var, len + 1);
 	if (value == NULL)
 		return (0);
@@ -83,7 +86,6 @@ static int		create_var(char *var, char *value, char **env, size_t len)
 	ft_strlcat(*env, value, new_len);
 	return (0);
 }
-
 
 /*
 ** Sets the "var" variable to the value "value" in the given environment "env".
@@ -102,22 +104,21 @@ int				env_set_var(char *var, char *value, char ***env)
 	tmp = *env;
 	while (*tmp != NULL)
 	{
-		if (!(ft_strncmp(*tmp, var, len)) && ((*(*tmp + len) == '=') || \
-												(*(*tmp + len) == '\0')))
-		{
-			create_var(var, value, tmp, len);
-			return (0);
-		}
+		if (!(ft_strncmp(*tmp, var, len)) &&
+			((*(*tmp + len) == '=') || (*(*tmp + len) == '\0')))
+			return (create_var(var, value, tmp, len));
 		tmp++;
 		env_size++;
 	}
-	if (!(tmp = ft_realloc(*env, sizeof(char *) * (env_size + 2), \
+	if (!(tmp = ft_realloc(*env, sizeof(char *) * (env_size + 2),
 								sizeof(char *) * (env_size + 1))))
-		errman(ERR_SYS, NULL);
-	create_var(var, value, tmp + env_size, len);
+	{
+		errman(ERR_SYSCMD, NULL, NULL);
+		return (1);
+	}
 	*(tmp + env_size + 1) = NULL;
 	*env = tmp;
-	return (0);
+	return (create_var(var, value, tmp + env_size, len));
 }
 
 /*

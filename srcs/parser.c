@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 23:48:28 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/14 02:11:22 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/18 04:13:17 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,27 @@
 /*
 ** Parses tokens which are part of a simple command.
 ** If CMD node does not exists, creates CMD and appends an ARG as its child.
-** Returns 0 if no error occurred, or error code otherwise.
+** Returns 0 if no error occurred, or 1 otherwise.
 */
 
 static int	parse_simplecom(t_token *token, t_node **simplecom)
 {
 	t_node *arg;
-	
+
 	if (!(*simplecom))
 	{
 		if (!(*simplecom = create_node(NODE_CMD)))
-			errman(ERR_SYS, NULL);
+			return (1);
 	}
 	if (!(arg = create_node(NODE_ARG)))
-		errman(ERR_SYS, NULL);
-	set_node_data(arg, token->text);
+		return (1);
+	if (set_node_data(arg, token->text))
+		return (1);
 	if (token->type == REDIR_IN || token->type == REDIR_OUT ||
 		token->type == REDIR_APP)
 	{
-		if ((*simplecom)->last_redir)
-			errman(ERR_TOKEN, NULL);
+		if ((*simplecom)->last_redir && errman(ERR_TOKEN, token->text, NULL))
+			return (1);
 		(*simplecom)->last_redir = 1;
 		arg->type = (int)token->type;
 	}
@@ -49,20 +50,20 @@ static int	parse_simplecom(t_token *token, t_node **simplecom)
 ** If the PIPE node does not exists, creates PIPE node.
 ** Adds CMD node "simplecom" as the PIPE node child, then sets simplecom
 ** pointer to NULL.
-** Returns 0 if no error occurred, or error code otherwise.
+** Returns 0 if no error occurred, or 1 otherwise.
 */
 
 static int	parse_pipe(t_node **simplecom, t_node **pipe)
 {
-	if (!(*simplecom))
-		errman(ERR_TOKEN, NULL);
+	if (!(*simplecom) && errman(ERR_TOKEN, "|", NULL))
+		return (1);
 	if (!(*pipe))
 	{
 		if (!(*pipe = create_node(NODE_PIPE)))
-			errman(ERR_SYS, NULL);
+			return (1);
 	}
-	if ((*simplecom)->last_redir)
-		errman(ERR_TOKEN, NULL);
+	if ((*simplecom)->last_redir && errman(ERR_TOKEN, "|", NULL))
+		return (1);
 	add_child_node(*pipe, *simplecom);
 	*simplecom = NULL;
 	return (0);
@@ -80,14 +81,16 @@ static int	parse_pipe(t_node **simplecom, t_node **pipe)
 static int	parse_semic(t_node **simplecom, t_node **pipe,
 	t_node **semic, int eol_flag)
 {
-	if (*simplecom && (*simplecom)->last_redir)
-		eol_flag ? errman(ERR_TOKEN, NULL) : errman(ERR_TOKEN, NULL);
-	if (*simplecom && !(*pipe))
+	if (((*simplecom && (*simplecom)->last_redir) ||
+		(!(*simplecom) && *pipe)) &&
+		eol_flag && errman(ERR_TOKEN, "(newline)", NULL))
+		return (1);
+	if (*simplecom && !(*pipe) && !(*simplecom)->last_redir)
 	{
 		add_child_node(*semic, *simplecom);
 		*simplecom = NULL;
 	}
-	else if (*simplecom && *pipe)
+	else if (*simplecom && *pipe && !(*simplecom)->last_redir)
 	{
 		add_child_node(*pipe, *simplecom);
 		add_child_node(*semic, *pipe);
@@ -95,9 +98,9 @@ static int	parse_semic(t_node **simplecom, t_node **pipe,
 		*pipe = NULL;
 	}
 	else if (!(*simplecom) && !(*pipe))
-		return (0);
-	else
-		errman(ERR_TOKEN, NULL);
+		;
+	else if (errman(ERR_TOKEN, ";", NULL))
+		return (1);
 	return (0);
 }
 
@@ -130,11 +133,11 @@ static int	parse_token(t_token *token, t_node **simplecom, t_node **pipe,
 ** 								SEMIC
 ** 				PIPE								CMD
 ** 		CMD				CMD						ARG		ARG
-**	ARG	ARG	ARG		ARG		ARG					ls		-la	
+**	ARG	ARG	ARG		ARG		ARG					ls		-la
 ** 	echo -n test	cat		-e
 */
 
-t_node	*parse_input(t_input *in)
+t_node		*parse_input(t_input *in)
 {
 	t_token	*token;
 	t_node	*simplecom;
@@ -144,7 +147,7 @@ t_node	*parse_input(t_input *in)
 	simplecom = NULL;
 	pipe = NULL;
 	if (!(semic = create_node(NODE_SEMIC)))
-		errman(ERR_SYS, NULL);
+		return (NULL);
 	// For parser testing. REMOVE on finalizing the project.
 	if (!ft_strncmp(in->buffer, "parser", 6))
 	{
@@ -156,16 +159,14 @@ t_node	*parse_input(t_input *in)
 		ft_memcmp(token, g_null_token, sizeof(t_token)))
 	{
 		subst_env(token);
-		if (token->concat)
-		{
-			if (concat_tokens(token, in))
-				return (NULL);
-		}
+		if (token->concat && concat_tokens(token, in))
+			return (free_parse_input(token, semic));
 		if (parse_token(token, &simplecom, &pipe, &semic))
-			return (NULL);
+			return (free_parse_input(token, semic));
 		delete_token(token);
 	}
-	parse_semic(&simplecom, &pipe, &semic, EOL);
+	if (!token || parse_semic(&simplecom, &pipe, &semic, EOL))
+		return (free_parse_input(token, semic));
 	delete_token(token);
 	delete_input(in);
 	return (semic);
@@ -264,3 +265,4 @@ void	test_parser(t_input *in)
 	}
 	printf("\n");
 }
+

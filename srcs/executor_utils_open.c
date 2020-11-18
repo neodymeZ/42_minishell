@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/12 00:49:43 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/12 00:49:45 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/18 14:24:18 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@
 ** pipes.
 ** fd_in and fd_out are the file descriptors of opened pipes for a given
 ** command.
-** Returns 0 on error or calls errman on error.
+** Returns 0 on error or 1 on error.
 */
 
-int		create_pipes(t_node *pipe_node)
+int			create_pipes(t_node *pipe_node)
 {
 	t_node	*child;
 	int		pipe_fd[2];
@@ -33,14 +33,13 @@ int		create_pipes(t_node *pipe_node)
 	{
 		if (child->next_sibling)
 		{
-			if (pipe(pipe_fd))
-				return (errman(ERR_SYS, NULL));
+			if (pipe(pipe_fd) && errman(ERR_SYSCMD, NULL, NULL))
+				return (1);
 			child->fd_out = pipe_fd[1];
 			child->next_sibling->fd_in = pipe_fd[0];
 			child->fd1_close = pipe_fd[0];
 			child->next_sibling->fd2_close = pipe_fd[1];
 		}
-//		printf("Fds after creating pipes: %d, %d\n", child->fd_in, child->fd_out);
 		child = child->next_sibling;
 	}
 	return (0);
@@ -51,15 +50,15 @@ int		create_pipes(t_node *pipe_node)
 ** Opens files based on the node type and sets the respective
 ** parameters in the "cmd" structure.
 ** If some file descriptors were already specified - closes them.
-** Returns 0 on success, or calls errman on error.
+** Returns 0 on success, or 1 on error.
 */
 
-static int		open_files(t_node *cmd, t_node *child)
+static int	open_files(t_node *cmd, t_node *child)
 {
 	char	*filename;
 	int		fd;
 	int		prev_fd;
-	
+
 	fd = 0;
 	prev_fd = (child->type == NODE_REDIR_IN ? cmd->fd_in : cmd->fd_out);
 	if (prev_fd != 0 && prev_fd != 1)
@@ -71,8 +70,8 @@ static int		open_files(t_node *cmd, t_node *child)
 		fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else if (child->type == NODE_REDIR_APP)
 		fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	if (fd == -1)
-		errman(ERR_SYS, NULL);
+	if (fd < 0 && errman(ERR_SYSCMD, NULL, NULL))
+		return (1);
 	if (child->type == NODE_REDIR_IN)
 		cmd->fd_in = fd;
 	else
@@ -88,22 +87,23 @@ static int		open_files(t_node *cmd, t_node *child)
 ** NODE_REDIR_APP).
 ** If any file descriptors were already specified for the cmd (e.g. by open
 ** pipe, or previous redirection), they are overwritten.
-** Returns 0 on success, errors are handled by helper function.
+** Returns 0 on success, or 1 on error.
 */
 
-int		create_files(t_node *cmd)
+int			create_files(t_node *cmd)
 {
 	t_node *child;
 
 	if (!cmd || !(child = cmd->first_child))
-		return (0);
+		return (1);
 	while (child)
 	{
 		if (child->next_sibling && (child->type == NODE_REDIR_IN ||
 			child->type == NODE_REDIR_OUT ||
 			child->type == NODE_REDIR_APP))
 		{
-			open_files(cmd, child);
+			if (open_files(cmd, child))
+				return (1);
 		}
 		child = child->next_sibling;
 	}

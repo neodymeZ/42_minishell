@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 00:56:54 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/09 09:42:43 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/11/18 20:01:30 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	signal_handler(int signo)
 	{
 		ft_putstr_fd("\b\b  \b\b\n", 1);
 		print_prompt();
+		g_status = 1;
 		if (g_gnl_str)
 			*g_gnl_str = '\0';
 	}
@@ -41,7 +42,16 @@ void	signal_handler(int signo)
 void	signal_handler_wait(int signo)
 {
 	if (signo == SIGINT)
+	{
+		g_status = 130;
 		ft_putchar_fd('\n', 1);
+	}
+	if (signo == SIGQUIT)
+	{
+		g_status = 131;
+		ft_putstr_fd("Quit: 3", 2);
+		ft_putchar_fd('\n', 2);
+	}
 	return ;
 }
 
@@ -59,17 +69,17 @@ int		set_signals(int flag)
 {
 	if (flag == SIGNAL_DFL && (signal(SIGINT, SIG_DFL) == SIG_ERR ||
 		signal(SIGQUIT, SIG_DFL) == SIG_ERR))
-		return (errman(ERR_SYS, NULL));
+		errman(ERR_SYS, NULL, NULL);
 	else if (flag == SIGNAL_IGN && (signal(SIGINT, SIG_IGN) == SIG_ERR ||
 		signal(SIGQUIT, SIG_IGN) == SIG_ERR))
-		return (errman(ERR_SYS, NULL));
+		errman(ERR_SYS, NULL, NULL);
 	else if (flag == SIGNAL_SET && (signal(SIGINT, signal_handler) == SIG_ERR ||
 		signal(SIGQUIT, signal_handler) == SIG_ERR ||
 		signal(SIGTERM, SIG_IGN) == SIG_ERR))
-		return (errman(ERR_SYS, NULL));
+		errman(ERR_SYS, NULL, NULL);
 	else if (flag == SIGNAL_SET_WAIT &&
 		(signal(SIGINT, signal_handler_wait) == SIG_ERR ||
-		signal(SIGQUIT, SIG_IGN) == SIG_ERR))
-		return (errman(ERR_SYS, NULL));
+		signal(SIGQUIT, signal_handler_wait) == SIG_ERR))
+		errman(ERR_SYS, NULL, NULL);
 	return (0);
 }

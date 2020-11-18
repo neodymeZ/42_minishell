@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:51:21 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/11 23:52:11 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/18 18:14:04 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,9 @@ int		is_builtin(char **argv, int flag, t_builtin_f *f);
 int		create_pipes(t_node *pipe_node);
 int		create_files(t_node *cmd);
 int		configure_fds(t_node *cmd);
-int		close_fds(t_node *cmd);
 int		restore_fds(t_node *cmd, int *saved_fds);
 int		close_fds(t_node *cmd);
+int		save_fds(int *saved_fds);
+int		close_saved_fds(int *saved_fds);
 
 #endif

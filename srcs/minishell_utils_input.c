@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 02:22:12 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/09 09:22:06 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/11/17 15:29:40 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
 ** Helper function for GNL wrapper.
 */
 
-static int	join_str(char **line, char **tmp) 
+static int	join_str(char **line, char **tmp)
 {
 	if (!(*tmp = ft_strjoin(g_gnl_str, *line)))
-		errman(ERR_SYS, NULL);
+		return (1);
 	free(*line);
 	free(g_gnl_str);
 	g_gnl_str = *tmp;
@@ -49,15 +49,16 @@ int			gnl_wrapper(int fd, char **line)
 	if (**line == '\0')
 		ft_exit(NULL);
 	if (!(g_gnl_str = ft_calloc(1, 1)))
-		errman(ERR_SYS, NULL);
+		return (-1);
 	ft_putstr_fd("  \b\b", 1);
-	while (!gnl_res) // Loop starts only when GNL result is 0 (EOF)
+	while (!gnl_res)
 	{
-		join_str(line, &tmp);
-		gnl_res = get_next_line(fd, line);
+		if (join_str(line, &tmp) || (gnl_res = get_next_line(fd, line)) < 0)
+			return (-1);
 		ft_putstr_fd("  \b\b", 1);
 	}
-	join_str(line, &tmp); // Append last piece with \n at the end.
+	if (join_str(line, &tmp))
+		return (-1);
 	*line = tmp;
 	g_gnl_str = NULL;
 	return (gnl_res);

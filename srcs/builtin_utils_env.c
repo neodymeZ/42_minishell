@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 01:25:11 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/15 22:46:16 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/11/17 01:43:07 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,8 @@ static	int		partition_for_quicksort(char **env, int l, int h)
 }
 
 /*
-** Sort (quicksort) env variables (we need this before printing the environment).
+** Sort (quicksort) env variables (we need this before printing the
+** environment).
 */
 
 void			sort_env(char **env, int low, int high)

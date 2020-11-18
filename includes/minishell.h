@@ -1,4 +1,14 @@
-// ADD HEADER
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/11/18 19:38:57 by larosale          #+#    #+#             */
+/*   Updated: 2020/11/18 19:39:00 by larosale         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -23,7 +33,6 @@
 ** Global variables' declarations
 */
 
-extern int		errno;
 extern char		**g_env;
 extern char		**g_env_local;
 extern t_token	*g_null_token;
@@ -47,7 +56,7 @@ int			check_quotes(char *input);
 # define SIGNAL_SET 		(2)
 # define SIGNAL_SET_WAIT 	(3)
 
-void   		signal_handler(int signo);
+void		signal_handler(int signo);
 void		signal_handler_wait(int signo);
 int			set_signals(int flag);
 
@@ -67,5 +76,6 @@ char		*env_get_var(char *var);
 
 void		print_prompt(void);
 void		print_prompt2(void);
+void		*free_read_input(char **input, char **temp);
 
 #endif

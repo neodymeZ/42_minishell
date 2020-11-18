@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 01:39:25 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/07 14:39:10 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/11/17 17:27:37 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,18 @@ t_tokbuf	*create_buffer(void)
 	t_tokbuf	*buffer;
 
 	if (!(buffer = ft_calloc(1, sizeof(t_tokbuf))))
-		errman(ERR_SYS, NULL);
+	{
+		errman(ERR_SYSCMD, NULL, NULL);
+		return (NULL);
+	}
 	buffer->size = 1024;
 	buffer->pos = 0;
 	if (!(buffer->buffer = ft_calloc(1, buffer->size)))
-		errman(ERR_SYS, NULL);
+	{
+		errman(ERR_SYSCMD, NULL, NULL);
+		free(buffer);
+		return (NULL);
+	}
 	buffer->type = STR;
 	buffer->concat = NO_CONCAT;
 	return (buffer);
@@ -55,7 +62,6 @@ t_tokbuf	*create_buffer(void)
 ** Returns 1 on error, or 0 otherwise.
 */
 
-
 int			add_to_buffer(char c, t_tokbuf *buffer)
 {
 	char *tmp;
@@ -64,7 +70,10 @@ int			add_to_buffer(char c, t_tokbuf *buffer)
 	if (buffer->pos >= buffer->size)
 	{
 		if (!(tmp = ft_realloc(buffer->buffer, buffer->size * 2, buffer->size)))
-			errman(ERR_SYS, NULL);
+		{
+			errman(ERR_SYSCMD, NULL, NULL);
+			return (1);
+		}
 		buffer->buffer = tmp;
 		buffer->size *= 2;
 	}

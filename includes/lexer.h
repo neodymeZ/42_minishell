@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 01:36:22 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/14 02:31:47 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/18 19:41:18 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,10 @@ typedef enum			e_token_types
 */
 
 typedef struct			s_input
-{   
-    char				*buffer;
-    int					size;
-    int					pos;
+{
+	char				*buffer;
+	int					size;
+	int					pos;
 }						t_input;
 
 /*
@@ -82,14 +82,13 @@ typedef struct			s_token
 ** copied to the token).
 */
 
-
 typedef struct			s_tokbuf
 {
 	char				*buffer;
 	int					size;
 	int					pos;
 	t_token_types		type;
-	int					concat;	
+	int					concat;
 }						t_tokbuf;
 
 /*

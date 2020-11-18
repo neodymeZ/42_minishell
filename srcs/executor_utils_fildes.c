@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executor_utils_io.c                                :+:      :+:    :+:   */
+/*   executor_utils_fildes.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/07 03:34:21 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/12 00:48:39 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/18 18:09:00 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,15 @@ int		configure_fds(t_node *cmd)
 	if (cmd->fd2_close)
 		close(cmd->fd2_close);
 	if (dup2(cmd->fd_in, STDIN_FILENO) == -1)
-		return (errman(ERR_SYS, NULL));
+	{
+		errman(ERR_SYSCMD, NULL, NULL);
+		return (1);
+	}
 	if (dup2(cmd->fd_out, STDOUT_FILENO) == -1)
-		return (errman(ERR_SYS, NULL));
+	{
+		errman(ERR_SYSCMD, NULL, NULL);
+		return (1);
+	}
 	return (0);
 }
 
@@ -46,6 +52,37 @@ int		close_fds(t_node *cmd)
 }
 
 /*
+** Duplicates standard fildes to new file descriptors and saves them to
+** the "saved_fds" array.
+*/
+
+int		save_fds(int *saved_fds)
+{
+	if ((saved_fds[0] = dup(STDIN_FILENO)) < 0 &&
+		errman(ERR_SYSCMD, NULL, NULL))
+		return (1);
+	if ((saved_fds[1] = dup(STDOUT_FILENO)) < 0 &&
+		errman(ERR_SYSCMD, NULL, NULL))
+	{
+		close(saved_fds[0]);
+		return (1);
+	}
+	return (0);
+}
+
+/*
+** Closes file descriptors, to which the standard fildes were
+** previously duplicated.
+*/
+
+int		close_saved_fds(int *saved_fds)
+{
+	close(*saved_fds);
+	close(*(saved_fds + 1));
+	return (1);
+}
+
+/*
 ** Restores file descriptor configuration after running a command.
 ** Uses previously saved STDIN and STDOUT (in "saved_fds").
 ** Iterates through command siblings and closes all open fds.
@@ -53,15 +90,14 @@ int		close_fds(t_node *cmd)
 
 int		restore_fds(t_node *cmd, int *saved_fds)
 {
-	if (dup2(*saved_fds, STDIN_FILENO) < 0 ||
-		dup2(*(saved_fds + 1), STDOUT_FILENO) < 0)
-		errman(ERR_SYS, NULL);
+	if ((dup2(*saved_fds, STDIN_FILENO) < 0 ||
+		dup2(*(saved_fds + 1), STDOUT_FILENO) < 0) &&
+		errman(ERR_SYSCMD, NULL, NULL))
+		return (1);
 	while (cmd)
 	{
 		close_fds(cmd);
 		cmd = cmd->next_sibling;
 	}
-	close(*saved_fds);
-	close(*(saved_fds + 1));
 	return (0);
 }

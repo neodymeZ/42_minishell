@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 01:43:42 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/14 02:36:18 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/18 02:16:05 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,18 +40,20 @@ static int		parse_ctrl(char c, t_tokbuf *buffer, t_input *in)
 	char	nextc;
 	int		ctrl_type;
 
-	if ((ctrl_type = is_ctrl(c)) && buffer->type == STR) 
+	if ((ctrl_type = is_ctrl(c)) && buffer->type == STR)
 	{
 		if (buffer->pos > 0)
 			unget_c(in);
 		else if (!buffer->pos)
 		{
+			add_to_buffer(c, buffer);
 			if (c == '>' && (nextc = peek_c(in)) == '>')
 			{
 				in->pos++;
 				buffer->type = REDIR_APP;
+				add_to_buffer(nextc, buffer);
 			}
-			else 
+			else
 				buffer->type = ctrl_type;
 		}
 		return (0);
@@ -75,7 +77,7 @@ static int		parse_char(char c, t_tokbuf *buffer, t_input *in)
 	if ((buffer->pos > 0 && ((c == ' ' || c == '\t') && buffer->type == STR)) ||
 		(c == '"' && buffer->type == STRDQ) ||
 		(c == '\047' && buffer->type == STRSQ))
-	{	
+	{
 		if ((c == '"' || c == '\047') && (nextc = peek_c(in)) &&
 			(nextc != ' ' && nextc != '\t' && nextc != EOL))
 			buffer->concat = CONCAT;
@@ -84,17 +86,16 @@ static int		parse_char(char c, t_tokbuf *buffer, t_input *in)
 	else if ((c == '"' || c == '\047') && !buffer->pos &&
 		buffer->type != STRDQ && buffer->type != STRSQ)
 		buffer->type = (c == '"' ? STRDQ : STRSQ);
-	else if ((c == '"' || c == '\047') && buffer->pos > 0 &&
-		buffer->type != STRDQ && buffer->type != STRSQ)
+	else if ((c == '"' || c == '\047') && buffer->pos > 0 && buffer->type !=
+		STRDQ && buffer->type != STRSQ && (buffer->concat = CONCAT))
 	{
-		buffer->concat = CONCAT;
 		unget_c(in);
 		return (0);
 	}
 	else if ((c == ' ' || c == '\t') && buffer->type == STR)
 		;
 	else
-		return (2);	
+		return (2);
 	return (1);
 }
 
@@ -112,26 +113,22 @@ t_token			*tokenize_input(t_input *in)
 	char		c;
 	int			res;
 
-	token = NULL;
 	res = 0;
-	c = '\0';
-	if (!in || !in->buffer || (c = next_c(in)) == ERRCHAR)
-		errman(ERR_SYS, NULL);
-	if (c == EOL)
+	if ((c = next_c(in)) == EOL)
 		return (null_token());
-	buffer = create_buffer();
+	if (!(buffer = create_buffer()))
+		return (NULL);
 	while (c != EOL)
 	{
 		if (!parse_ctrl(c, buffer, in) || !(res = parse_char(c, buffer, in)))
 			break ;
-		if (res == 2)
-			add_to_buffer(c, buffer);
+		res == 2 ? add_to_buffer(c, buffer) : 0;
 		c = next_c(in);
 	}
 	if (buffer->type == 0 && *(buffer->buffer) == '\0')
-		return (null_token());
-	if (!(token = create_token(buffer, in)))
-		errman(ERR_SYS, NULL);
+		token = null_token();
+	else
+		token = create_token(buffer, in);
 	delete_buffer(buffer);
 	return (token);
 }
