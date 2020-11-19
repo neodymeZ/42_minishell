@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/26 00:41:24 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/18 18:22:45 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/19 13:19:48 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,8 @@ void		print_error(int e, char *var, char **args)
 		wr_msg(var, ": `", *args, "': not a valid identifier");
 	if (e == ERR_SYSCMD)
 	{
-		*args ? ft_putstr_fd(*args, 2) : 0;
-		*args ? ft_putstr_fd(": ", 2) : 0;
+		args && *args ? ft_putstr_fd(*args, 2) : 0;
+		args && *args ? ft_putstr_fd(": ", 2) : 0;
 		if (errno)
 			perror(var);
 		else
