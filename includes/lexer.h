@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 01:36:22 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/18 19:41:18 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/19 03:24:21 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,9 +117,5 @@ t_token					*tokenize_input(t_input *in);
 t_tokbuf				*create_buffer(void);
 int						add_to_buffer(char c, t_tokbuf *buffer);
 void					delete_buffer(t_tokbuf *buffer);
-
-// TESTING
-
-void					test_tokenize(t_input *in);
 
 #endif

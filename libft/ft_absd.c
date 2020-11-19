@@ -6,11 +6,11 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/06 13:57:07 by larosale          #+#    #+#             */
-/*   Updated: 2020/08/06 13:57:16 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/19 03:26:57 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-double ft_absd(double d)
+double	ft_absd(double d)
 {
 	return (d < 0 ? -d : d);
 }

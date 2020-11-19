@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 01:43:42 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/18 02:16:05 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/19 03:25:18 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,22 +131,4 @@ t_token			*tokenize_input(t_input *in)
 		token = create_token(buffer, in);
 	delete_buffer(buffer);
 	return (token);
-}
-
-/*
-** The function is used to test lexer, remove before submission
-** Usage: lexer <command> in minishell prompt.
-*/
-
-void			test_tokenize(t_input *in)
-{
-	t_token	*token;
-
-	printf("Input is: %s\n", in->buffer);
-	token = tokenize_input(in);
-	while (ft_memcmp(token, g_null_token, sizeof(t_token)))
-	{
-		printf("Token is: %s, its length is: %d, type is: %d, concat is: %d\n", token->text, token->len, token->type, token->concat);
-		token = tokenize_input(in);
-	}
 }

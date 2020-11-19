@@ -1,7 +1,17 @@
-# ADD HEADER
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: larosale <larosale@42.fr>                  +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2020/11/19 03:23:21 by larosale          #+#    #+#              #
+#    Updated: 2020/11/19 03:23:40 by larosale         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
 NAME			= minishell
-CFLAGS			= -Wall -Werror -Wextra -g
+CFLAGS			= -Wall -Werror -Wextra
 NODEPS			= clean fclean re
 LIBS			= -L $(LIBFT_FLDR) -lft
 INCLUDES		= -I $(LIBFT_FLDR) -I $(HDRS_FLDR)

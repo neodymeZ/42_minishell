@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/10 23:55:44 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/18 04:35:21 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/19 02:52:26 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,8 +103,6 @@ int			subst_env(t_token *token)
 
 	i = 1;
 	ft_memset(env_name, 0, 256);
-	token->type == STR && token->concat && !ft_strncmp(token->text, "$", 2) ?
-		*(token->text) = '\0' : 0;
 	if ((token->type == STR || token->type == STRDQ) &&
 		(tmp = ft_strchr(token->text, '$')))
 	{

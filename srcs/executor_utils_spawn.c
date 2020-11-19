@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/08 00:45:24 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/18 20:31:58 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/19 03:26:03 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static int	run_in_child(char **argv, t_node *cmd)
 {
 	t_builtin_f	f;
 
-	if(ft_strncmp(*argv, "./minishell", 11))
+	if (ft_strncmp(*argv, "./minishell", 11))
 		set_signals(SIGNAL_DFL);
 	if (configure_fds(cmd))
 		exit(1);

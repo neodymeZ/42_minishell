@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/14 00:50:03 by larosale          #+#    #+#             */
-/*   Updated: 2020/08/14 01:39:55 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/19 03:27:12 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 ** Calculates length of an arc on a unit circle, from (1, 0) to (x, y) points.
 */
 
-double ft_math_arclen(double x, double y)
+double	ft_math_arclen(double x, double y)
 {
 	double	arclen;
 

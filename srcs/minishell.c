@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/17 01:44:32 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/18 19:36:23 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/19 03:25:40 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,18 +69,6 @@ int		shell_loop(void)
 		print_prompt();
 		if (!(in = read_input()))
 			continue ;
-		// Added for lexer testing. Remove before submitting
-		if (!ft_strncmp(in->buffer, "lexer", 5))
-		{
-			test_tokenize(in);
-			continue ;
-		}
-		// Added for parser testing. Remove before submitting
-		if (!ft_strncmp(in->buffer, "parser", 6))
-		{
-			test_parser(in);
-			continue ;
-		}
 		if (!(ast = parse_input(in)))
 		{
 			delete_input(in);

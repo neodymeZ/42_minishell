@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 02:35:02 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/18 16:47:43 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/19 02:28:30 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int				free_argv(int argc, char **argv)
 {
 	if (!argc || !argv)
 		return (1);
-	while (argv[argc] && argc--)
+	while (--argc >= 0)
 		free(argv[argc]);
 	return (1);
 }
@@ -92,7 +92,6 @@ int				get_argv(t_node *arg, int *argc, char **argv)
 {
 	int	arg_count;
 
-	*argc = 0;
 	arg_count = *argc;
 	while (arg)
 	{
@@ -112,6 +111,7 @@ int				get_argv(t_node *arg, int *argc, char **argv)
 		arg = arg->next_sibling;
 	}
 	argv[arg_count] = NULL;
+	*argc = arg_count;
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 23:48:28 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/18 04:13:17 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/19 03:26:11 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,13 +148,6 @@ t_node		*parse_input(t_input *in)
 	pipe = NULL;
 	if (!(semic = create_node(NODE_SEMIC)))
 		return (NULL);
-	// For parser testing. REMOVE on finalizing the project.
-	if (!ft_strncmp(in->buffer, "parser", 6))
-	{
-		token = tokenize_input(in);
-		delete_token(token);
-	}
-	// End
 	while ((token = tokenize_input(in)) &&
 		ft_memcmp(token, g_null_token, sizeof(t_token)))
 	{
@@ -171,98 +164,3 @@ t_node		*parse_input(t_input *in)
 	delete_input(in);
 	return (semic);
 }
-
-/*
-** For testing purposes, remove
-*/
-
-char *node_types(t_node_types type)
-{
-	char	*str;
-
-	str = NULL;
-	if (type == NODE_SEMIC)
-		str = ft_strdup("SEMIC");
-	else if (type == NODE_PIPE)
-		str = ft_strdup("PIPE");
-	else if (type == NODE_CMD)
-		str = ft_strdup("CMD");
-	else if (type == NODE_ARG)
-		str = ft_strdup("ARG");
-	return (str);
-}
-
-/*
-** For testing purposes, remove before submitting
-** The function is used for testing parser.
-** To launch, enter "parser <command>" in minishell prompt.
-*/
-
-void	test_parser(t_input *in)
-{
-	t_node *node;
-	t_node *node2;
-	t_node *node3;
-	t_node *node4;
-	char *str;
-
-	setbuf(stdout, NULL);
-    printf("Input is: %s\n", in->buffer);
-	node = parse_input(in);
-	if (!node)
-		return ;
-	str = node_types(node->type);
-	printf("%s(%d)\n\n", str, node->children);
-	node = node->first_child;
-	node2 = node;
-	while (node)
-	{
-		str = node_types(node->type);
-		printf("%s(%d)   ", str, node->children);
-		node = node->next_sibling;
-	}
-	printf ("\n\n");
-	node = node2;
-	while (node)
-	{
-		node3 = node->first_child;
-		while (node3)
-		{
-			if (node3->type == NODE_ARG)
-				printf("%s   ", node3->data);
-			else if (node3->type == NODE_REDIR_IN || node3->type == NODE_REDIR_OUT || node3->type == NODE_REDIR_APP)
-				printf("redir: %d ", node3->type);
-		else
-			{
-				str = node_types(node3->type);
-				printf("%s(%d)   ", str, node3->children);
-			}
-			node3 = node3->next_sibling;
-		}
-		printf(" | ");
-		node = node->next_sibling;
-	}
-	printf("\n\n");
-	node = node2;
-	while (node)
-	{
-		node3 = node->first_child;
-		while (node3)
-		{
-			node4 = node3->first_child;
-			while (node4)
-			{
-				if (node4->type == NODE_ARG)
-					printf("%s   ", node4->data);
-				else if (node4->type == NODE_REDIR_IN || node4->type == NODE_REDIR_OUT || node4->type == NODE_REDIR_APP)
-					printf("redir: %d ", node4->type);
-				node4 = node4->next_sibling;
-			}
-			node3 = node3->next_sibling;
-		}
-		printf(" | ");
-		node = node->next_sibling;
-	}
-	printf("\n");
-}
-
