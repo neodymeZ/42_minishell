@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/18 19:38:57 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/18 19:39:00 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/20 18:48:16 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ void		env_free(char **env);
 int			env_del_var(char *var, char **env);
 int			env_set_var(char *var, char *value, char ***env);
 char		*env_get_var(char *var);
+char		*find_var(char *var, char **env);
+void		env_export_var(char *name, char *value);
 
 /*
 ** Utils

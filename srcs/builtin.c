@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 20:32:03 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/18 19:28:25 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/20 19:03:52 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int		ft_cd(char **args)
 {
 	char	*path;
 	int		res;
+	char	*oldpwd;
 
 	if (*(args + 1))
 		path = *(args + 1);
@@ -34,11 +35,14 @@ int		ft_cd(char **args)
 			return (1);
 		}
 	}
+	oldpwd = getcwd(NULL, 0);
 	if ((res = chdir(path)) != 0)
 	{
 		errman(ERR_SYSCMD, path, args);
 		return (1);
 	}
+	maintain_cd_env_var(oldpwd);
+	free(oldpwd);
 	return (0);
 }
 

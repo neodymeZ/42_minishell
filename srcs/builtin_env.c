@@ -6,7 +6,7 @@
 /*   By: gejeanet <gejeanet@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 20:57:33 by gejeanet          #+#    #+#             */
-/*   Updated: 2020/11/18 22:52:27 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/11/20 18:01:59 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ int				ft_export(char **args)
 	{
 		split_value(*args, &value);
 		if (check_varname(*args) == 0)
-			env_set_var(*args, value, &g_env);
+			env_export_var(*args, value);
 		else
 		{
 			errman(ERR_INVLID, "export", args);

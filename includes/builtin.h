@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 02:09:26 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/14 03:00:57 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/20 19:03:32 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int				ft_test(char **args);
 int				check_varname(char *str);
 void			split_value(char *var, char **value);
 void			sort_env(char **env, int low, int high);
+void			maintain_cd_env_var(char *oldpwd);
 
 /*
 ** Typedef for function pointer to builtin funcs.

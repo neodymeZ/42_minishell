@@ -6,7 +6,7 @@
 /*   By: gejeanet <gejeanet@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 20:14:39 by gejeanet          #+#    #+#             */
-/*   Updated: 2020/11/17 02:36:38 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/20 18:11:52 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,10 @@
 /*
 ** Finds the variable "var" in a given environment "env" and returns a
 ** pointer to its value, or NULL if the variable was not found.
+** The returned pointer MUST NOT be passed to free() !!!
 */
 
-static	char	*find_var(char *var, char **env)
+char			*find_var(char *var, char **env)
 {
 	size_t	len;
 

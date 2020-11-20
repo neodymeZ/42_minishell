@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 01:25:11 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/17 01:43:07 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/20 18:43:14 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,5 +98,28 @@ void			sort_env(char **env, int low, int high)
 		base = partition_for_quicksort(env, low, high);
 		sort_env(env, low, base);
 		sort_env(env, base + 1, high);
+	}
+}
+
+/*
+** Export variable.
+** It create/update var if var does NOT exist in any (global or local) table
+** OR value is NOT NULL.
+** If var exists in local env table AND value is NULL,
+** it create var in global env table with a value from local env table.
+*/
+
+void			env_export_var(char *var, char *value)
+{
+	char	*local_value;
+
+	if (env_get_var(var) == NULL || value != NULL)
+		env_set_var(var, value, &g_env);
+	else if (find_var(var, g_env) != NULL)
+		return;
+	else
+	{
+		local_value = find_var(var, g_env_local);
+		env_set_var(var, local_value, &g_env);
 	}
 }
