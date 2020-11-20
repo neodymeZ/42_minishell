@@ -2,25 +2,24 @@
 42 minishell project
 
 To do:
-1) Parser - token string concatenation ✅ 
-2) Word expansion (env vars substitution ✅ 
-3) Word expansion (escape chars?)
-3) Pipes
-4) Redirections
-5) Error management - pass error description to errman function
-   for custom error messages
-6) Check memory leaks
-7) Uppercase letters in commands?
-8) Launching script as a command line argument?
-9) Lexical order of "export" output ✅ 
+1) Word expansion (escape chars?)
+2) Uppercase letters in commands
+
+To fix:
+1) Check memory leaks ✅ 
+2) Changing $PATH after cd
+3) Sorting export output, not env array
+4) Segfault on redir-only command (> test)
+5) Handle multiple semicolons as invalid sequence
+6) !!Launch commands in lists in parent process, not in children
 
 Additionally implemented:
 1) Multiline input (on '\' symbol or on missing quote);
 
 Will not be implemented:
 1) Multiline pipe (complex parsing of input is needed);
-2) Freeing memory on erroneous exit (OS will handle);
-3) Shell variables;
-4) Simultaneous command execution. Commands are executed sequentially,
+2) Shell variables;
+3) Simultaneous command execution. Commands are executed sequentially,
 the parent process waits until completion before forking a new child.
 Thus, looped commands like "yes" won't work correctly in pipes (i.e. yes | head)
+4) Launching script as a command line argument (not required by subject)
