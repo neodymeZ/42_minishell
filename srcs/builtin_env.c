@@ -6,7 +6,7 @@
 /*   By: gejeanet <gejeanet@student.21-school.ru>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 20:57:33 by gejeanet          #+#    #+#             */
-/*   Updated: 2020/11/20 18:01:59 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/11/20 20:58:27 by gejeanet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ static	void	prnt_var(char *var)
 /*
 ** Helper function for "ft_export" function.
 ** Prints environment variables similarly to the bash export command.
+** Makes a copy of g_env, sort it and print.
 */
 
 static	void	prnt_env(void)
@@ -95,6 +96,7 @@ static	void	prnt_env(void)
 	char	**p;
 	char	*var;
 	int		i;
+	char	**env_copy;
 
 	if (g_env == NULL || *g_env == NULL)
 		return ;
@@ -102,14 +104,16 @@ static	void	prnt_env(void)
 	p = g_env;
 	while (*p++ != NULL)
 		i++;
-	sort_env(g_env, 0, i - 1);
-	p = g_env;
+	env_copy = env_init(g_env);
+	sort_env(env_copy, 0, i - 1);
+	p = env_copy;
 	while (*p != NULL)
 	{
 		var = *p++;
 		if (*var != '_' || *(var + 1) != '=')
 			prnt_var(var);
 	}
+	env_free(env_copy);
 }
 
 /*
