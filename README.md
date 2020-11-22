@@ -9,12 +9,11 @@ To fix:
 1) Check memory leaks ✅ 
 2) Changing $PATH after cd ✅
 3) Sorting export output, not env array ✅
-4) Segfault on redir-only command (> test)
+4) Segfault on redir-only command (> test) ✅
 5) Handle multiple semicolons as invalid sequence
 6) !!Launch commands in lists in parent process, not in children
 7) Clear input line when SIGINT is sent in multiline
 8) Escape characters ✅
-9) Handle UPPERCASE when running builtins
 
 Additionally implemented:
 1) Multiline input (on '\' symbol or on missing quote);
