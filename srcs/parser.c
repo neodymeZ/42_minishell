@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 23:48:28 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/22 03:33:45 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/22 16:35:54 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ t_node		*parse_input(t_input *in)
 	pipe = NULL;
 	if (!(semic = create_node(NODE_SEMIC)))
 		return (NULL);
-	while ((token = tokenize_input(in)) &&
+	while ((token = tokenize_input(in)) && token->type != SEMIC && // new
 		ft_memcmp(token, g_null_token, sizeof(t_token)))
 	{
 		subst_env(token);
@@ -162,6 +162,6 @@ t_node		*parse_input(t_input *in)
 	if (!token || parse_semic(&simplecom, &pipe, &semic, EOL))
 		return (free_parse_input(token, semic));
 	delete_token(token);
-	delete_input(in);
+//	delete_input(in);
 	return (semic);
 }

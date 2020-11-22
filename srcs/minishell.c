@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/22 04:34:11 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/22 04:34:18 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/22 16:47:25 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,14 +68,18 @@ int		shell_loop(void)
 		print_prompt();
 		if (!(in = read_input()))
 			continue ;
-		if (!(ast = parse_input(in)))
+		while (peek_c(in) != EOL) // new
 		{
-			delete_input(in);
-			continue ;
+			if (!(ast = parse_input(in)))
+			{
+				delete_input(in);
+				break ;				// changed from continue
+			}
+			run_ast(ast);
+			delete_tree(ast);
 		}
-		run_ast(ast);
-		delete_tree(ast);
 	}
+	delete_input(in); // new
 	return (0);
 }
 
