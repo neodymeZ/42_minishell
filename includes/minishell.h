@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/18 19:38:57 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/21 03:58:45 by larosale         ###   ########.fr       */
+/*   Created: 2020/11/22 04:34:29 by larosale          #+#    #+#             */
+/*   Updated: 2020/11/22 04:34:32 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,8 @@ void		env_free(char **env);
 int			env_del_var(char *var, char **env);
 int			env_set_var(char *var, char *value, char ***env);
 char		*env_get_var(char *var);
+char		*find_var(char *var, char **env);
+void		env_export_var(char *name, char *value);
 
 /*
 ** Utils

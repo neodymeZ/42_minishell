@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/17 01:44:32 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/21 04:00:17 by larosale         ###   ########.fr       */
+/*   Created: 2020/11/22 04:34:11 by larosale          #+#    #+#             */
+/*   Updated: 2020/11/22 04:34:18 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ int		shell_loop(void)
 int		main(int argc, char **argv, char **env)
 {
 	g_env = env_init(env);
+	g_env_local = env_init(env);
 	g_status = 0;
 	if (!(g_null_token = null_token()))
 		errman(ERR_SYS, NULL, NULL);

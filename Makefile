@@ -5,8 +5,8 @@
 #                                                     +:+ +:+         +:+      #
 #    By: larosale <larosale@42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2020/11/19 03:23:21 by larosale          #+#    #+#              #
-#    Updated: 2020/11/20 18:35:44 by larosale         ###   ########.fr        #
+#    Created: 2020/11/22 04:34:46 by larosale          #+#    #+#              #
+#    Updated: 2020/11/22 04:34:48 by larosale         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ HDRS_FLDR		= ./includes
 LIBFT_FLDR		= ./libft
 SRCS_LIST		= minishell.c minishell_utils_prompt.c minishell_utils_input.c \
 				minishell_utils_free.c error_handler.c signal_handlers.c \
-				builtin.c builtin_env.c builtin_utils_env.c \
+				builtin.c builtin_utils.c builtin_env.c builtin_utils_env.c \
 				env.c env_utils.c \
 				lexer.c lexer_utils_buffer.c lexer_utils_input.c \
 				lexer_utils_tokens.c lexer_utils_chars.c \
