@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 02:35:02 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/19 02:28:30 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/22 14:57:07 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,8 @@ int				get_argv(t_node *arg, int *argc, char **argv)
 	arg_count = *argc;
 	while (arg)
 	{
-		if (arg->type == NODE_REDIR_IN || arg->type == NODE_REDIR_OUT ||
-			arg->type == NODE_REDIR_APP)
+		if ((arg->type == NODE_REDIR_IN || arg->type == NODE_REDIR_OUT ||
+			arg->type == NODE_REDIR_APP) && arg->next_sibling)
 		{
 			arg = arg->next_sibling->next_sibling;
 			if (!arg)

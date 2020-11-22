@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/21 16:51:09 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/19 12:53:34 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/22 15:23:54 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ static int	run_simplecom(t_node *cmd, int flag)
 	if (!cmd || !(arg = cmd->first_child) ||
 		get_argv(arg, &argc, argv) || create_files(cmd))
 		return (free_argv(argc, argv));
+	if (!(*argv))
+		return (0);
 	if (!flag && is_builtin(argv, flag, &f))
 	{
 		if (configure_fds(cmd))
