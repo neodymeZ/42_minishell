@@ -14,6 +14,7 @@ To fix:
 6) !!Launch commands in lists in parent process, not in children
 7) Clear input line when SIGINT is sent in multiline
 8) Escape characters ✅
+9) Handle UPPERCASE when running builtins
 
 Additionally implemented:
 1) Multiline input (on '\' symbol or on missing quote);
