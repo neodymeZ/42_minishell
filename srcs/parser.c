@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 23:48:28 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/19 03:26:11 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/22 03:33:45 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,6 +152,7 @@ t_node		*parse_input(t_input *in)
 		ft_memcmp(token, g_null_token, sizeof(t_token)))
 	{
 		subst_env(token);
+		remove_escapes(token);
 		if (token->concat && concat_tokens(token, in))
 			return (free_parse_input(token, semic));
 		if (parse_token(token, &simplecom, &pipe, &semic))

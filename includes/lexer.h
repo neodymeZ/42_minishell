@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 01:36:22 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/19 03:24:21 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/22 01:46:25 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,24 @@ typedef enum			e_token_types
 	REDIR_APP,
 	SEMIC
 }						t_token_types;
+
+/*
+** Enum of type "t_char_types" defines types of special symbols.
+** It is used while doing lexical analysis.
+** The types are:
+** - SPACE - a space;
+** - TAB - tabulation symbol;
+** - DQ - double quote;
+** - SQ - single quote.
+*/
+
+typedef enum			e_char_types
+{
+	SPACE = 1,
+	TAB,
+	DQ,
+	SQ
+}						t_char_types;
 
 /*
 ** A structure of type "t_input" contains the input buffer, together with its
@@ -117,5 +135,14 @@ t_token					*tokenize_input(t_input *in);
 t_tokbuf				*create_buffer(void);
 int						add_to_buffer(char c, t_tokbuf *buffer);
 void					delete_buffer(t_tokbuf *buffer);
+
+/*
+** Functions to determine type of chars in input string
+*/
+
+int						is_ctrl(char c);
+int						is_white(char c);
+int						is_quote(char c);
+int						is_escaped(char *str, char *c_pos);
 
 #endif

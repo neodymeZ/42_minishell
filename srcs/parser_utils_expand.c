@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/10 23:55:44 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/19 02:52:26 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/22 03:58:00 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ static int	append_token(t_token *read, t_token *token)
 
 	tmp = NULL;
 	subst_env(read);
+	remove_escapes(read);
 	if (!(tmp = ft_strjoin(token->text, read->text)))
 	{
 		errman(ERR_SYSCMD, NULL, NULL);
@@ -83,6 +84,7 @@ static int	replace_env_token(t_token *token, char *src, char *dst)
 	}
 	free(token->text);
 	token->text = tmp;
+	mem_alloc ? free(dst) : 0;
 	return (0);
 }
 
@@ -104,7 +106,8 @@ int			subst_env(t_token *token)
 	i = 1;
 	ft_memset(env_name, 0, 256);
 	if ((token->type == STR || token->type == STRDQ) &&
-		(tmp = ft_strchr(token->text, '$')))
+		(tmp = ft_strchr(token->text, '$')) &&
+		!is_escaped(token->text, tmp))
 	{
 		if (*(tmp + 1) == '?' && !replace_env_token(token, "$?", NULL))
 			return (subst_env(token));
@@ -117,6 +120,30 @@ int			subst_env(t_token *token)
 			if (!replace_env_token(token, env_name, env_value))
 				return (subst_env(token));
 		}
+	}
+	return (0);
+}
+
+/*
+** Removes escape character '\' from the token texts (of STR or STRDQ types),
+** if they occur before $ or \ (for STR type), or before $, \, " (STRDQ type).
+** The function calls itself recursively until all corrections are made and
+** returns 0.
+*/
+
+int			remove_escapes(t_token *token)
+{
+	char *tmp;
+
+	if ((token->type != STR && token->type != STRDQ) || !(*(token->text)))
+		return (0);
+	tmp = token->text;
+	while (*(tmp + 1))
+	{
+		if (*tmp == '\\' && (*(tmp + 1) == '\\' || *(tmp + 1) == '$' ||
+			(*(tmp + 1) == '"' && token->type == STRDQ)))
+			ft_strdel(tmp);
+		tmp++;
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/17 01:44:32 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/19 03:25:40 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/21 04:00:17 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,7 @@ t_input	*read_input(void)
 
 	if (gnl_wrapper(0, &input) < 0 && errman(ERR_SYSCMD, NULL, NULL))
 		return (NULL);
-	while (ft_strlen(input) > 0 && (input[ft_strlen(input) - 1] == '\\' ||
-		check_quotes(input)))
+	while (ft_strlen(input) > 0 && (check_esc(input) || check_quotes(input)))
 	{
 		print_prompt2();
 		if (input[ft_strlen(input) - 1] == '\\')

@@ -6,7 +6,7 @@
 #    By: larosale <larosale@42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/19 03:23:21 by larosale          #+#    #+#              #
-#    Updated: 2020/11/19 03:23:40 by larosale         ###   ########.fr        #
+#    Updated: 2020/11/20 18:35:44 by larosale         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ SRCS_LIST		= minishell.c minishell_utils_prompt.c minishell_utils_input.c \
 				builtin.c builtin_env.c builtin_utils_env.c \
 				env.c env_utils.c \
 				lexer.c lexer_utils_buffer.c lexer_utils_input.c \
-				lexer_utils_tokens.c \
+				lexer_utils_tokens.c lexer_utils_chars.c \
 				parser.c parser_utils_nodes.c parser_utils_expand.c \
 				executor.c executor_utils_args.c executor_utils_spawn.c \
 				executor_utils_open.c executor_utils_fildes.c

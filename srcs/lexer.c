@@ -6,27 +6,49 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 01:43:42 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/19 03:25:18 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/22 04:28:30 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /*
-** Determines, whether the input char "c" is a control char and returns
-** its enum value.
+** Parses escape character '\'.
+** The function does nothing and returns 0 if the current character is not '\'
+** If the next character is EOL, the function returns 0 and ungets the char.
+** Otherwise, the next char is added to buffer.
+** In case of double or single quoted buffers (or if the next char is $, \), the
+** preceding '\' is added to the buffer too.
+** NB: Handling escapes in double quotes should be done later (when expanding
+** environment vars).
 */
 
-static int		is_ctrl(char c)
+static int		parse_esc(char c, t_tokbuf *buffer, t_input *in)
 {
-	if (c == '|')
-		return (PIPE);
-	else if (c == '<')
-		return (REDIR_IN);
-	else if (c == '>')
-		return (REDIR_OUT);
-	else if (c == ';')
-		return (SEMIC);
+	char	nextc;
+
+	if (c == '\\' && (buffer->type == STR || buffer->type == STRDQ))
+	{
+		if ((nextc = next_c(in)) == EOL || (buffer->type == STRDQ &&
+			nextc != '$' && nextc != '"' && nextc != '\\'))
+		{
+			unget_c(in);
+			return (0);
+		}
+		if ((buffer->type == STR && (nextc == '$' || nextc == '\\')) ||
+			(buffer->type == STRDQ && (nextc == '$' || nextc == '\\' ||
+			nextc == '"')))
+		{
+			add_to_buffer(c, buffer);
+			add_to_buffer(nextc, buffer);
+			return (1);
+		}
+		else if (buffer->type == STR && nextc != '$' && nextc != '\\')
+		{
+			add_to_buffer(nextc, buffer);
+			return (1);
+		}
+	}
 	return (0);
 }
 
@@ -74,25 +96,25 @@ static int		parse_char(char c, t_tokbuf *buffer, t_input *in)
 {
 	char	nextc;
 
-	if ((buffer->pos > 0 && ((c == ' ' || c == '\t') && buffer->type == STR)) ||
-		(c == '"' && buffer->type == STRDQ) ||
-		(c == '\047' && buffer->type == STRSQ))
+	if ((buffer->pos > 0 && is_white(c) && buffer->type == STR) ||
+		(is_quote(c) == DQ && buffer->type == STRDQ) ||
+		(is_quote(c) == SQ && buffer->type == STRSQ))
 	{
-		if ((c == '"' || c == '\047') && (nextc = peek_c(in)) &&
-			(nextc != ' ' && nextc != '\t' && nextc != EOL))
+		if (is_quote(c) && (nextc = peek_c(in)) &&
+			!is_white(nextc) && nextc != EOL)
 			buffer->concat = CONCAT;
 		return (0);
 	}
-	else if ((c == '"' || c == '\047') && !buffer->pos &&
+	else if (is_quote(c) && !buffer->pos &&
 		buffer->type != STRDQ && buffer->type != STRSQ)
 		buffer->type = (c == '"' ? STRDQ : STRSQ);
-	else if ((c == '"' || c == '\047') && buffer->pos > 0 && buffer->type !=
-		STRDQ && buffer->type != STRSQ && (buffer->concat = CONCAT))
+	else if (is_quote(c) && buffer->pos > 0 && buffer->type != STRDQ &&
+		buffer->type != STRSQ && (buffer->concat = CONCAT))
 	{
 		unget_c(in);
 		return (0);
 	}
-	else if ((c == ' ' || c == '\t') && buffer->type == STR)
+	else if (is_white(c) && buffer->type == STR)
 		;
 	else
 		return (2);
@@ -114,16 +136,17 @@ t_token			*tokenize_input(t_input *in)
 	int			res;
 
 	res = 0;
-	if ((c = next_c(in)) == EOL)
-		return (null_token());
 	if (!(buffer = create_buffer()))
 		return (NULL);
-	while (c != EOL)
+	if (peek_c(in) == EOL)
+		return (null_token());
+	while ((c = next_c(in)) != EOL)
 	{
+		if (parse_esc(c, buffer, in))
+			continue ;
 		if (!parse_ctrl(c, buffer, in) || !(res = parse_char(c, buffer, in)))
 			break ;
 		res == 2 ? add_to_buffer(c, buffer) : 0;
-		c = next_c(in);
 	}
 	if (buffer->type == 0 && *(buffer->buffer) == '\0')
 		token = null_token();

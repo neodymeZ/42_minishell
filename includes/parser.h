@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 23:12:19 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/19 03:24:31 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/22 02:25:49 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,5 +63,6 @@ t_node				*parse_input(t_input *in);
 
 int					concat_tokens(t_token *token, t_input *in);
 int					subst_env(t_token *token);
+int					remove_escapes(t_token *token);
 
 #endif

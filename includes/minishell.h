@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/18 19:38:57 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/18 19:39:00 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/21 03:58:45 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ extern int		g_status;
 t_input		*read_input(void);
 int			gnl_wrapper(int fd, char **line);
 int			check_quotes(char *input);
+int			check_esc(char *input);
 
 /*
 ** Signal handlers
