@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 23:48:28 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/23 04:20:05 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/23 20:01:33 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ static int	parse_simplecom(t_token *token, t_node **simplecom)
 	}
 	if (!(arg = create_node(NODE_ARG)))
 		return (1);
+	add_child_node(*simplecom, arg);
 	if (set_node_data(arg, token->text))
 		return (1);
 	if (token->type == REDIR_IN || token->type == REDIR_OUT ||
@@ -41,7 +42,6 @@ static int	parse_simplecom(t_token *token, t_node **simplecom)
 	}
 	else
 		(*simplecom)->last_redir = 0;
-	add_child_node(*simplecom, arg);
 	return (0);
 }
 
@@ -62,9 +62,9 @@ static int	parse_pipe(t_node **simplecom, t_node **pipe)
 		if (!(*pipe = create_node(NODE_PIPE)))
 			return (1);
 	}
-	add_child_node(*pipe, *simplecom);
 	if ((*simplecom)->last_redir && errman(ERR_TOKEN, "|", NULL))
 		return (1);
+	add_child_node(*pipe, *simplecom);
 	*simplecom = NULL;
 	return (0);
 }
@@ -160,14 +160,14 @@ t_node		*parse_input(t_input *in)
 		subst_env(token);
 		remove_escapes(token);
 		if (token->concat && concat_tokens(token, in))
-			return (free_parse_input(token, semic));
+			return (free_parse_input(token, sc, pipe, semic));
 		if (parse_token(token, &sc, &pipe, &semic))
-			return (free_parse_input(token, semic));
+			return (free_parse_input(token, sc, pipe, semic));
 		delete_token(token);
 	}
 	if ((token->type == SEMIC && parse_semic(&sc, &pipe, &semic, NO_EOL))
 		|| (token->type != SEMIC && parse_semic(&sc, &pipe, &semic, EOL)))
-		return (free_parse_input(token, semic));
+		return (free_parse_input(token, sc, pipe, semic));
 	delete_token(token);
 	return (semic);
 }

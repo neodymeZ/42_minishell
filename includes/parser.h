@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 23:12:19 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/22 02:25:49 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/23 20:02:20 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ t_node				*create_node(t_node_types type);
 int					add_child_node(t_node *parent, t_node *child);
 void				delete_tree(t_node *root);
 int					set_node_data(t_node *node, char *data);
-void				*free_parse_input(t_token *token, t_node *tree);
+void				*free_parse_input(t_token *token, t_node *sc,
+					t_node *pipe, t_node *semic);
 
 /*
 ** Parsing functions
