@@ -6,12 +6,12 @@
 #    By: larosale <larosale@42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/22 04:34:46 by larosale          #+#    #+#              #
-#    Updated: 2020/11/22 04:34:48 by larosale         ###   ########.fr        #
+#    Updated: 2020/11/23 03:42:54 by larosale         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME			= minishell
-CFLAGS			= -Wall -Werror -Wextra
+CFLAGS			= -Wall -Werror -Wextra -g
 NODEPS			= clean fclean re
 LIBS			= -L $(LIBFT_FLDR) -lft
 INCLUDES		= -I $(LIBFT_FLDR) -I $(HDRS_FLDR)
@@ -19,7 +19,8 @@ SRCS_FLDR		= ./srcs
 HDRS_FLDR		= ./includes
 LIBFT_FLDR		= ./libft
 SRCS_LIST		= minishell.c minishell_utils_prompt.c minishell_utils_input.c \
-				minishell_utils_free.c error_handler.c signal_handlers.c \
+				minishell_utils_free.c minishell_utils_preparse.c \
+				error_handler.c signal_handlers.c \
 				builtin.c builtin_utils.c builtin_env.c builtin_utils_env.c \
 				env.c env_utils.c \
 				lexer.c lexer_utils_buffer.c lexer_utils_input.c \

@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 23:48:28 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/22 18:34:26 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/23 04:20:05 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,9 @@ static int	parse_pipe(t_node **simplecom, t_node **pipe)
 		if (!(*pipe = create_node(NODE_PIPE)))
 			return (1);
 	}
+	add_child_node(*pipe, *simplecom);
 	if ((*simplecom)->last_redir && errman(ERR_TOKEN, "|", NULL))
 		return (1);
-	add_child_node(*pipe, *simplecom);
 	*simplecom = NULL;
 	return (0);
 }
@@ -138,35 +138,36 @@ static int	parse_token(t_token *token, t_node **simplecom, t_node **pipe,
 ** 		CMD				CMD						ARG		ARG
 **	ARG	ARG	ARG		ARG		ARG					ls		-la
 ** 	echo -n test	cat		-e
+**
+** UPD: to fix environment vars handling, parser is launced separately for
+** each branch under SEMIC.
 */
 
 t_node		*parse_input(t_input *in)
 {
 	t_token	*token;
-	t_node	*simplecom;
+	t_node	*sc;
 	t_node	*pipe;
 	t_node	*semic;
 
-	simplecom = NULL;
+	sc = NULL;
 	pipe = NULL;
 	if (!(semic = create_node(NODE_SEMIC)))
 		return (NULL);
-	while ((token = tokenize_input(in)) && token->type != SEMIC && // new
+	while ((token = tokenize_input(in)) && token->type != SEMIC &&
 		ft_memcmp(token, g_null_token, sizeof(t_token)))
 	{
 		subst_env(token);
 		remove_escapes(token);
 		if (token->concat && concat_tokens(token, in))
 			return (free_parse_input(token, semic));
-		if (parse_token(token, &simplecom, &pipe, &semic))
+		if (parse_token(token, &sc, &pipe, &semic))
 			return (free_parse_input(token, semic));
 		delete_token(token);
 	}
-	if (!token || (token->type == SEMIC &&
-		parse_semic(&simplecom, &pipe, &semic, NO_EOL)) ||
-		(token->type != SEMIC && parse_semic(&simplecom, &pipe, &semic, EOL)))
+	if ((token->type == SEMIC && parse_semic(&sc, &pipe, &semic, NO_EOL))
+		|| (token->type != SEMIC && parse_semic(&sc, &pipe, &semic, EOL)))
 		return (free_parse_input(token, semic));
 	delete_token(token);
-//	delete_input(in);
 	return (semic);
 }

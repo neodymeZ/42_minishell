@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/22 04:34:29 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/22 04:34:32 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/23 03:16:47 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ extern char		**g_env;
 extern char		**g_env_local;
 extern t_token	*g_null_token;
 extern char		*g_gnl_str;
+extern char		*g_ml_str;
 extern int		g_status;
 
 /*

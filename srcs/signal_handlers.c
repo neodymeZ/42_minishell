@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/13 00:56:54 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/18 20:01:30 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/23 03:26:40 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ void	signal_handler(int signo)
 		g_status = 1;
 		if (g_gnl_str)
 			*g_gnl_str = '\0';
+		if (g_ml_str)
+			*g_ml_str = '\0';
 	}
 	else if (signo == SIGQUIT)
 		ft_putstr_fd("\b\b  \b\b", 1);

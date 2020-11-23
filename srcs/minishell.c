@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/22 04:34:11 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/22 17:47:43 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/23 04:11:10 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ char	**g_env = NULL;
 char	**g_env_local = NULL;
 t_token	*g_null_token = NULL;
 char	*g_gnl_str = NULL;
+char	*g_ml_str = NULL;
 int		g_status = 0;
 
 /*
@@ -35,11 +36,13 @@ t_input	*read_input(void)
 	char	*temp2;
 	t_input	*in;
 
+	temp = NULL;
 	if (gnl_wrapper(0, &input) < 0 && errman(ERR_SYSCMD, NULL, NULL))
 		return (NULL);
 	while (ft_strlen(input) > 0 && (check_esc(input) || check_quotes(input)))
 	{
 		print_prompt2();
+		g_ml_str = input;
 		if (input[ft_strlen(input) - 1] == '\\')
 			input[ft_strlen(input) - 1] = '\0';
 		if ((gnl_wrapper(0, &temp) < 0 || !(temp2 = ft_strjoin(input, temp))) &&
@@ -68,18 +71,19 @@ int		shell_loop(void)
 		print_prompt();
 		if (!(in = read_input()))
 			continue ;
-		while (peek_c(in) != EOL) // new
+		while (peek_c(in) != EOL)
 		{
 			if (!(ast = parse_input(in)))
 			{
 				delete_input(in);
-				break ;				// changed from continue
+				in = NULL;
+				break ;
 			}
 			run_ast(ast);
 			delete_tree(ast);
 		}
+		delete_input(in);
 	}
-	delete_input(in); // new
 	return (0);
 }
 

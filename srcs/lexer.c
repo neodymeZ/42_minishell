@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 01:43:42 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/22 04:28:30 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/23 04:04:45 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,10 +136,10 @@ t_token			*tokenize_input(t_input *in)
 	int			res;
 
 	res = 0;
-	if (!(buffer = create_buffer()))
-		return (NULL);
 	if (peek_c(in) == EOL)
 		return (null_token());
+	if (!(buffer = create_buffer()))
+		return (NULL);
 	while ((c = next_c(in)) != EOL)
 	{
 		if (parse_esc(c, buffer, in))

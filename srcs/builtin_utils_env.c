@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 01:25:11 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/20 18:43:14 by gejeanet         ###   ########.fr       */
+/*   Updated: 2020/11/23 02:59:51 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ void			env_export_var(char *var, char *value)
 	if (env_get_var(var) == NULL || value != NULL)
 		env_set_var(var, value, &g_env);
 	else if (find_var(var, g_env) != NULL)
-		return;
+		return ;
 	else
 	{
 		local_value = find_var(var, g_env_local);

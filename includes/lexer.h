@@ -6,7 +6,7 @@
 /*   By: larosale <larosale@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 01:36:22 by larosale          #+#    #+#             */
-/*   Updated: 2020/11/22 01:46:25 by larosale         ###   ########.fr       */
+/*   Updated: 2020/11/23 00:27:22 by larosale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ typedef enum			e_token_types
 	REDIR_IN,
 	REDIR_OUT,
 	REDIR_APP,
-	SEMIC
+	SEMIC,
+	NEWLINE
 }						t_token_types;
 
 /*
