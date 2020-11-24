@@ -27,11 +27,15 @@ make
 ## Known bugs 
 Behavior, not identical to bash:
 
-1. Already input symbols could not be deleted after Ctrl-D
+1. Already input symbols could not be deleted after Ctrl-D.
+
 *Reason: input is handled in cooked mode, not char mode (as in bash).*
+
 2. If syntax error occurs in a command list (;), commands before the erroneous one 
 are executed (in bash, only error is shown).
+
 *Reason: input is parsed and the command is launched for every command in the list
 independently. Bash uses pre-parsing step to check the input string for syntax errors.*
+
 3. Commands, saved in env vars, are not launched on $VAR command.
 *Reason: bash expands environment variables on an earlier stage, before parsing.*
