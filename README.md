@@ -38,4 +38,5 @@ are executed (in bash, only error is shown).
 independently. Bash uses pre-parsing step to check the input string for syntax errors.*
 
 3. Commands, saved in env vars, are not launched on $VAR command.
+
 *Reason: bash expands environment variables on an earlier stage, before parsing.*
