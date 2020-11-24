@@ -1,6 +1,8 @@
 # 42_minishell
 Creating a shell which is a subset of bash
 
+*NB: Code is dense due to 42 styling rules (25 lines per function, 5 functions per file, etc).*
+
 ## Usage
 ```
 git clone <repo> <dir>
