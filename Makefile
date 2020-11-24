@@ -6,12 +6,12 @@
 #    By: larosale <larosale@42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/22 04:34:46 by larosale          #+#    #+#              #
-#    Updated: 2020/11/23 03:42:54 by larosale         ###   ########.fr        #
+#    Updated: 2020/11/23 21:35:40 by larosale         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME			= minishell
-CFLAGS			= -Wall -Werror -Wextra -g
+CFLAGS			= -Wall -Werror -Wextra
 NODEPS			= clean fclean re
 LIBS			= -L $(LIBFT_FLDR) -lft
 INCLUDES		= -I $(LIBFT_FLDR) -I $(HDRS_FLDR)
